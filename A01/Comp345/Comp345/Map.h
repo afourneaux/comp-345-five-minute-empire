@@ -37,6 +37,7 @@ public:
 	int territory_count;
 	int continent_count;
 	int player_count;
+	int starting_territory_index;
 	Territory* territories;
 	TerritoryList* continents;
 	Map(int *territories, int territory_count, int player_count, int continent_count);
@@ -44,12 +45,14 @@ public:
 	~Map();
 	void addEdge(int origin, int destination);
 	Territory* getTerritory(int territory_index);
+	Territory* setStartingTerritory(int territory_index);
 	void printMap();
 	void printMapMemAddresses();
 	bool validate();
 private:
 	int countContiguousNodes();
 	int countContiguousNodesInContinent(TerritoryList* continent);
+	int countWaterConnections(int territory_index);
 };
 
 int testMap();
