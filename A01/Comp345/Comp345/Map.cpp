@@ -6,10 +6,10 @@ using namespace std;
 //Initializes all vertices/nodes (ie territories) 
 //territories array parameter: array indexes correspond to territory indexes, the values at each index correspond to the continent ID (territories[0]==1 -> territory 0 belongs to continent 1)
 //Continent IDs are indexed from 0
-//TODO: decide whether player-specific map-related info is stored in the Territory object or in the Player object
 Map::Map(int* territories, int territory_count, int player_count, int continent_count) {
 	this->territory_count = territory_count;
 	this->continent_count = continent_count;
+	this->player_count = player_count;
 
 	//Initialize continent Linked Lists
 	this->continents = new TerritoryList[continent_count];
@@ -36,6 +36,51 @@ Map::Map(int* territories, int territory_count, int player_count, int continent_
 		}
 	}
 }
+
+Map::Map(Map* map) {
+	
+	this->territory_count = map->territory_count;
+	this->continent_count = map->continent_count;
+	this->player_count = map->player_count;
+
+	//Initialize continent Linked Lists
+	this->continents = new TerritoryList[continent_count];
+	for (int i = 0; i < continent_count; i++) {
+		this->continents[i].head = nullptr;
+		this->continents[i].length = 0;
+	}
+
+	//Initialize territories array and copy
+	this->territories = new Territory[territory_count];
+	for (int i = 0; i < territory_count; i++) {
+		this->territories[i].continentID = map->territories[i].continentID;
+		this->territories[i].territoryID = i;
+		this->territories[i].army_count = new int[map->player_count];
+		this->territories[i].city_count = new int[map->player_count];
+		for (int j = 0; j < player_count; j++) {
+			this->territories[i].army_count[j] = map->territories[i].army_count[j];
+			this->territories[i].city_count[j] = map->territories[i].city_count[j];
+		}
+
+		Edge* temp_edge = map->territories[i].head;
+		if (temp_edge != nullptr) {
+			Edge* prev = this->territories[i].head = new Edge{ &territories[temp_edge->destination_territory->territoryID],temp_edge->movement_cost, nullptr };
+			temp_edge = temp_edge->next;
+
+			while (temp_edge != nullptr) {
+				prev->next = new Edge{ &territories[temp_edge->destination_territory->territoryID], temp_edge->movement_cost };
+				temp_edge = temp_edge->next;
+				prev = prev->next;
+			}
+			prev->next = nullptr;
+		}
+		//Append territory to its corresponding continent list
+		this->continents[map->territories[i].continentID].head = new TerritoryListNode{ &this->territories[i], continents[map->territories[i].continentID].head };
+		this->continents[map->territories[i].continentID].length++;
+	}
+}
+
+
 
 Map::~Map() {
 	//Iterate through territories and delete corresponding edges
@@ -107,6 +152,25 @@ void Map::printMap() {
 			current = current->next;
 		}
 		cout << endl;
+		for (int j = 0; j < player_count; j++) {
+			cout << "\tPlayer " << j << ": \tarmy count: " << territories[i].army_count[j] << "\tcity count: " << territories[i].city_count[j] << endl;
+		}
+	}
+}
+
+void Map::printMapMemAddresses() {
+	for (int i = 0; i < territory_count; i++) {
+		cout << "DEBUG: PRINTING MEMORY ADDRESSES" << endl;
+		cout << "Territory address " << &territories[i] << ", ContinentID " << &territories[i].continentID << ". Connections to: ";
+		Edge* current = territories[i].head;
+		while (current != nullptr) {
+			cout << &current->destination_territory->territoryID << " ";
+			current = current->next;
+		}
+		cout << endl;
+		for (int j = 0; j < player_count; j++) {
+			cout << "\tPlayer " << j << ": \tarmy count: " << &territories[i].army_count[j] << "\tcity count: " << &territories[i].city_count[j] << endl;
+		}
 	}
 }
 
