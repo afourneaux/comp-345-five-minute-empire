@@ -47,7 +47,25 @@ int testMap() {
 	delete testMap;
 
 	cout << "---------------------------------------------------" << endl;
-	cout << "Test case 4: valid map" << endl;
+	cout << "Test case 4: map with a one-way edge" << endl;
+	cout << "---------------------------------------------------" << endl;
+	testMap = new Map(arr, 4, 2, 2);
+	testMap->addEdge(0, 1);
+	testMap->addEdge(0, 2);
+	testMap->addEdge(0, 3);
+	testMap->addEdge(1, 3);
+	testMap->addEdge(1, 2);
+	testMap->addEdge(2, 3);
+	//Edges are added bi-directionally by default. To test a fail case, manually delete an edge
+	Edge* edge_to_delete = testMap->getTerritory(0)->head;
+	testMap->getTerritory(0)->head = testMap->getTerritory(0)->head->next;
+	delete edge_to_delete;
+	testMap->printMap();
+	cout << "Map validate() result: " << testMap->validate() << endl;
+	delete testMap;
+
+	cout << "---------------------------------------------------" << endl;
+	cout << "Test case 5: valid map" << endl;
 	cout << "---------------------------------------------------" << endl;
 	testMap = new Map(arr, 4, 2, 2);
 	testMap->addEdge(0, 1);

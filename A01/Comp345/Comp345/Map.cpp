@@ -193,7 +193,7 @@ bool Map::validate() {
 			return false;
 		}
 	}
-	//Check all outgoing edges for a corresponding incoming edge (should be impossible by design)
+	//Check all outgoing edges for a corresponding incoming edge (shouldn't occur unless an edge is manually removed)
 	for (int i = 0; i < territory_count; i++) {
 		Edge* outEdge = territories[i].head;
 		while (outEdge != nullptr) {
@@ -207,7 +207,7 @@ bool Map::validate() {
 				inEdge = inEdge->next;
 			}
 			if (!found_incoming) {
-				cout << "Invalid map: Territory ID " << i << " has an outgoing edge to " << outEdge->destination_territory->territoryID << " with no corresponding incoming edge.";
+				cout << "Invalid map: Territory ID " << i << " has an outgoing edge to " << outEdge->destination_territory->territoryID << " with no corresponding incoming edge." << endl;
 				return false;
 			}
 			outEdge = outEdge->next;
