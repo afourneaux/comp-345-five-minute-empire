@@ -245,6 +245,7 @@ int Map::countContiguousNodes() {
 
 
 int Map::countContiguousNodesInContinent(TerritoryList *continent) {
+	if (continent->head == nullptr) return 0;
 	bool* seen = new bool[territory_count];
 	for (int i = 0; i < territory_count; i++) seen[i] = false;
 	int seenCount{ 0 };
