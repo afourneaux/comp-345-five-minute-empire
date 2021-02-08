@@ -35,6 +35,152 @@ void Deck::Generate()
 	(&(&this->cards[index])->actions[0])->actionValue = 3;
 	(&(&this->cards[index])->actions[1])->action = eAction_DestroyArmies;
 	(&(&this->cards[index])->actions[1])->actionValue = 1;
+
+	index++;
+
+	(&this->cards[index])->name = "Dire Eye";
+	(&this->cards[index])->image = "card_dire_eye.png";
+	(&this->cards[index])->actionCount = 1;
+	(&this->cards[index])->abilityCount = 1;
+	(&this->cards[index])->abilities = new Ability[1];
+	(&this->cards[index])->actions = new Action[1];
+	(&(&this->cards[index])->abilities[0])->type = eAbility_Flying;
+	(&(&this->cards[index])->actions[0])->action = eAction_PlaceArmies;
+	(&(&this->cards[index])->actions[0])->actionValue = 4;
+
+	index++;
+
+	(&this->cards[index])->name = "Dire Goblin";
+	(&this->cards[index])->image = "card_dire_goblin.png";
+	(&this->cards[index])->actionCount = 1;
+	(&this->cards[index])->abilityCount = 1;
+	(&this->cards[index])->abilities = new Ability[1];
+	(&this->cards[index])->actions = new Action[1];
+	(&(&this->cards[index])->abilities[0])->type = eAbility_Elixir;
+	(&(&this->cards[index])->abilities[0])->value = 1;
+	(&(&this->cards[index])->actions[0])->action = eAction_MoveArmies;
+	(&(&this->cards[index])->actions[0])->actionValue = 5;
+
+	index++;
+
+	(&this->cards[index])->name = "Dire Ogre";
+	(&this->cards[index])->image = "card_dire_ogre.png";
+	(&this->cards[index])->actionCount = 1;
+	(&this->cards[index])->abilityCount = 1;
+	(&this->cards[index])->abilities = new Ability[1];
+	(&this->cards[index])->actions = new Action[1];
+	(&(&this->cards[index])->abilities[0])->type = eAbility_VpPerCoins;
+	(&(&this->cards[index])->abilities[0])->value = 1;
+	(&(&this->cards[index])->abilities[0])->setTarget = 3;
+	(&(&this->cards[index])->actions[0])->action = eAction_MoveArmies;
+	(&(&this->cards[index])->actions[0])->actionValue = 2;
+
+	index++;
+
+	(&this->cards[index])->name = "Lake";
+	(&this->cards[index])->image = "card_lake.png";
+	(&this->cards[index])->actionCount = 2;
+	(&this->cards[index])->actionChoice = eChoice_Or;
+	(&this->cards[index])->abilityCount = 1;
+	(&this->cards[index])->abilities = new Ability[1];
+	(&this->cards[index])->actions = new Action[2];
+	(&(&this->cards[index])->abilities[0])->type = eAbility_VpPerCardName;
+	(&(&this->cards[index])->abilities[0])->value = 1;
+	(&(&this->cards[index])->abilities[0])->setTarget = 1;
+	(&(&this->cards[index])->abilities[0])->setName = "Forest";
+	(&(&this->cards[index])->abilities[0])->countSetOnce = false;
+	(&(&this->cards[index])->actions[0])->action = eAction_PlaceArmies;
+	(&(&this->cards[index])->actions[0])->actionValue = 2;
+	(&(&this->cards[index])->actions[1])->action = eAction_MoveArmies;
+	(&(&this->cards[index])->actions[1])->actionValue = 3;
+
+	index++;
+
+	(&this->cards[index])->name = "Forest Elf";
+	(&this->cards[index])->image = "card_forest_elf.png";
+	(&this->cards[index])->actionCount = 2;
+	(&this->cards[index])->actionChoice = eChoice_Or;
+	(&this->cards[index])->abilityCount = 1;
+	(&this->cards[index])->abilities = new Ability[1];
+	(&this->cards[index])->actions = new Action[2];
+	(&(&this->cards[index])->abilities[0])->type = eAbility_PlusOneArmy;
+	(&(&this->cards[index])->actions[0])->action = eAction_PlaceArmies;
+	(&(&this->cards[index])->actions[0])->actionValue = 3;
+	(&(&this->cards[index])->actions[1])->action = eAction_MoveArmies;
+	(&(&this->cards[index])->actions[1])->actionValue = 2;
+
+	index++;
+
+	(&this->cards[index])->name = "Forest Gnome";
+	(&this->cards[index])->image = "card_forest_gnome.png";
+	(&this->cards[index])->actionCount = 1;
+	(&this->cards[index])->abilityCount = 1;
+	(&this->cards[index])->abilities = new Ability[1];
+	(&this->cards[index])->actions = new Action[1];
+	(&(&this->cards[index])->abilities[0])->type = eAbility_Elixir;
+	(&(&this->cards[index])->abilities[0])->value = 3;
+	(&(&this->cards[index])->actions[0])->action = eAction_MoveArmies;
+	(&(&this->cards[index])->actions[0])->actionValue = 2;
+
+	index++;
+
+	(&this->cards[index])->name = "Forest Tree Town";
+	(&this->cards[index])->image = "card_forest_tree_town.png";
+	(&this->cards[index])->actionCount = 1;
+	(&this->cards[index])->abilityCount = 1;
+	(&this->cards[index])->abilities = new Ability[1];
+	(&this->cards[index])->actions = new Action[1];
+	(&(&this->cards[index])->abilities[0])->type = eAbility_PlusOneMove;
+	(&(&this->cards[index])->actions[0])->action = eAction_BuildCity;
+
+	index++;
+
+	(&this->cards[index])->name = "Graveyard";
+	(&this->cards[index])->image = "card_graveyard.png";
+	(&this->cards[index])->actionCount = 1;
+	(&this->cards[index])->abilityCount = 1;
+	(&this->cards[index])->abilities = new Ability[1];
+	(&this->cards[index])->actions = new Action[1];
+	(&(&this->cards[index])->abilities[0])->type = eAbility_VpPerCardName;
+	(&(&this->cards[index])->abilities[0])->value = 1;
+	(&(&this->cards[index])->abilities[0])->setTarget = 1;
+	(&(&this->cards[index])->abilities[0])->setName = "Cursed";
+	(&(&this->cards[index])->abilities[0])->countSetOnce = false;
+	(&(&this->cards[index])->actions[0])->action = eAction_BuildCity;
+
+	index++;
+
+	(&this->cards[index])->name = "Mountain Dwarf";
+	(&this->cards[index])->image = "card_mountain_dwarf.png";
+	(&this->cards[index])->actionChoice = eChoice_And;
+	(&this->cards[index])->actionCount = 2;
+	(&this->cards[index])->abilityCount = 1;
+	(&this->cards[index])->abilities = new Ability[1];
+	(&this->cards[index])->actions = new Action[2];
+	(&(&this->cards[index])->abilities[0])->type = eAbility_VpPerCardName;
+	(&(&this->cards[index])->abilities[0])->value = 3;
+	(&(&this->cards[index])->abilities[0])->setTarget = 2;
+	(&(&this->cards[index])->abilities[0])->setName = "Mountain";
+	(&(&this->cards[index])->abilities[0])->countSetOnce = true;
+	(&(&this->cards[index])->actions[0])->action = eAction_PlaceArmies;
+	(&(&this->cards[index])->actions[0])->actionValue = 2;
+	(&(&this->cards[index])->actions[1])->action = eAction_DestroyArmies;
+	(&(&this->cards[index])->actions[1])->actionValue = 1;
+
+	index++;
+
+	(&this->cards[index])->name = "Mountain Treasury";
+	(&this->cards[index])->image = "card_mountain_treasury.png";
+	(&this->cards[index])->actionCount = 1;
+	(&this->cards[index])->abilityCount = 2;
+	(&this->cards[index])->abilities = new Ability[2];
+	(&this->cards[index])->actions = new Action[1];
+	(&(&this->cards[index])->abilities[0])->type = eAbility_Elixir;
+	(&(&this->cards[index])->abilities[0])->value = 1;
+	(&(&this->cards[index])->abilities[1])->type = eAbility_Coins;
+	(&(&this->cards[index])->abilities[1])->value = 2;
+	(&(&this->cards[index])->actions[0])->action = eAction_MoveArmies;
+	(&(&this->cards[index])->actions[0])->actionValue = 3;
 }
 
 // Get the top card and remove it from the deck
@@ -42,6 +188,7 @@ Card* Deck::Draw()
 {
 	// If the deck is empty, return a null pointer
 	if (this->deckIndex == DECK_SIZE) {
+		cout << "ERROR: Deck::Draw attempting to draw a card from an empty deck" << endl;
 		return nullptr;
 	}
 	return &this->cards[this->deckIndex++];
@@ -53,7 +200,7 @@ void Deck::Print() {
 	cout << "Total cards dealt: " << this->deckIndex << endl;
 	cout << "Cards remaining in the deck: " << DECK_SIZE - this->deckIndex << endl;
 	cout << "Card descriptions:" << endl;
-	for (int i = this->deckIndex; i < DECK_SIZE - this->deckIndex; i++) {
+	for (int i = this->deckIndex; i < DECK_SIZE; i++) {
 		(&this->cards[i])->Print();
 	}
 }
@@ -89,7 +236,7 @@ Card* Hand::Exchange(int index/*, Player player */)
 Card* Hand::GetCardAtIndex(int index)
 {
 	if (index < 0 || index >= HAND_SIZE) {
-		// TODO: Handle index out of bounds
+		cout << "ERROR: Hand::GetCardAtIndex attempting to get card at index " << index << ". Valid values: 0 - " << HAND_SIZE << endl;
 		return nullptr;
 	}
 	return &this->cards[index];
@@ -101,9 +248,19 @@ int Hand::GetCostAtIndex(int index)
 {
 	if (index < 0 || index >= HAND_SIZE) {
 		// TODO: Handle index out of bounds
+		cout << "ERROR: Hand::GetCostAtIndex attempting to get cost at index " << index << ". Valid values: 0 - " << HAND_SIZE << endl;
 		return -1;
 	}
 	return (index + 1) / 2;
+}
+
+void Hand::Print() {
+	cout << "*******PRINTING HAND CONTENTS*******" << endl;
+	for (int i = 0; i < HAND_SIZE; i++) {
+		cout << "*****SLOT " << i + 1 << endl;
+		cout << "Card cost: " << this->GetCostAtIndex(i) << endl;
+		this->GetCardAtIndex(i)->Print();
+	}
 }
 
 /*******
@@ -219,10 +376,10 @@ string Ability::ToString()
 	case eAbility_VpPerCardName:
 		value = "+" + to_string(this->value) + "VP ";
 		if (this->countSetOnce) {
-			value += " if you have ";
+			value += "if you have ";
 		}
 		else {
-			value += " per ";
+			value += "per ";
 		}
 		if (this->setTarget == 1) {
 			value += this->setName + " card";

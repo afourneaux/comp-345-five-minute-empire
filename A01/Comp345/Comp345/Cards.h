@@ -3,7 +3,7 @@
 
 using namespace std;
 
-const int DECK_SIZE = 10;
+const int DECK_SIZE = 11;
 const int HAND_SIZE = 6;
 
 enum CardAction {
@@ -76,6 +76,7 @@ public:
 	Card* Exchange(int index);
 	Card* GetCardAtIndex(int index);
 	int GetCostAtIndex(int index);
+	void Print();
 private:
 	Card* cards;
 	Deck* deck;
