@@ -3,8 +3,8 @@
 
 using namespace std;
 
-const int DECK_SIZE = 11;
-const int HAND_SIZE = 6;
+const int DECK_SIZE = 11;	// The total number of implemented cards in the deck
+const int HAND_SIZE = 6;	// The number of face-up cards in the hand
 
 enum CardAction {
 	eAction_None,
@@ -47,6 +47,8 @@ struct Ability {
 };
 
 struct Card {
+	Card();						// Default constructor
+	Card(Card* card);			// Copy constructor
 	string name;				// Title of the card
 	string image;				// Source file containing card art
 	Action* actions;			// The set of action(s) granted by the card
@@ -54,32 +56,35 @@ struct Card {
 	CardChoice actionChoice;	// If two actions exist, determine whether it is an AND or OR relationship
 	Ability* abilities;			// The ability/abilities listed on the card
 	int abilityCount;			// How many abilities are on the card
-	void Print();				// Output the card's formatted data
+	void Print();				// Output the card's formatted data to cout
 };
 
+//TODO: assignment operator, stream insertion
 class Deck {
 public:
 	Deck();
 	Deck(Deck* deck);
-	Card* Draw();
-	void Print();
+	Card* Draw();				// Return and remove the first card from the deck
+	void Print();				// Output the deck's contents to cout
 private:
-	void Generate();
-	Card* cards;
-	int deckIndex;
+	void Generate();			// Populate the deck with hard-coded cards
+	Card* cards;				// The contents of the deck
+	int deckIndex;				// The current index representing the top of the deck
 };
 
+//TODO: assignment operator, stream insertion, Player interaction in Exchange
 class Hand {
 public:
-	Hand(Deck* deck);
-	Hand(Hand* hand);
-	Card* Exchange(int index);
-	Card* GetCardAtIndex(int index);
-	int GetCostAtIndex(int index);
-	void Print();
+	Hand(Deck* deck);								// Default constructor
+	Hand(Hand* hand);								// Copy constructor
+	//~Hand();										// Destructor
+	Card* Exchange(int index/*, Player player*/);	// Spend coins to obtain a card 
+	Card* GetCardAtIndex(int index);				// Returns card data at a given index
+	int GetCostAtIndex(int index);					// Returns the coin cost to retrieve a card at a given index
+	void Print();									// Output each card in the hand to cout
 private:
-	Card* cards;
-	Deck* deck;
+	Card* cards;									// The content of the hand
+	Deck* deck;										// The associated deck from which to draw cards from
 };
 
-int testCards();
+int testCards();									// The driver to display test information
