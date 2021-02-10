@@ -1,4 +1,5 @@
 #pragma once
+#include <iostream>
 
 struct Edge;
 
@@ -8,7 +9,7 @@ struct Territory {
 	int territoryID;					// Index of the territory in the territories[] array of Map class
 	int* army_count;					// army_count and city_count are arrays indexed by player index (eg if player 0 has 5 armies in the territory, army_count[0]==5)
 	int* city_count;
-
+	friend std::ostream& operator<< (std::ostream& out, const Territory& territory);
 };
 
 struct Edge {
@@ -48,6 +49,7 @@ public:
 	void PrintMap();								// Prints a string representation of the map
 	void PrintMapMemAddresses();					// DEBUG: prints a string representation of the map's memory addresses
 	bool Validate();								// Validates if the map is a valid game map
+	friend std::ostream& operator<< (std::ostream& out, const Map& map); // Stream insertion operator
 private:
 	int CountContiguousNodes();						// Used in validate() to check that all territories are connected
 	int CountContiguousNodesInContinent(TerritoryList* continent);	// Used in validate() to check that all continents are contiguous

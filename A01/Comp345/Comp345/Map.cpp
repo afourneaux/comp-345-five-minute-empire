@@ -321,6 +321,22 @@ Territory* Map::SetStartingTerritory(int territory_index) {
 	}
 }
 
+std::ostream& operator<< (std::ostream& out, const Map& map) {
+	for (int i = 0; i < map.territory_count; i++) {		
+		out << "Territory index " << i << ", ContinentID " << map.territories[i].continentID << ". Connections to: ";
+		Edge* current = map.territories[i].head;
+		while (current != nullptr) {
+			out << current->destination_territory->territoryID << " ";
+			current = current->next;
+		}
+		out << endl;
+		for (int j = 0; j < map.player_count; j++) {
+			out << "\tPlayer " << j << ": \tarmy count: " << map.territories[i].army_count[j] << "\tcity count: " << map.territories[i].city_count[j] << endl;
+		}
+	}
+	return out;
+}
+
 
 TerritoryList::TerritoryList() {
 	head = nullptr;

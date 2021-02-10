@@ -19,7 +19,7 @@ int TestMap() {
 	testMap->AddEdge(0, 2);
 	testMap->AddEdge(2, 3);
 	testMap->AddEdge(0, 3);
-	testMap->PrintMap();
+	cout << *testMap;
 	cout << "Map validate() result: " << testMap->Validate() << endl;
 	delete testMap;
 
@@ -29,7 +29,7 @@ int TestMap() {
 	testMap = new Map(arr, 4, 2, 2);
 	testMap->AddEdge(0, 1);
 	testMap->AddEdge(2, 3);
-	testMap->PrintMap();
+	cout << *testMap;
 	cout << "Map validate() result: " << testMap->Validate() << endl;
 	delete testMap;
 
@@ -42,7 +42,7 @@ int TestMap() {
 	testMap->AddEdge(0, 3);
 	testMap->AddEdge(1, 3);
 	testMap->AddEdge(2, 3);
-	testMap->PrintMap();
+	cout << *testMap;
 	cout << "Map validate() result: " << testMap->Validate() << endl;
 	delete testMap;
 
@@ -60,7 +60,7 @@ int TestMap() {
 	Edge* edge_to_delete = testMap->GetTerritory(0)->head;
 	testMap->GetTerritory(0)->head = testMap->GetTerritory(0)->head->next;
 	delete edge_to_delete;
-	testMap->PrintMap();
+	cout << *testMap;
 	cout << "Map validate() result: " << testMap->Validate() << endl;
 	delete testMap;
 
@@ -74,7 +74,7 @@ int TestMap() {
 	testMap->AddEdge(1, 3);
 	testMap->AddEdge(1, 2);
 	testMap->AddEdge(2, 3);
-	testMap->PrintMap();
+	cout << *testMap;
 	cout << "Map validate() result: " << testMap->Validate() << endl;
 	delete testMap;
 	delete[] arr;
