@@ -113,7 +113,7 @@ Map::~Map() {
 }
 
 
-void Map::addEdge(int origin, int destination) {
+void Map::AddEdge(int origin, int destination) {
 	//Check for valid indexes
 	if (origin < 0 || origin >= territory_count) {
 		cout << "WARNING: Error on adding edge (" << origin << "," << destination << "): origin territory index " << origin << " out of range. Edge not added.\n";
@@ -141,12 +141,12 @@ void Map::addEdge(int origin, int destination) {
 	int edgeCost{ 1 };
 	if (territories[origin].continentID != territories[destination].continentID) edgeCost = 3;
 	//Add edge (in both directions)
-	territories[origin].head = new Edge{ getTerritory(destination), edgeCost, territories[origin].head };
-	territories[destination].head = new Edge{ getTerritory(origin), edgeCost, territories[destination].head };
+	territories[origin].head = new Edge{ GetTerritory(destination), edgeCost, territories[origin].head };
+	territories[destination].head = new Edge{ GetTerritory(origin), edgeCost, territories[destination].head };
 }
 
 
-void Map::printMap() {
+void Map::PrintMap() {
 	for (int i = 0; i < territory_count; i++) {
 		cout << "Territory index " << i << ", ContinentID " << territories[i].continentID << ". Connections to: ";
 		Edge* current = territories[i].head;
@@ -162,7 +162,7 @@ void Map::printMap() {
 }
 
 
-void Map::printMapMemAddresses() {
+void Map::PrintMapMemAddresses() {
 	for (int i = 0; i < territory_count; i++) {
 		cout << "DEBUG: PRINTING MEMORY ADDRESSES" << endl;
 		cout << "Territory address " << &territories[i] << ", ContinentID " << &territories[i].continentID << ". Connections to: ";
@@ -179,16 +179,16 @@ void Map::printMapMemAddresses() {
 }
 
 
-bool Map::validate() {
+bool Map::Validate() {
 	//Check if territory count matches the visited node count from a BFS
-	if (territory_count != countContiguousNodes()) {
+	if (territory_count != CountContiguousNodes()) {
 		cout << "Invalid map: not all territories are connected." << endl;
 		return false;
 	}
 	//Check each continent: count contiguous nodes via BFS, check against continent's territory count
 	for (int i = 0; i < continent_count; i++) {
 		TerritoryList* continent = &continents[i];
-		if (continent->length != countContiguousNodesInContinent(continent)) {
+		if (continent->length != CountContiguousNodesInContinent(continent)) {
 			cout << "Invalid map: continent " << i << " has non-contiguous territories." << endl;
 			return false;
 		}
@@ -217,22 +217,22 @@ bool Map::validate() {
 }
 
 
-int Map::countContiguousNodes() {
+int Map::CountContiguousNodes() {
 	bool* seen = new bool[territory_count];
 	for (int i = 0; i < territory_count; i++) seen[i] = false;
 	int seenCount{ 0 };
 	TerritoryList visitQueue;
-	visitQueue.push(&territories[0]);
+	visitQueue.Push(&territories[0]);
 	seen[0] = true;
 	while (visitQueue.length > 0) {
 
 		seenCount++;
-		TerritoryListNode* current = visitQueue.pop();
+		TerritoryListNode* current = visitQueue.Pop();
 		// cout << "DEBUG countContinuousNodes(): Visiting " << current->territory->territoryID << endl;
 		Edge* outEdge = current->territory->head;
 		while (outEdge != nullptr) {
 			if (!seen[outEdge->destination_territory->territoryID]) {
-				visitQueue.push(outEdge->destination_territory);
+				visitQueue.Push(outEdge->destination_territory);
 				seen[outEdge->destination_territory->territoryID]=true;
 			}
 			outEdge = outEdge->next;
@@ -244,22 +244,22 @@ int Map::countContiguousNodes() {
 }
 
 
-int Map::countContiguousNodesInContinent(TerritoryList *continent) {
+int Map::CountContiguousNodesInContinent(TerritoryList *continent) {
 	if (continent->head == nullptr) return 0;
 	bool* seen = new bool[territory_count];
 	for (int i = 0; i < territory_count; i++) seen[i] = false;
 	int seenCount{ 0 };
 	TerritoryList *visitQueue = new TerritoryList();
-	visitQueue->push(continent->head->territory);
+	visitQueue->Push(continent->head->territory);
 	seen[continent->head->territory->territoryID] = true;
 	while (visitQueue->length > 0) {
 		seenCount++;
-		TerritoryListNode* current = visitQueue->pop();
+		TerritoryListNode* current = visitQueue->Pop();
 		// cout << "DEBUG countContinuousNodesInContinent(): Visiting " << current->territory->territoryID << endl;
 		Edge* outEdge = current->territory->head;
 		while (outEdge != nullptr) {
 			if (!seen[outEdge->destination_territory->territoryID] and outEdge->destination_territory->continentID == current->territory->continentID) {
-				visitQueue->push(outEdge->destination_territory);
+				visitQueue->Push(outEdge->destination_territory);
 				seen[outEdge->destination_territory->territoryID] = true;
 			}
 			outEdge = outEdge->next;
@@ -272,7 +272,7 @@ int Map::countContiguousNodesInContinent(TerritoryList *continent) {
 }
 
 
-int Map::countWaterConnections(int territory_index)
+int Map::CountWaterConnections(int territory_index)
 {
 	int count = 0;
 	Edge* temp = territories[territory_index].head;
@@ -285,7 +285,7 @@ int Map::countWaterConnections(int territory_index)
 }
 
 
-Territory* Map::getTerritory(int territory_index) {
+Territory* Map::GetTerritory(int territory_index) {
 	if (territory_index < 0 || territory_index >= territory_count) {
 		cout << "ERROR: Failure to fetch territory at index " << territory_index << ", index is out of range." << endl;
 		return nullptr;
@@ -294,8 +294,8 @@ Territory* Map::getTerritory(int territory_index) {
 }
 
 
-Territory* Map::setStartingTerritory(int territory_index) {
-	int water_connections = countWaterConnections(territory_index);
+Territory* Map::SetStartingTerritory(int territory_index) {
+	int water_connections = CountWaterConnections(territory_index);
 	//Reject if territory does not have a water connection to another continent
 	if (water_connections == 0) {
 		cout << "ERROR: invalid starting territory " << territory_index << ", the starting territory must have at least one connection to another continent";
@@ -306,7 +306,7 @@ Territory* Map::setStartingTerritory(int territory_index) {
 		int count = 0;
 		Edge* temp = territories[territory_index].head;
 		while (temp != nullptr) {
-			if (temp->destination_territory->continentID == territories[territory_index].continentID and countWaterConnections(temp->destination_territory->territoryID) > 0) {
+			if (temp->destination_territory->continentID == territories[territory_index].continentID and CountWaterConnections(temp->destination_territory->territoryID) > 0) {
 				starting_territory_index = territory_index;
 				return &territories[territory_index];
 			}
@@ -328,13 +328,13 @@ TerritoryList::TerritoryList() {
 }
 
 
-void TerritoryList::push(Territory* territory) {
+void TerritoryList::Push(Territory* territory) {
 	this->head = new TerritoryListNode{ territory, this->head };
 	this->length++;
 }
 
 
-TerritoryListNode* TerritoryList::pop() {
+TerritoryListNode* TerritoryList::Pop() {
 	if (this->head == nullptr) return nullptr;
 	this->length--;
 	TerritoryListNode* temp = this->head;
