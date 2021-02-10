@@ -31,7 +31,6 @@ struct TerritoryList {					// Territorylist is a generic linked list data struct
 	TerritoryListNode* Pop();			// Removes first territory from linked list
 };
 
-//TODO: assignment operator, stream insertion
 class Map {
 public:
 	int territory_count;							// Number of territories in Map
@@ -49,6 +48,7 @@ public:
 	void PrintMap();								// Prints a string representation of the map
 	void PrintMapMemAddresses();					// DEBUG: prints a string representation of the map's memory addresses
 	bool Validate();								// Validates if the map is a valid game map
+	Map& operator= (const Map& map);				// Assignment operator
 	friend std::ostream& operator<< (std::ostream& out, const Map& map); // Stream insertion operator
 private:
 	int CountContiguousNodes();						// Used in validate() to check that all territories are connected

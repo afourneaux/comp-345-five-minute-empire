@@ -1,5 +1,4 @@
 #include "Map.h"
-#include <iostream>
 
 using namespace std;
 
@@ -320,6 +319,87 @@ Territory* Map::SetStartingTerritory(int territory_index) {
 		return &territories[territory_index];
 	}
 }
+
+
+Map& Map::operator= (const Map& map) {
+	//Check for self-assignment
+	if (this == &map) {
+		return *this;
+	}
+	
+	//Deallocate currently used memory:
+	//Iterate through territories and delete corresponding edges
+	for (int i = 0; i < territory_count; i++) {
+		Edge* current = territories[i].head;
+		while (current != nullptr) {
+			Edge* temp = current->next;
+			delete current;
+			current = temp;
+		}
+		delete[] territories[i].army_count;
+		delete[] territories[i].city_count;
+	}
+	delete[] territories;
+	territories = nullptr;
+
+	//Iterate through continents and delete corresponding TerritoryListNodes
+	for (int i = 0; i < continent_count; i++) {
+		TerritoryList* current = &continents[i];
+		TerritoryListNode* terr = current->head;
+		while (terr != nullptr) {
+			TerritoryListNode* temp = terr->next;
+			delete terr;
+			terr = temp;
+		}
+	}
+	delete[] continents;
+	continents = nullptr;
+	
+	//reallocate new values:
+	this->territory_count = map.territory_count;
+	this->continent_count = map.continent_count;
+	this->player_count = map.player_count;
+	this->starting_territory_index = map.starting_territory_index;
+
+	//Initialize continent Linked Lists
+	this->continents = new TerritoryList[continent_count];
+	for (int i = 0; i < continent_count; i++) {
+		this->continents[i].head = nullptr;
+		this->continents[i].length = 0;
+	}
+
+	//Initialize territories array and copy
+	this->territories = new Territory[territory_count];
+	for (int i = 0; i < territory_count; i++) {
+		this->territories[i].continentID = map.territories[i].continentID;
+		this->territories[i].territoryID = i;
+		this->territories[i].army_count = new int[map.player_count];
+		this->territories[i].city_count = new int[map.player_count];
+		for (int j = 0; j < player_count; j++) {
+			this->territories[i].army_count[j] = map.territories[i].army_count[j];
+			this->territories[i].city_count[j] = map.territories[i].city_count[j];
+		}
+
+		Edge* temp_edge = map.territories[i].head;
+		if (temp_edge != nullptr) {
+			Edge* prev = this->territories[i].head = new Edge{ &territories[temp_edge->destination_territory->territoryID],temp_edge->movement_cost, nullptr };
+			temp_edge = temp_edge->next;
+
+			while (temp_edge != nullptr) {
+				prev->next = new Edge{ &territories[temp_edge->destination_territory->territoryID], temp_edge->movement_cost };
+				temp_edge = temp_edge->next;
+				prev = prev->next;
+			}
+			prev->next = nullptr;
+		}
+		//Append territory to its corresponding continent list
+		this->continents[map.territories[i].continentID].head = new TerritoryListNode{ &this->territories[i], continents[map.territories[i].continentID].head };
+		this->continents[map.territories[i].continentID].length++;
+	}
+
+	return *this;
+}
+
 
 std::ostream& operator<< (std::ostream& out, const Map& map) {
 	for (int i = 0; i < map.territory_count; i++) {		
