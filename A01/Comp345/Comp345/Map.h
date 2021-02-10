@@ -9,7 +9,6 @@ struct Territory {
 	int territoryID;					// Index of the territory in the territories[] array of Map class
 	int* army_count;					// army_count and city_count are arrays indexed by player index (eg if player 0 has 5 armies in the territory, army_count[0]==5)
 	int* city_count;
-	friend std::ostream& operator<< (std::ostream& out, const Territory& territory);
 };
 
 struct Edge {
