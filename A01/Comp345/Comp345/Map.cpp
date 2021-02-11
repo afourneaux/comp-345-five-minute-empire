@@ -145,22 +145,6 @@ void Map::AddEdge(int origin, int destination) {
 }
 
 
-void Map::PrintMap() {
-	for (int i = 0; i < territory_count; i++) {
-		cout << "Territory index " << i << ", ContinentID " << territories[i].continentID << ". Connections to: ";
-		Edge* current = territories[i].head;
-		while (current != nullptr) {
-			cout << current->destination_territory->territoryID << " ";
-			current = current->next;
-		}
-		cout << endl;
-		for (int j = 0; j < player_count; j++) {
-			cout << "\tPlayer " << j << ": \tarmy count: " << territories[i].army_count[j] << "\tcity count: " << territories[i].city_count[j] << endl;
-		}
-	}
-}
-
-
 void Map::PrintMapMemAddresses() {
 	for (int i = 0; i < territory_count; i++) {
 		cout << "DEBUG: PRINTING MEMORY ADDRESSES" << endl;
