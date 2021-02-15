@@ -211,7 +211,6 @@ int Map::CountContiguousNodes() {
 
 		seenCount++;
 		TerritoryListNode* current = visitQueue.Pop();
-		// cout << "DEBUG countContinuousNodes(): Visiting " << current->territory->territoryID << endl;
 		Edge* outEdge = current->territory->head;
 		while (outEdge != nullptr) {
 			if (!seen[outEdge->destination_territory->territoryID]) {
@@ -238,7 +237,6 @@ int Map::CountContiguousNodesInContinent(TerritoryList *continent) {
 	while (visitQueue->length > 0) {
 		seenCount++;
 		TerritoryListNode* current = visitQueue->Pop();
-		// cout << "DEBUG countContinuousNodesInContinent(): Visiting " << current->territory->territoryID << endl;
 		Edge* outEdge = current->territory->head;
 		while (outEdge != nullptr) {
 			if (!seen[outEdge->destination_territory->territoryID] and outEdge->destination_territory->continentID == current->territory->continentID) {
