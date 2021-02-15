@@ -1,6 +1,8 @@
-#include "Map.h"
+#include "Player.h"
 #include <iostream>
+#include "PlayerDriver.cpp"
 
 int main() {
-	testMap();
+	testPlayer();
 }
+

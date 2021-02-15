@@ -40,7 +40,7 @@ public:
 	int starting_territory_index;
 	Territory* territories;
 	TerritoryList* continents;
-	Map(int *territories, int territory_count, int player_count, int continent_count);
+	Map(int* territories, int territory_count, int player_count, int continent_count);
 	Map(Map* map);
 	~Map();
 	void addEdge(int origin, int destination);
@@ -55,4 +55,5 @@ private:
 	int countWaterConnections(int territory_index);
 };
 
-int testMap();
+
+

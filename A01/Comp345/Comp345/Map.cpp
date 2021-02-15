@@ -39,7 +39,7 @@ Map::Map(int* territories, int territory_count, int player_count, int continent_
 }
 
 
-Map::Map(Map* map) {
+Map::Map(Map * map) {
 	this->territory_count = map->territory_count;
 	this->continent_count = map->continent_count;
 	this->player_count = map->player_count;
@@ -233,7 +233,7 @@ int Map::countContiguousNodes() {
 		while (outEdge != nullptr) {
 			if (!seen[outEdge->destination_territory->territoryID]) {
 				visitQueue.push(outEdge->destination_territory);
-				seen[outEdge->destination_territory->territoryID]=true;
+				seen[outEdge->destination_territory->territoryID] = true;
 			}
 			outEdge = outEdge->next;
 		}
@@ -244,12 +244,12 @@ int Map::countContiguousNodes() {
 }
 
 
-int Map::countContiguousNodesInContinent(TerritoryList *continent) {
+int Map::countContiguousNodesInContinent(TerritoryList * continent) {
 	if (continent->head == nullptr) return 0;
 	bool* seen = new bool[territory_count];
 	for (int i = 0; i < territory_count; i++) seen[i] = false;
 	int seenCount{ 0 };
-	TerritoryList *visitQueue = new TerritoryList();
+	TerritoryList* visitQueue = new TerritoryList();
 	visitQueue->push(continent->head->territory);
 	seen[continent->head->territory->territoryID] = true;
 	while (visitQueue->length > 0) {
@@ -328,7 +328,7 @@ TerritoryList::TerritoryList() {
 }
 
 
-void TerritoryList::push(Territory* territory) {
+void TerritoryList::push(Territory * territory) {
 	this->head = new TerritoryListNode{ territory, this->head };
 	this->length++;
 }
@@ -341,4 +341,5 @@ TerritoryListNode* TerritoryList::pop() {
 	head = temp->next;
 	return temp;
 }
+
 
