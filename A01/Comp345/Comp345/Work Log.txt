@@ -1,0 +1,13 @@
+Assainment 1:
+
+Amir Hossein Hadinezhad :
+{
+
+ Biding Cpp and header
+
+ Player {
+	PaymentCheck , Treasury_Report , PayCoin Functions
+	setter and getter for PlayerName, Coin , Bid,s Id
+       }
+}
+
