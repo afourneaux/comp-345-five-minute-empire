@@ -3,6 +3,6 @@
 #include <iostream>
 
 int main() {
-	testMap();
-	testCards();
+	TestMap();
+	TestCards();
 }

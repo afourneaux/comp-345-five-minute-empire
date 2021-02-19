@@ -12,7 +12,7 @@ Deck::Deck() {
 }
 
 // Copy constructor
-Deck::Deck(Deck* deck) {
+Deck::Deck(const Deck* deck) {
 	this->deckIndex = deck->deckIndex;
 	this->cards = new Card[DECK_SIZE];
 
@@ -199,17 +199,17 @@ Card* Deck::Draw()
 	return &this->cards[this->deckIndex++];
 }
 
-// Output the deck's contents to cout
-void Deck::Print() {
-	cout << "*******PRINTING DECK CONTENTS*******" << endl;
-	cout << "Starting deck size: " << DECK_SIZE << endl;
-	cout << "Total cards dealt: " << this->deckIndex << endl;
-	cout << "Cards remaining in the deck: " << DECK_SIZE - this->deckIndex << endl;
-	cout << "Card descriptions:" << endl;
-	for (int i = this->deckIndex; i < DECK_SIZE; i++) {
-		this->cards[i].Print();
-		cout << endl;
+// Stream insertion operator
+std::ostream& operator<<(std::ostream& out, const Deck& deck) {
+	out << "Original deck size: " << DECK_SIZE << endl;
+	out << "Total cards dealt: " << deck.deckIndex << endl;
+	out << "Cards remaining in the deck: " << DECK_SIZE - deck.deckIndex << endl;
+	out << "Card descriptions:" << endl;
+	for (int i = deck.deckIndex; i < DECK_SIZE; i++) {
+		out << deck.cards[i];
+		out << endl;
 	}
+	return out;
 }
 
 /*******
@@ -228,7 +228,7 @@ Hand::Hand(Deck* deck) {
 }
 
 // Copy constructor
-Hand::Hand(Hand* hand) {
+Hand::Hand(const Hand* hand) {
 	this->deck = hand->deck;
 	this->cards = new Card[HAND_SIZE];
 	for (int i = 0; i < HAND_SIZE; i++) {
@@ -243,7 +243,7 @@ Hand::~Hand() {
 }*/
 
 // Spend coins to obtain a card
-Card* Hand::Exchange(int index/*, Player player */)
+Card* Hand::Exchange(const int index/*, Player player */)
 {
 	int cost = this->GetCostAtIndex(index);
 	// TODO: Logic to make the player pay for the card
@@ -253,7 +253,7 @@ Card* Hand::Exchange(int index/*, Player player */)
 }
 
 // Returns card data at a given index
-Card* Hand::GetCardAtIndex(int index)
+Card* Hand::GetCardAtIndex(const int index) const
 {
 	if (index < 0 || index >= HAND_SIZE) {
 		cout << "ERROR: Hand::GetCardAtIndex attempting to get card at index " << index << ". Valid values: 0 - " << HAND_SIZE << endl;
@@ -265,25 +265,24 @@ Card* Hand::GetCardAtIndex(int index)
 // Returns the coin cost to retrieve a card at a given index
 // Card costs are 0, 1, 1, 2, 2, 3
 // This translates to the card's position / 2 (rounded down)
-int Hand::GetCostAtIndex(int index)
+int Hand::GetCostAtIndex(const int index) const
 {
 	if (index < 0 || index >= HAND_SIZE) {
-		// TODO: Handle index out of bounds
 		cout << "ERROR: Hand::GetCostAtIndex attempting to get cost at index " << index << ". Valid values: 0 - " << HAND_SIZE << endl;
 		return -1;
 	}
 	return (index + 1) / 2;
 }
 
-// Output each card in the hand to cout
-void Hand::Print() {
-	cout << "*******PRINTING HAND CONTENTS*******" << endl;
+// Stream insertion operator
+std::ostream& operator<<(std::ostream& out, const Hand& hand) {
 	for (int i = 0; i < HAND_SIZE; i++) {
-		cout << "*****SLOT " << i + 1 << endl;
-		cout << "Card cost: " << this->GetCostAtIndex(i) << endl;
-		this->GetCardAtIndex(i)->Print();
-		cout << endl;
+		out << "*****SLOT " << i + 1 << endl;
+		out << "Card cost: " << hand.GetCostAtIndex(i) << endl;
+		out << *hand.GetCardAtIndex(i);
+		out << endl;
 	}
+	return out;
 }
 
 /*******
@@ -295,7 +294,7 @@ Card::Card() {
 }
 
 // Copy Constructor
-Card::Card(Card* card) {
+Card::Card(const Card* card) {
 	this->name = card->name;
 	this->image = card->image;
 	this->actionChoice = card->actionChoice;
@@ -318,81 +317,78 @@ Card::Card(Card* card) {
 	}
 }
 
-// Output card data to cout
-void Card::Print() {
+std::ostream& operator<<(std::ostream& out, const Card& card) {
 	// Print identifying information
-	cout << "===============" << endl; 
-	cout << this->name << endl;
-	cout << "Image source: " << this->image << endl;
+	out << "===============" << endl;
+	out << card.name << endl;
+	out << "Image source: " << card.image << endl;
 	// Print ability/abilities
-	cout << "===ABILITIES===" << endl;
-	for (int i = 0; i < this->abilityCount; i++) {
-		cout << this->abilities[i].ToString();
-		cout << endl;
+	out << "===ABILITIES===" << endl;
+	for (int i = 0; i < card.abilityCount; i++) {
+		out << card.abilities[i] << endl;
 	}
 	// Print action(s)
-	cout << "====ACTIONS====" << endl;
-	for (int i = 0; i < this->actionCount; i++) {
-		cout << this->actions[i].ToString();
-		if (i < this->actionCount - 1) {
-			switch (this->actionChoice) {
+	out << "====ACTIONS====" << endl;
+	for (int i = 0; i < card.actionCount; i++) {
+		out << card.actions[i];
+		if (i < card.actionCount - 1) {
+			switch (card.actionChoice) {
 			case eChoice_And:
-				cout << " AND ";
+				out << " AND ";
 				break;
 			case eChoice_Or:
-				cout << " OR ";
+				out << " OR ";
 				break;
 			}
 		}
 	}
-	cout << endl;
-	cout << "===============" << endl;
+	out << endl;
+	out << "===============" << endl;
+	return out;
 }
 
 /*******
   ACTION
  *******/
 
-// Format Action data as a string
-string Action::ToString()
-{
-	string value;
-	switch (this->action) {
+// Stream insertion operator
+std::ostream& operator<<(std::ostream& out, const Action& action) {
+	switch (action.action) {
 	case eAction_BuildCity:
-		value = "Build City";
+		out << "Build City";
 		break;
 	case eAction_DestroyArmies:
-		value = "Destroy " + to_string(this->actionValue);
-		if (this->actionValue == 1) {
-			value += " Army";
+		out << "Destroy " << action.actionValue;
+		if (action.actionValue == 1) {
+			out << " Army";
 		}
 		else {
-			value += " Armies";
+			out << " Armies";
 		}
 		break;
 	case eAction_MoveArmies:
-		value = "Move " + to_string(this->actionValue);
-		if (this->actionValue == 1) {
-			value += " Army";
+		out << "Move " << action.actionValue;
+		if (action.actionValue == 1) {
+			out << " Army";
 		}
 		else {
-			value += " Armies";
+			out << " Armies";
 		}
 		break;
 	case eAction_PlaceArmies:
-		value = "Place " + to_string(this->actionValue);
-		if (this->actionValue == 1) {
-			value += " Army";
+		out << "Place " << action.actionValue;
+		if (action.actionValue == 1) {
+			out << " Army";
 		}
 		else {
-			value += " Armies";
+			out << " Armies";
 		}
 		break;
 	case eAction_None:
-		value = "No Action";
+		out << "No Action";
 		break;
 	}
-	return value;
+	return out;
 }
 
 /*******
@@ -400,62 +396,59 @@ string Action::ToString()
  *******/
 
 // Format Ability data as a string
-string Ability::ToString()
-{
-	string value;
-	switch (this->type) {
+std::ostream& operator<<(std::ostream & out, const Ability &ability) {
+	switch (ability.type) {
 	case eAbility_PlusOneMove:
-		value = "Plus One Movement";
+		out << "Plus One Movement";
 		break;
 	case eAbility_PlusOneArmy:
-		value = "Plus One Army";
+		out << "Plus One Army";
 		break;
 	case eAbility_Flying:
-		value = "Flying";
+		out << "Flying";
 		break;
 	case eAbility_Coins:
-		if (this->value == 1) {
-			value = to_string(this->value) + " Coin";
+		if (ability.value == 1) {
+			out << ability.value << " Coin";
 		}
 		else {
-			value = to_string(this->value) + " Coins";
+			out << ability.value << " Coins";
 		}
 		break;
 	case eAbility_Elixir:
-		if (this->value == 1) {
-			value = to_string(this->value) + " Elixir";
+		if (ability.value == 1) {
+			out << ability.value << " Elixir";
 		}
 		else {
-			value = to_string(this->value) + " Elixirs";
+			out << ability.value << " Elixirs";
 		}
 		break;
 	case eAbility_VpPerCardName:
-		value = "+" + to_string(this->value) + "VP ";
-		if (this->countSetOnce) {
-			value += "if you have ";
+		out << "+" << ability.value << "VP ";
+		if (ability.countSetOnce) {
+			out << "if you have ";
 		}
 		else {
-			value += "per ";
+			out << "per ";
 		}
-		if (this->setTarget == 1) {
-			value += this->setName + " card";
+		if (ability.setTarget == 1) {
+			out << ability.setName << " card";
 		}
 		else {
-			value += to_string(this->setTarget) + " " + this->setName + " cards";
+			out << ability.setTarget << " " << ability.setName << " cards";
 		}
 		break;
 	case eAbility_VpPerCoins:
-		value = "+" + to_string(this->value) + "VP per ";
-		if (this->setTarget == 1) {
-			value += "coin";
+		out << "+" << ability.value << "VP per ";
+		if (ability.setTarget == 1) {
+			out << "coin";
 		}
 		else {
-			value += to_string(this->setTarget) + " coins";
+			out << ability.setTarget << " coins";
 		}
 	case eAbility_None:
-		value = "No Ability";
+		out << "No Ability";
 		break;
 	}
-
-	return value;
+	return out;
 }

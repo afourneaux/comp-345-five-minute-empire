@@ -34,7 +34,7 @@ enum CardAbility {
 struct Action {
 	CardAction action;			// The type of action allowed by the card
 	int actionValue;			// The value associated to the card's action, for example "move *2* armies"
-	string ToString();
+	friend std::ostream& operator<< (std::ostream& out, const Action& action); // Stream insertion operator
 };
 
 struct Ability {
@@ -43,12 +43,12 @@ struct Ability {
 	string setName;				// If the card grants VP Per Card Set, what name does it target?
 	int setTarget;				// If the card grants VP Per Card Set, how many cards does the holder need?
 	bool countSetOnce;			// If true, VP for having a card set is only granted once
-	string ToString();
+	friend std::ostream& operator<< (std::ostream& out, const Ability& ability); // Stream insertion operator
 };
 
 struct Card {
 	Card();						// Default constructor
-	Card(Card* card);			// Copy constructor
+	Card(const Card* card);		// Copy constructor
 	string name;				// Title of the card
 	string image;				// Source file containing card art
 	Action* actions;			// The set of action(s) granted by the card
@@ -56,16 +56,16 @@ struct Card {
 	CardChoice actionChoice;	// If two actions exist, determine whether it is an AND or OR relationship
 	Ability* abilities;			// The ability/abilities listed on the card
 	int abilityCount;			// How many abilities are on the card
-	void Print();				// Output the card's formatted data to cout
+	friend std::ostream& operator<< (std::ostream& out, const Card& card); // Stream insertion operator
 };
 
 //TODO: assignment operator, stream insertion
 class Deck {
 public:
 	Deck();
-	Deck(Deck* deck);
+	Deck(const Deck* deck);
 	Card* Draw();				// Return and remove the first card from the deck
-	void Print();				// Output the deck's contents to cout
+	friend std::ostream& operator<< (std::ostream& out, const Deck& deck); // Stream insertion operator
 private:
 	void Generate();			// Populate the deck with hard-coded cards
 	Card* cards;				// The contents of the deck
@@ -75,16 +75,16 @@ private:
 //TODO: assignment operator, stream insertion, Player interaction in Exchange
 class Hand {
 public:
-	Hand(Deck* deck);								// Default constructor
-	Hand(Hand* hand);								// Copy constructor
-	//~Hand();										// Destructor
-	Card* Exchange(int index/*, Player player*/);	// Spend coins to obtain a card 
-	Card* GetCardAtIndex(int index);				// Returns card data at a given index
-	int GetCostAtIndex(int index);					// Returns the coin cost to retrieve a card at a given index
-	void Print();									// Output each card in the hand to cout
+	Hand(Deck* deck);									// Default constructor
+	Hand(const Hand* hand);								// Copy constructor
+	//~Hand();											// Destructor
+	Card* Exchange(const int index/*, Player player*/);	// Spend coins to obtain a card 
+	Card* GetCardAtIndex(const int index) const;		// Returns card data at a given index
+	int GetCostAtIndex(const int index) const;			// Returns the coin cost to retrieve a card at a given index
+	friend std::ostream& operator<< (std::ostream& out, const Hand& hand); // Stream insertion operator
 private:
-	Card* cards;									// The content of the hand
-	Deck* deck;										// The associated deck from which to draw cards from
+	Card* cards;										// The content of the hand
+	Deck* deck;											// The associated deck from which to draw cards from
 };
 
-int testCards();									// The driver to display test information
+int TestCards();										// The driver to display test information

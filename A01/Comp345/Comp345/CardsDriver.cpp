@@ -3,38 +3,42 @@
 
 using namespace std;
 
-int testCards() {
+int TestCards() {
 	cout << "XXXXXXXXXXXXXXXXXXXXXXXXXXXXXXX" << endl;
 	cout << "TESTING CARDS CLASS" << endl;
 	cout << "XXXXXXXXXXXXXXXXXXXXXXXXXXXXXXX" << endl;
 	Deck* deck = new Deck();
 	Hand* hand = new Hand(deck);
-	deck->Print();
+	cout << "*******PRINTING DECK CONTENTS*******" << endl;
+	cout << *deck;
 
 	cout << endl;
 
-	hand->Print();
+	cout << "*******PRINTING HAND CONTENTS*******" << endl;
+	cout << *hand;
 
 	cout << endl;
 
 	cout << "Drawing a card..." << endl;
 	Card* card = deck->Draw();
 	cout << "Card drawn:" << endl;
-	card->Print();
+	cout << *card;
 
 	cout << endl;
 
 	cout << "Copying deck..." << endl;
 	Deck* secondDeck = new Deck(deck);
 	delete deck;
-	secondDeck->Print();
+	cout << "*******PRINTING DECK CONTENTS*******" << endl;
+	cout << *secondDeck;
 
 	cout << endl;
 
 	cout << "Copying hand..." << endl;
 	Hand* secondHand = new Hand(hand);
 	delete hand;
-	secondHand->Print();
+	cout << "*******PRINTING HAND CONTENTS*******" << endl;
+	cout << *secondHand;
 
 	delete secondDeck;
 	delete secondHand;
