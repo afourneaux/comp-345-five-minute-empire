@@ -6,5 +6,5 @@
 
 int main() {
 	TestMap();
-	test_main();
+	test_BiddingMain();
 }

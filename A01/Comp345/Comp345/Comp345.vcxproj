@@ -144,7 +144,6 @@
     <ClCompile Include="Map.cpp" />
     <ClCompile Include="MapDriver.cpp" />
     <ClCompile Include="Player.cpp" />
-    <ClCompile Include="BiddingMain.cpp" />
   </ItemGroup>
   <ItemGroup>
     <ClInclude Include="Biding.h" />
