@@ -199,8 +199,25 @@ Card* Deck::Draw()
 	return &this->cards[this->deckIndex++];
 }
 
+// Assignment operator
+Deck& Deck::operator= (const Deck& deck) {
+	// Check for self-assignment
+	if (this == &deck) {
+		return *this;
+	}
+
+	this->deckIndex = deck.deckIndex;
+	this->cards = new Card[DECK_SIZE];
+
+	for (int i = 0; i < DECK_SIZE; i++) {
+		this->cards[i] = new Card(deck.cards[i]);
+	}
+
+	return *this;
+}
+
 // Stream insertion operator
-std::ostream& operator<<(std::ostream& out, const Deck& deck) {
+ostream& operator<<(ostream& out, const Deck& deck) {
 	out << "Original deck size: " << DECK_SIZE << endl;
 	out << "Total cards dealt: " << deck.deckIndex << endl;
 	out << "Cards remaining in the deck: " << DECK_SIZE - deck.deckIndex << endl;
@@ -229,7 +246,7 @@ Hand::Hand(Deck* deck) {
 
 // Copy constructor
 Hand::Hand(const Hand* hand) {
-	this->deck = hand->deck;
+	this->deck = hand->deck; // Keep the assignment to the same deck
 	this->cards = new Card[HAND_SIZE];
 	for (int i = 0; i < HAND_SIZE; i++) {
 		this->cards[i] = new Card(hand->cards[i]);
@@ -243,10 +260,11 @@ Hand::~Hand() {
 }*/
 
 // Spend coins to obtain a card
-Card* Hand::Exchange(const int index/*, Player player */)
+// Assume coin count in player has already been validated by the calling function
+Card* Hand::Exchange(const int index, Player player)
 {
 	int cost = this->GetCostAtIndex(index);
-	// TODO: Logic to make the player pay for the card
+	player.payCoin(&cost);
 	Card* card = &this->cards[index];
 	this->cards[index] = *this->deck->Draw();
 	return card;
@@ -275,7 +293,7 @@ int Hand::GetCostAtIndex(const int index) const
 }
 
 // Stream insertion operator
-std::ostream& operator<<(std::ostream& out, const Hand& hand) {
+ostream& operator<<(ostream& out, const Hand& hand) {
 	for (int i = 0; i < HAND_SIZE; i++) {
 		out << "*****SLOT " << i + 1 << endl;
 		out << "Card cost: " << hand.GetCostAtIndex(i) << endl;
@@ -285,10 +303,26 @@ std::ostream& operator<<(std::ostream& out, const Hand& hand) {
 	return out;
 }
 
+// Assignment operator
+Hand& Hand::operator= (const Hand& hand) {
+	// Check for self-assignment
+	if (this == &hand) {
+		return *this;
+	}
+	this->deck = hand.deck; // Keep the assignment to the same deck
+	this->cards = new Card[HAND_SIZE];
+	for (int i = 0; i < HAND_SIZE; i++) {
+		this->cards[i] = new Card(hand.cards[i]);
+	}
+
+	return *this;
+}
+
 /*******
   CARD
  *******/
 
+// Default constructor
 Card::Card() {
 
 }
@@ -317,7 +351,39 @@ Card::Card(const Card* card) {
 	}
 }
 
-std::ostream& operator<<(std::ostream& out, const Card& card) {
+// Assignment operator
+Card& Card::operator= (const Card& card) {
+	// Check for self-assignment
+	if (this == &card) {
+		return *this;
+	}
+
+	this->name = card.name;
+	this->image = card.image;
+	this->actionChoice = card.actionChoice;
+	this->actionCount = card.actionCount;
+	this->abilityCount = card.abilityCount;
+	this->abilities = new Ability[card.abilityCount];
+	this->actions = new Action[card.actionCount];
+	// Copy actions
+	for (int i = 0; i < this->actionCount; i++) {
+		this->actions[i].action = card.actions[i].action;
+		this->actions[i].actionValue = card.actions[i].actionValue;
+	}
+	// Copy abilities
+	for (int i = 0; i < this->abilityCount; i++) {
+		this->abilities[i].type = card.abilities[i].type;
+		this->abilities[i].value = card.abilities[i].value;
+		this->abilities[i].setName = card.abilities[i].setName;
+		this->abilities[i].setTarget = card.abilities[i].setTarget;
+		this->abilities[i].countSetOnce = card.abilities[i].countSetOnce;
+	}
+
+	return *this;
+}
+
+// Stream insertion operator
+ostream& operator<<(ostream& out, const Card& card) {
 	// Print identifying information
 	out << "===============" << endl;
 	out << card.name << endl;
@@ -351,8 +417,21 @@ std::ostream& operator<<(std::ostream& out, const Card& card) {
   ACTION
  *******/
 
+// Assignment operator
+Action& Action::operator= (const Action& action) {
+	// Check for self-assignment
+	if (this == &action) {
+		return *this;
+	}
+
+	this->action = action.action;
+	this->actionValue = action.actionValue;
+
+	return *this;
+}
+
 // Stream insertion operator
-std::ostream& operator<<(std::ostream& out, const Action& action) {
+ostream& operator<<(ostream& out, const Action& action) {
 	switch (action.action) {
 	case eAction_BuildCity:
 		out << "Build City";
@@ -395,8 +474,23 @@ std::ostream& operator<<(std::ostream& out, const Action& action) {
   ABILITY
  *******/
 
-// Format Ability data as a string
-std::ostream& operator<<(std::ostream & out, const Ability &ability) {
+Ability& Ability::operator= (const Ability& ability) {
+	// Check for self-assignment
+	if (this == &ability) {
+		return *this;
+	}
+
+	this->type = ability.type;
+	this->value = ability.value;
+	this->setName = ability.setName;
+	this->setTarget = ability.setTarget;
+	this->countSetOnce = ability.countSetOnce;
+
+	return *this;
+}
+
+// Stream insertion operator
+ostream& operator<<(ostream& out, const Ability& ability) {
 	switch (ability.type) {
 	case eAbility_PlusOneMove:
 		out << "Plus One Movement";
