@@ -10,7 +10,7 @@
 #include "Player.h"
 #include"Biding.h"
 
-int test_Main()
+int test_BiddingMain()
 {
 	doBiding();
 	return 0;
