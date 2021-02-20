@@ -50,64 +50,64 @@ std::vector <Player> NumPlayer() {
 int privatelyAsk (Player gamer)
 {
 	int out;  
-	int v;   // STAND FOR "value" :)
-	int max = g.getCoin();
+	int val;   // STAND FOR "value" :)
+	int max = gamer.getCoin();
 	char bid[5];
 		char c;
 	//std::string value;
-	int a = 0;  // counter
+	int counter = 0;  // counter
 	bool toInf = true;
 	// do untill get the right result
 	while (toInf)
 	{
-		bid[a] = _getch();
-		c = bid[a];
-		// format checking
-		if (a>2 && a!=13)
+		bid[counter] = _getch();
+		c = bid[counter];
+		// 2 digit format checking 
+		if (counter>2 && counter!=13)
 		{
 			
 			std::cout << std::endl << "in order to be Private  only two digits format will be accepted , for exp : 01 for 1  " << std::endl <<std::endl << "Try Again " << std::endl;
-			a = 0;
+			counter = 0;
 			bid[0]=0;
 			bid[1]=0;
 			bid[2]=0;
-			out=ask(g);
+			out=privatelyAsk(gamer);
 			break;
 		}
-		a++;
+		counter++;
 		// ASCII for Enter
 		if (c == 13)
 		{
-			// format checking
-			if (a==2)
+			// 2 digit format checking
+			if (counter==2)
 			{
-				a = 0;
+				counter = 0;
 				bid[0] = 0;
 				bid[1] = 0;
 				bid[2] = 0;
 				std::cout << std::endl << "in order to be Private  only two digits format will be accepted , for exp : 01 for 1 " << std::endl << std::endl << "Try Again " << std::endl;;
-				out =ask(g);
+				out =privatelyAsk(gamer);
 				break;
 			}
-			// save user input to "v"
-			v= (bid[0]-48 )*10 +( bid[1]-48) ;  // char to int with ASCII calc
-			if (v>max)
+			// save user input to "val"
+			val= (bid[0]-48 )*10 +( bid[1]-48) ;  // char to int with ASCII calc
+			if (val>max)
 			{
-				a = 0;
+				counter = 0;
 				bid[0] = 0;
 				bid[1] = 0;
 				bid[2] = 0;
 				std::cout << std::endl << "Attention to your Treasuary" << std::endl;
-				g.Treasuary_Report();
+				gamer.Treasuary_Report();
 				
 				std::cout << std::endl << "Try Again " << std::endl;
-				out=ask(g);
+				out=privatelyAsk(gamer);
 				break;
 			}
 			//when our bid val right
 			else
 			{
-				out = v;
+				out = val;
 				toInf = false;
 				return out;
 				break;
