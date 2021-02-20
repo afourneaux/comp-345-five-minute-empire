@@ -17,7 +17,7 @@ public:
 	void setPlayer_Name(std::string name);
 	void setCoin(int value);
 	void setID(int id);
-	void setBid(int bidval);
+	void setBid(int* bidval);
 	//getters
 	int getCoin();
 	std::string getPlayer_Name();
@@ -25,9 +25,9 @@ public:
 	int getBid();
 
 	
-	bool paymentCheck(int payment);
+	bool paymentCheck(int* payment);
 	void Treasuary_Report();
-	void payCoin(int payment);
+	void payCoin(int* payment);
 
 
 

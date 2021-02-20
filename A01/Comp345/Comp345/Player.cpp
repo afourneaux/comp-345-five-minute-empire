@@ -24,11 +24,12 @@ void Player::setPlayer_Name(std::string name)
 	player_Name = name;
 }
 
-void Player::setBid(int bidval)
+void Player::setBid(int* bidval)
 {
+	
 	if (paymentCheck(bidval))
 	{
-		bid = bidval;
+		bid = *bidval;
 	}
 }
 
@@ -68,16 +69,18 @@ void Player::Treasuary_Report()
 	std::cout << "Treasury report  :  You Have " << getCoin() << "coin" << std::endl;
 }
 
-bool Player::paymentCheck(int payment )
+bool Player::paymentCheck(int* payment )
 {
-	if (getCoin() < payment)
+	int payagain = *payment;
+	if (getCoin() < *payment)
 	{
 		std::cout << "You cant pay more that what you own" << std::endl;
 		Treasuary_Report();
 		std::cout << "Try Agin  ";
-		int pay;
-		std::cin >> pay;
-		paymentCheck(pay);
+		//int payagain;
+		std::cin >> *payment;
+
+		paymentCheck(payment);
 
 	}
 	else
@@ -87,13 +90,13 @@ bool Player::paymentCheck(int payment )
 	
 }
 
-void Player::payCoin(int payment)
+void Player::payCoin(int* payment)
 {
 	if (paymentCheck(payment))
 	{
 		std::cout << "Congratulation " << getPlayer_Name() <<"!" << std::endl;
-		std::cout << "You successfully paied " << payment << "coin" << std::endl;
-		int remained = getCoin() - payment;
+		std::cout << "You successfully paied " << *payment << "coin" << std::endl;
+		int remained = getCoin() - *payment;
 		setCoin(remained);
 		Treasuary_Report();
 	}
