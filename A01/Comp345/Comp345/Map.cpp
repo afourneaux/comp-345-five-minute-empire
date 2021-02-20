@@ -253,8 +253,7 @@ int Map::CountContiguousNodesInContinent(TerritoryList *continent) {
 }
 
 
-int Map::CountWaterConnections(int territory_index)
-{
+int Map::CountWaterConnections(int territory_index) {
 	int count = 0;
 	Edge* temp = territories[territory_index].head;
 	while (temp != nullptr) {
@@ -263,6 +262,17 @@ int Map::CountWaterConnections(int territory_index)
 		temp = temp->next;
 	}
 	return count;
+}
+
+int Map::CheckAdjacency(int origin, int destination) {
+	Edge* temp = territories[origin].head;
+	while (temp != nullptr) {
+		if (temp->destination_territory->territoryID == destination) {
+			return temp->movement_cost;
+		}
+		temp = temp->next;
+	}
+	return -1;
 }
 
 
