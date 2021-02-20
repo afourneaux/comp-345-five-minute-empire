@@ -55,6 +55,7 @@ struct Ability {
 struct Card {
 	Card();						// Default constructor
 	Card(const Card* card);		// Copy constructor
+	~Card();					// Destructor
 	string name;				// Title of the card
 	string image;				// Source file containing card art
 	Action* actions;			// The set of action(s) granted by the card
@@ -68,8 +69,9 @@ struct Card {
 
 class Deck {
 public:
-	Deck();
-	Deck(const Deck* deck);
+	Deck();						// Default constructor
+	Deck(const Deck* deck);		// Copy constructor
+	~Deck();					// Destructor
 	Card* Draw();				// Return and remove the first card from the deck
 	Deck& operator= (const Deck& deck);								// Assignment operator
 	friend ostream& operator<< (ostream& out, const Deck& deck);	// Stream insertion operator
@@ -83,7 +85,7 @@ class Hand {
 public:
 	Hand(Deck* deck);									// Default constructor
 	Hand(const Hand* hand);								// Copy constructor
-	//~Hand();											// Destructor
+	~Hand();											// Destructor
 	Card* Exchange(const int index, Player player);		// Spend coins to obtain a card 
 	Card* GetCardAtIndex(const int index) const;		// Returns card data at a given index
 	int GetCostAtIndex(const int index) const;			// Returns the coin cost to retrieve a card at a given index
