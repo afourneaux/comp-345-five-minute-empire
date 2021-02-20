@@ -1,13 +1,40 @@
+Comp 345, Group 21
 Assainment 1:
 
-Amir Hossein Hadinezhad :
+
+⚪Amir Hossein Hadinezhad :
 {
 
- Biding Cpp and header
+ ⚫Biding Cpp and header
 
- Player {
-	PaymentCheck , Treasury_Report , PayCoin Functions
+ ⚫Player {
+	PaymentCheck , Treasury_Report , PayCoin , Biding Functions
 	setter and getter for PlayerName, Coin , Bid,s Id
        }
 }
 
+__________________________________________________________________________________________________________|
+
+⚪ Write yor name
+
+
+
+__________________________________________________________________________________________________________|
+
+⚪ Write yor name
+
+
+
+__________________________________________________________________________________________________________|
+
+⚪ Write yor name
+
+
+
+__________________________________________________________________________________________________________|
+
+⚪ Write yor name
+
+
+
+__________________________________________________________________________________________________________|
