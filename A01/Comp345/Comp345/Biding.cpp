@@ -53,7 +53,7 @@ int privatelyAsk (Player gamer)
 	int val;   // STAND FOR "value" :)
 	int max = gamer.getCoin();
 	char bid[5];
-		char c;
+	char c;
 	//std::string value;
 	int counter = 0;  // counter
 	bool toInf = true;
@@ -85,12 +85,12 @@ int privatelyAsk (Player gamer)
 				bid[0] = 0;
 				bid[1] = 0;
 				bid[2] = 0;
-				std::cout << std::endl << "in order to be Private  only two digits format will be accepted , for exp : 01 for 1 " << std::endl << std::endl << "Try Again " << std::endl;;
+				std::cout << std::endl << "in order to be Private  only two digits format will be accepted , for exp : 01 for 1 " << std::endl << std::endl << "Try Again " << std::endl;
 				out =privatelyAsk(gamer);
 				break;
 			}
 			// save user input to "val"
-			val= (bid[0]-48 )*10 +( bid[1]-48) ;  // char to int with ASCII calc
+			val= (bid[0]-48 )*10 +( bid[1]-48) ;  // char to int with ASCII calculation
 			if (val>max)
 			{
 				counter = 0;
@@ -104,11 +104,12 @@ int privatelyAsk (Player gamer)
 				out=privatelyAsk(gamer);
 				break;
 			}
-			//when our bid val right
+			//when our bid val is in right format and amount
 			else
 			{
 				out = val;
 				toInf = false;
+				//return bid value
 				return out;
 				break;
 			}
@@ -117,7 +118,7 @@ int privatelyAsk (Player gamer)
 		else
 		{
 			
-			// security
+			// print * instead to keep it private
 			std::cout << "*";
 		}
 
@@ -155,7 +156,7 @@ std::vector <Player> askPlayersInfo( std::vector<Player> players_In_Game)
 		//newPlayer.Treasuary_Report();
 		players_In_Game[i].Treasuary_Report();
 		std::cout << std::endl << "in order to be Private  only two digits format will be accepted , for exp : 01 for 1 " << std::endl << std::endl << std::endl;;
-		pay = ask(players_In_Game[i]);
+		pay = privatelyAsk(players_In_Game[i]);
 	
 
 
@@ -169,7 +170,7 @@ std::vector <Player> askPlayersInfo( std::vector<Player> players_In_Game)
 	return players_In_Game;
 }
 /// <summary>
-/// Print The witter
+/// Print The winner
 /// </summary>
 /// <param name="players_In_Game"> players in the game</param>
 void WhoStart(std::vector<Player> players_In_Game)
@@ -227,7 +228,7 @@ void WhoStart(std::vector<Player> players_In_Game)
 
 }
 /// <summary>
-/// do all biding stuff
+/// do all bidding stuff
 /// </summary>
 void doBiding()
 {
