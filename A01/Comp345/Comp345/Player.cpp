@@ -23,15 +23,15 @@ void Player::setPlayer_Name(std::string name)
 {
 	player_Name = name;
 }
-
-void Player::setBid(int* bidval)
-{
-	
-	if (paymentCheck(bidval))
-	{
-		bid = *bidval;
-	}
-}
+/////////////////////////////Moved to Nested BiddingF///////////////////////////////////
+//void Player::setBid(int* bidval)
+//{
+//	
+//	if (paymentCheck(bidval))
+//	{
+//		bid = *bidval;
+//	}
+//}
 
 void Player::setCoin(int val)
 {
@@ -43,7 +43,10 @@ void Player::setID(int id)
 	ID = id;
 }
 
-
+/// <summary>
+/// //////////////////////////////////////////// name of the Function
+/// </summary>
+/// <returns></returns>
 std::string Player::getPlayer_Name()
 {
 	return player_Name;
@@ -54,21 +57,27 @@ int Player::getCoin()
 	return coin;
 }
 
-int Player::getBid()
-{
-	return bid;
-}
+/////////////////////////////Moved to Nested BiddingF///////////////////////////////////
+//int Player::getBid()
+//{
+//	return bid;
+//}
 
 int Player::getID()
 {
 	return ID;
 }
-
+///////////////////////////////////////Please Use This Function I need It For Bidding and i guess its Nice to have
 void Player::Treasuary_Report()
 {
 	std::cout << "Treasury report  :  You Have " << getCoin() << "coin" << std::endl;
 }
 
+/// <summary>
+///////////////////////////////////////////////////////Its Payment Check If you want Add it ,, making sure they dont pay more that wahat they have
+/// </summary>
+/// <param name="payment"></param>
+/// <returns></returns>
 bool Player::paymentCheck(int* payment )
 {
 	int payagain = *payment;
@@ -89,7 +98,10 @@ bool Player::paymentCheck(int* payment )
 	}
 	
 }
-
+/// <summary>
+/// ////////////////////////////////////// im currently using this one for bidding //// things to note : takes pointer  , use Payment Check And threaseury_ Report ,, print some INFO
+/// </summary>
+/// <param name="payment"></param>
 void Player::payCoin(int* payment)
 {
 	if (paymentCheck(payment))
@@ -99,6 +111,7 @@ void Player::payCoin(int* payment)
 		int remained = getCoin() - *payment;
 		setCoin(remained);
 		Treasuary_Report();
+
 	}
 }
 

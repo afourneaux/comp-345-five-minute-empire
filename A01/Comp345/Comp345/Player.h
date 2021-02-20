@@ -6,7 +6,12 @@
 //============================================================================
 #pragma once
 #include<iostream>
-
+#include "BiddingF.h"
+/// <summary>
+/// //////////////////////////////////  PLEASE PAY attention to THe name of the following as they are being used in bidding 
+/// ?////////////////////////////////   getPlayer_Name   Treasuary_Report  getCoin  payCoin 
+/// /////////////////////////////////   to create Player OBJ i also used   : setCoin   setPlayer_Name
+/// </summary>
 class Player
 {
 public:
@@ -17,17 +22,24 @@ public:
 	void setPlayer_Name(std::string name);
 	void setCoin(int value);
 	void setID(int id);
-	void setBid(int* bidval);
+
+/** ******************** */ //Moved to nested Class BiddingF
+	//void setBid(int* bidval);
 	//getters
+///////////////////////////
 	int getCoin();
 	std::string getPlayer_Name();
 	int getID();
-	int getBid();
+	//int getBid();
 
 	
 	bool paymentCheck(int* payment);
 	void Treasuary_Report();
 	void payCoin(int* payment);
+	/// <summary>
+	/// Nested class Taking Care of Bidding//////////  our nsted Class  Its PUBLIC
+	/// </summary>
+	class BiddingF bf {};
 
 
 
@@ -36,6 +48,8 @@ public:
 private:
 	std::string player_Name;
 	int coin;
-	int bid;
+///***********/Moved to BiddingF class************************
+/// 	int bid;
 	int ID;
+	
 };

@@ -20,7 +20,7 @@ void welcome()
 	std::cout << "We do the bid now , every palyer will get 10 coins hand if they win the bid they can start the game but they have t0 pay their bid!" << std::endl;
 }
 /// <summary>
-/// How many Players 
+/// How many Players /////////**************************** can be removed if you create PLayers some where else
 /// </summary>
 /// <returns> vecter of pplayers in the game</returns>
 std::vector <Player> NumPlayer() {
@@ -42,6 +42,9 @@ std::vector <Player> NumPlayer() {
 		//players_In_Game[1].setCoin(2);
 
 }
+//************************************************************
+
+
 /// <summary>
 /// Rec Func that get the ask and return bid val privately
 /// </summary>
@@ -140,7 +143,7 @@ std::vector <Player> askPlayersInfo( std::vector<Player> players_In_Game)
 	{
 		std::string name;
 		int pay;
-
+		//////////////////*************************** in between can be removed if you create PLayers OBj some where else but PLEASE pass me VECTOR of player 
 		
 
 		std::cout << std::endl;
@@ -152,6 +155,11 @@ std::vector <Player> askPlayersInfo( std::vector<Player> players_In_Game)
 		players_In_Game[i].setCoin(10);
 		//Player newPlayer(name, 10);
 		std::cout << std::endl;
+		
+		/////////////////////***************************************************************************************
+		/// 
+		/// 
+	
 		std::cout << "How much do you want to bid?  ";
 		//newPlayer.Treasuary_Report();
 		players_In_Game[i].Treasuary_Report();
@@ -163,7 +171,7 @@ std::vector <Player> askPlayersInfo( std::vector<Player> players_In_Game)
 
 		//std::cin >> pay;
 		
-		players_In_Game[i].setBid(&pay);
+		players_In_Game[i].bf.setBid( &pay);
 		//players_In_Game.push_back(newPlayer);
 	}
 
@@ -185,22 +193,22 @@ void WhoStart(std::vector<Player> players_In_Game)
 		//Print everyones name and their bid value
 		std::cout << "             *================================*" << std::endl;
 		std::cout << "		"<< players_In_Game[i].getPlayer_Name() << " : " << std::endl;
-		std::cout << "		Bid :   " <<players_In_Game[i].getBid() << std::endl;
+		std::cout << "		Bid :   " <<players_In_Game[i].bf.getBid() << std::endl;
 		std::cout << "             ===============================" << std::endl << std::endl;
 
 		//find the highest bid
-		if (players_In_Game[i].getBid() > winner_bid)
+		if (players_In_Game[i].bf.getBid() > winner_bid)
 		{
 			winner_Index = i;
-			winner_bid = players_In_Game[i].getBid();
+			winner_bid = players_In_Game[i].bf.getBid();
 		}
 		//if bid are equal compare names
-		if (players_In_Game[i].getBid() == winner_bid)
+		if (players_In_Game[i].bf.getBid() == winner_bid)
 		{
 			if (players_In_Game[i].getPlayer_Name().compare(players_In_Game.at(winner_Index).getPlayer_Name()) < 0 )
 			{
 				winner_Index = i;
-				winner_bid = players_In_Game[i].getBid();
+				winner_bid = players_In_Game[i].bf.getBid();
 
 			}
 
@@ -214,9 +222,9 @@ void WhoStart(std::vector<Player> players_In_Game)
 	std::cout << "		            ********" << std::endl;
 	std::cout << std::endl;
 	std::cout << "		         "<< players_In_Game[winner_Index].getPlayer_Name() << " won the bid " << std::endl;
-	std::cout << "		            Bid :   " << players_In_Game[winner_Index].getBid() << std::endl;
+	std::cout << "		            Bid :   " << players_In_Game[winner_Index].bf.getBid() << std::endl;
 	std::cout << std::endl;
-	int b = players_In_Game[winner_Index].getBid();
+	int b = players_In_Game[winner_Index].bf.getBid();
 	int* p = &b;
 	players_In_Game[winner_Index].payCoin(p);
 	std::cout << std::endl;
@@ -233,7 +241,9 @@ void WhoStart(std::vector<Player> players_In_Game)
 void doBiding()
 {
 	welcome();
-
+	/// <summary>
+	/// //////////////////////////////////////////////////// modifivation will be needed if you create Player OBJ somewherre else 
+	/// </summary>
 	WhoStart (askPlayersInfo ( NumPlayer() ) );
 
 }
