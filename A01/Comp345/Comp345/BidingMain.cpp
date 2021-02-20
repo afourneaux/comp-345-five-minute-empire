@@ -14,7 +14,7 @@
 
 
 
-int main()
+int test_main()
 {
 	doBiding();
 }
