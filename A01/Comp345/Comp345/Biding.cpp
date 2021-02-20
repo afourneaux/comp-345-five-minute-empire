@@ -42,22 +42,27 @@ std::vector <Player> NumPlayer() {
 		//players_In_Game[1].setCoin(2);
 
 }
-
-int ask (Player g)
+/// <summary>
+/// Rec Func that get the ask and return bid val privately
+/// </summary>
+/// <param name="gamer"> a player in game</param>
+/// <returns>bid val of a gamer</returns>
+int privatelyAsk (Player gamer)
 {
-	int out;
-	int v;
+	int out;  
+	int v;   // STAND FOR "value" :)
 	int max = g.getCoin();
 	char bid[5];
 		char c;
-	std::string value;
-	int a = 0;
-	bool tof = true;
-	while (tof)
+	//std::string value;
+	int a = 0;  // counter
+	bool toInf = true;
+	// do untill get the right result
+	while (toInf)
 	{
 		bid[a] = _getch();
 		c = bid[a];
-		
+		// format checking
 		if (a>2 && a!=13)
 		{
 			
@@ -70,9 +75,10 @@ int ask (Player g)
 			break;
 		}
 		a++;
+		// ASCII for Enter
 		if (c == 13)
 		{
-			
+			// format checking
 			if (a==2)
 			{
 				a = 0;
@@ -83,8 +89,8 @@ int ask (Player g)
 				out =ask(g);
 				break;
 			}
-			
-			v= (bid[0]-48 )*10 +( bid[1]-48) ;
+			// save user input to "v"
+			v= (bid[0]-48 )*10 +( bid[1]-48) ;  // char to int with ASCII calc
 			if (v>max)
 			{
 				a = 0;
@@ -98,10 +104,11 @@ int ask (Player g)
 				out=ask(g);
 				break;
 			}
+			//when our bid val right
 			else
 			{
 				out = v;
-				tof = false;
+				toInf = false;
 				return out;
 				break;
 			}
@@ -110,7 +117,7 @@ int ask (Player g)
 		else
 		{
 			
-			
+			// security
 			std::cout << "*";
 		}
 
