@@ -42,66 +42,74 @@ std::vector <Player> NumPlayer() {
 		//players_In_Game[1].setCoin(2);
 
 }
-
-int ask (Player g)
+/// <summary>
+/// Rec Func that get the ask and return bid val privately
+/// </summary>
+/// <param name="gamer"> a player in game</param>
+/// <returns>bid val of a gamer</returns>
+int privatelyAsk (Player gamer)
 {
-	int out;
-	int v;
-	int max = g.getCoin();
+	int out;  
+	int val;   // STAND FOR "value" :)
+	int max = gamer.getCoin();
 	char bid[5];
-		char c;
-	std::string value;
-	int a = 0;
-	bool tof = true;
-	while (tof)
+	char c;
+	//std::string value;
+	int counter = 0;  // counter
+	bool toInf = true;
+	// do untill get the right result
+	while (toInf)
 	{
-		bid[a] = _getch();
-		c = bid[a];
-		
-		if (a>2 && a!=13)
+		bid[counter] = _getch();
+		c = bid[counter];
+		// 2 digit format checking 
+		if (counter>2 && counter!=13)
 		{
 			
 			std::cout << std::endl << "in order to be Private  only two digits format will be accepted , for exp : 01 for 1  " << std::endl <<std::endl << "Try Again " << std::endl;
-			a = 0;
+			counter = 0;
 			bid[0]=0;
 			bid[1]=0;
 			bid[2]=0;
-			out=ask(g);
+			out=privatelyAsk(gamer);
 			break;
 		}
-		a++;
+		counter++;
+		// ASCII for Enter
 		if (c == 13)
 		{
-			
-			if (a==2)
+			// 2 digit format checking
+			if (counter==2)
 			{
-				a = 0;
+				counter = 0;
 				bid[0] = 0;
 				bid[1] = 0;
 				bid[2] = 0;
-				std::cout << std::endl << "in order to be Private  only two digits format will be accepted , for exp : 01 for 1 " << std::endl << std::endl << "Try Again " << std::endl;;
-				out =ask(g);
+				std::cout << std::endl << "in order to be Private  only two digits format will be accepted , for exp : 01 for 1 " << std::endl << std::endl << "Try Again " << std::endl;
+				out =privatelyAsk(gamer);
 				break;
 			}
-			
-			v= (bid[0]-48 )*10 +( bid[1]-48) ;
-			if (v>max)
+			// save user input to "val"
+			val= (bid[0]-48 )*10 +( bid[1]-48) ;  // char to int with ASCII calculation
+			if (val>max)
 			{
-				a = 0;
+				counter = 0;
 				bid[0] = 0;
 				bid[1] = 0;
 				bid[2] = 0;
 				std::cout << std::endl << "Attention to your Treasuary" << std::endl;
-				g.Treasuary_Report();
+				gamer.Treasuary_Report();
 				
 				std::cout << std::endl << "Try Again " << std::endl;
-				out=ask(g);
+				out=privatelyAsk(gamer);
 				break;
 			}
+			//when our bid val is in right format and amount
 			else
 			{
-				out = v;
-				tof = false;
+				out = val;
+				toInf = false;
+				//return bid value
 				return out;
 				break;
 			}
@@ -110,7 +118,7 @@ int ask (Player g)
 		else
 		{
 			
-			
+			// print * instead to keep it private
 			std::cout << "*";
 		}
 
@@ -148,7 +156,7 @@ std::vector <Player> askPlayersInfo( std::vector<Player> players_In_Game)
 		//newPlayer.Treasuary_Report();
 		players_In_Game[i].Treasuary_Report();
 		std::cout << std::endl << "in order to be Private  only two digits format will be accepted , for exp : 01 for 1 " << std::endl << std::endl << std::endl;;
-		pay = ask(players_In_Game[i]);
+		pay = privatelyAsk(players_In_Game[i]);
 	
 
 
@@ -162,7 +170,7 @@ std::vector <Player> askPlayersInfo( std::vector<Player> players_In_Game)
 	return players_In_Game;
 }
 /// <summary>
-/// Print The witter
+/// Print The winner
 /// </summary>
 /// <param name="players_In_Game"> players in the game</param>
 void WhoStart(std::vector<Player> players_In_Game)
@@ -220,7 +228,7 @@ void WhoStart(std::vector<Player> players_In_Game)
 
 }
 /// <summary>
-/// do all biding stuff
+/// do all bidding stuff
 /// </summary>
 void doBiding()
 {

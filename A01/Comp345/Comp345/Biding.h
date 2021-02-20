@@ -18,7 +18,14 @@
 	/// <returns>vector corispond to the num of player in the game</returns>
 	std::vector <Player> NumPlayer();
 	std::vector <Player> askPlayersInfo(std::vector<Player> players_In_Game);
-	int ask(Player p);
+	/// <summary>
+	/// Rec Func that ask and store bid val privately
+	/// </summary>
+	/// <param name="gamer"> a player in game</param>
+	/// <returns>bid val of a gamer</returns>
+	int privatelyAsk (Player gamer);
 	void WhoStart(std::vector<Player> players_In_Game);
 	void doBiding();
+
+	int test_BiddingMain();
 

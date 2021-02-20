@@ -1,8 +1,13 @@
+
+
+#include <iostream>
 #include "Map.h"
 #include "Cards.h"
-#include <iostream>
+#include "Player.h"
+#include "Biding.h"
 
 int main() {
+	test_BiddingMain();
 	TestMap();
 	TestCards();
 }

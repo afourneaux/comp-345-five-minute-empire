@@ -6,17 +6,14 @@
 // Description : biding part to initiate the game
 //============================================================================
 #include<iostream>
-#include <vector>
 #include <windows.h>
 #include "Player.h"
 #include"Biding.h"
 
-
-
-
-int main()
+int test_BiddingMain()
 {
 	doBiding();
+	return 0;
 }
 
 
