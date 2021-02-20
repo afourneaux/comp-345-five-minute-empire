@@ -5,6 +5,7 @@
 #include "Biding.h"
 
 int main() {
-	TestMap();
 	test_BiddingMain();
+	TestMap();
+	
 }

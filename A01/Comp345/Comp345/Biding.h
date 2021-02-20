@@ -27,3 +27,5 @@
 	void WhoStart(std::vector<Player> players_In_Game);
 	void doBiding();
 
+	int test_BiddingMain();
+
