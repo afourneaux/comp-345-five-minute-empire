@@ -1,3 +1,7 @@
+// COMP345 Assignment 1
+// Map class implementation
+// Author: Georges Grondin (40034160)
+
 #include "Map.h"
 
 using namespace std;
@@ -137,8 +141,8 @@ void Map::AddEdge(int origin, int destination) {
 		temp = temp->next;
 	}
 	//Compute edge cost (ie movement cost)
-	int edgeCost{ 1 };
-	if (territories[origin].continentID != territories[destination].continentID) edgeCost = 3;
+	int edgeCost{ LAND_MOVEMENT_COST };
+	if (territories[origin].continentID != territories[destination].continentID) edgeCost = WATER_MOVEMENT_COST;
 	//Add edge (in both directions)
 	territories[origin].head = new Edge{ GetTerritory(destination), edgeCost, territories[origin].head };
 	territories[destination].head = new Edge{ GetTerritory(origin), edgeCost, territories[destination].head };
@@ -253,8 +257,7 @@ int Map::CountContiguousNodesInContinent(TerritoryList *continent) {
 }
 
 
-int Map::CountWaterConnections(int territory_index)
-{
+int Map::CountWaterConnections(int territory_index) {
 	int count = 0;
 	Edge* temp = territories[territory_index].head;
 	while (temp != nullptr) {
@@ -263,6 +266,19 @@ int Map::CountWaterConnections(int territory_index)
 		temp = temp->next;
 	}
 	return count;
+}
+
+// Checks if two territories are adjacent
+// Returns -1 if they are not adjacent, otherwise returns the movement cost (1 or 3)
+int Map::CheckAdjacency(int origin, int destination) {
+	Edge* temp = territories[origin].head;
+	while (temp != nullptr) {
+		if (temp->destination_territory->territoryID == destination) {
+			return temp->movement_cost;
+		}
+		temp = temp->next;
+	}
+	return -1;
 }
 
 

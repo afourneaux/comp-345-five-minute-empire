@@ -1,3 +1,7 @@
+// COMP345 Assignment 1
+// Map class header
+// Author: Georges Grondin (40034160)
+
 #pragma once
 #include <iostream>
 
@@ -42,6 +46,7 @@ public:
 	Map(Map* map);									// Copy constructor
 	~Map();											// Destructor
 	void AddEdge(int origin, int destination);		// Adds a bi-directional edge from territories[origin] to territories[destination]
+	int CheckAdjacency(int origin, int destination);	// Checks if two territories are adjacent. Returns the movement cost if they are connected, otherwise -1
 	Territory* GetTerritory(int territory_index);	// Returns a pointer to the territory at the specified index
 	Territory* SetStartingTerritory(int territory_index);	// Sets the starting territory for army placement
 	void PrintMapMemAddresses();					// DEBUG: prints a string representation of the map's memory addresses
@@ -49,6 +54,8 @@ public:
 	Map& operator= (const Map& map);				// Assignment operator
 	friend std::ostream& operator<< (std::ostream& out, const Map& map); // Stream insertion operator
 private:
+	const int LAND_MOVEMENT_COST = 1;
+	const int WATER_MOVEMENT_COST = 3;
 	int CountContiguousNodes();						// Used in validate() to check that all territories are connected
 	int CountContiguousNodesInContinent(TerritoryList* continent);	// Used in validate() to check that all continents are contiguous
 	int CountWaterConnections(int territory_index);	// Used in setStartingTerritory() to check if the placement is valid

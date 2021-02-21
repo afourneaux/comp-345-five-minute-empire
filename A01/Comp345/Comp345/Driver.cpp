@@ -1,6 +1,9 @@
-
-
+// Used to check for memory leaks
+#define _CRTDBG_MAP_ALLOC
+#include <stdlib.h>
+#include <crtdbg.h>
 #include <iostream>
+
 #include "Map.h"
 #include "MapLoader.h"
 #include "Cards.h"
@@ -12,4 +15,7 @@ int main() {
 	mapLoaderTest();
 	TestCards();
 	test_BiddingMain();
+
+	//Check for memory leaks at the end of execution
+	_CrtDumpMemoryLeaks();
 }

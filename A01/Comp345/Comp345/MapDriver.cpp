@@ -1,12 +1,17 @@
+// COMP345 Assignment 1
+// Map class driver
+// Author: Georges Grondin (40034160)
+
 #include "Map.h"
 #include <iostream>
 
 using namespace std;
 
 int TestMap() {
+
 	cout << "XXXXXXXXXXXXXXXXXXXXXXXXXXXXXXX" << endl;
 	cout << "TESTING MAP CLASS" << endl;
-	cout << "XXXXXXXXXXXXXXXXXXXXXXXXXXXXXXX" << endl;\
+	cout << "XXXXXXXXXXXXXXXXXXXXXXXXXXXXXXX" << endl << endl;
 	cout << "---------------------------------------------------" << endl;
 	cout << "Test case 1: map with non-connected node" << endl;
 	cout << "---------------------------------------------------" << endl;
@@ -20,7 +25,7 @@ int TestMap() {
 	testMap->AddEdge(2, 3);
 	testMap->AddEdge(0, 3);
 	cout << *testMap;
-	cout << "Map validate() result: " << testMap->Validate() << endl;
+	cout << "Map validate() result: " << testMap->Validate() << endl << endl;
 	delete testMap;
 
 	cout << "---------------------------------------------------" << endl;
@@ -30,7 +35,7 @@ int TestMap() {
 	testMap->AddEdge(0, 1);
 	testMap->AddEdge(2, 3);
 	cout << *testMap;
-	cout << "Map validate() result: " << testMap->Validate() << endl;
+	cout << "Map validate() result: " << testMap->Validate() << endl << endl;
 	delete testMap;
 
 	cout << "---------------------------------------------------" << endl;
@@ -43,7 +48,7 @@ int TestMap() {
 	testMap->AddEdge(1, 3);
 	testMap->AddEdge(2, 3);
 	cout << *testMap;
-	cout << "Map validate() result: " << testMap->Validate() << endl;
+	cout << "Map validate() result: " << testMap->Validate() << endl << endl;
 	delete testMap;
 
 	cout << "---------------------------------------------------" << endl;
@@ -61,7 +66,7 @@ int TestMap() {
 	testMap->GetTerritory(0)->head = testMap->GetTerritory(0)->head->next;
 	delete edge_to_delete;
 	cout << *testMap;
-	cout << "Map validate() result: " << testMap->Validate() << endl;
+	cout << "Map validate() result: " << testMap->Validate() << endl << endl;
 	delete testMap;
 
 	cout << "---------------------------------------------------" << endl;
@@ -75,8 +80,31 @@ int TestMap() {
 	testMap->AddEdge(1, 2);
 	testMap->AddEdge(2, 3);
 	cout << *testMap;
-	cout << "Map validate() result: " << testMap->Validate() << endl;
+	cout << "Map validate() result: " << testMap->Validate() << endl << endl;
+
+	cout << "---------------------------------------------------" << endl;
+	cout << "Test case 6: copy constructor: copying previous map, deleting it and printing:" << endl;
+	cout << "---------------------------------------------------" << endl;
+	Map* copyMap = new Map(testMap);
 	delete testMap;
+	cout << *copyMap << endl;
+
+	testMap = new Map(arr, 4, 2, 2);
+	testMap->AddEdge(0, 1);
+	testMap->AddEdge(0, 2);
+	testMap->AddEdge(0, 3);
+	testMap->AddEdge(1, 3);
+	testMap->AddEdge(1, 2);
+	testMap->AddEdge(2, 3);
+
+	cout << "---------------------------------------------------" << endl;
+	cout << "Test case 7: assignment operator: assigning map, deleting input map and printing:" << endl;
+	cout << "---------------------------------------------------" << endl;
+	*copyMap = *testMap;
+	delete testMap;
+	cout << *copyMap << endl;
+	
+	delete copyMap;
 	delete[] arr;
 
 	return 0;
