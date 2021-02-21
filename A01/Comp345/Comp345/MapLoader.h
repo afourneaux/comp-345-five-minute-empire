@@ -27,3 +27,5 @@ class MapLoader
 		int continents;			// To store number of continents
 		friend std::ostream& operator<<(std::ostream&, const MapLoader&);
 };
+
+int mapLoaderTest();

@@ -52,7 +52,7 @@ MapLoader::MapLoader(string filename) {
 	myFile >> line;							// Store number of regions
 	regionsSize = stoi(line);				// Parse line to int and store value in regionsSize
 	cout << "Regions: " << regionsSize << endl;
-	this->regions = new int(regionsSize);	// Assign length of regions array (ARRAY ISSUE TO FIX)
+	this->regions = new int[regionsSize];	// Assign length of regions array
 	
 	// Read # continents for every region
 	myFile.ignore(100, '\n');				// Ignore label
@@ -77,10 +77,10 @@ MapLoader::MapLoader(string filename) {
 
 	// Finally time to make our map!
 	Map* userMap = new Map(regions, regionsSize, players, continents); // Use map class to create map
+	cout << *userMap;
 	myFile.ignore(100, '\n');				// Ignore label
 	myFile.ignore(100, '\n');				// Ignore label
-	myFile >> line;
-	cout << "WTF" << 0 << endl;
+	//myFile >> line;
 
 /*	// Connect all the boards
 	myFile.ignore(100, '\n');				// Ignore label
@@ -90,32 +90,34 @@ MapLoader::MapLoader(string filename) {
 		temp = stoi(line);
 		userMap->AddEdge()
 	}*/
-/*	for (i = 0; i < regionsSize; i++) {		// Loop through region indexes and add adjacent edges
-		myFile >> line;						// Read origin index, but skip it
+	for (i = 0; i < regionsSize; i++) {		// Loop through region indexes and add adjacent edges
+		myFile >> line;						// Read origin index
+		int origin = stoi(line);
 		while (line != ".") {				// '.' is a delimeter, if you match it then stop connecting regions within that board
 			myFile >> line;					// Store adjacent territory
 			if (line == ".") {				// Conditional to prevent a MASSIVE ERROR!
 				break;						//		just so we don't have a non-numerical string
 			}
 			temp = stoi(line);				// Parse adjacent territory to int
-			if (temp > regions[i]) {		// If the adjacent region is higher than the origin it means it hasn't already been connected
-				userMap->AddEdge(regions[i], temp);	// Add edge to and from origin
-				cout << "New edge added: [" << regions[i] << "<-->" << temp << "]" << endl;
-			}
+			userMap->AddEdge(origin, temp);	// Add edge to and from origin
+			cout << "New edge added: [" << origin << "<-->" << temp << "]" << endl;
 		}
-	}*/
+	}
 
+	
 	// Let's print our map!
-	//cout << *userMap;
-
+	cout << *userMap;
+	
 	// Validate it!
-	//cout << "Map validate() result: " << userMap->Validate() << endl;
+	cout << "Map validate() result: " << userMap->Validate() << endl;
 
+	
 	delete userMap;
 	delete[] regions;
-	regions = NULL;
+	regions = nullptr;
 	
 	myFile.close();
+	
 }
 
 std::ostream& operator<<(std::ostream& strm, const MapLoader& file)

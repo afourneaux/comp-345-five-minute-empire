@@ -138,17 +138,21 @@
     </Link>
   </ItemDefinitionGroup>
   <ItemGroup>
-    <ClCompile Include="Biding.cpp" />
-    <ClCompile Include="BidingMain.cpp" />
     <ClCompile Include="Driver.cpp" />
     <ClCompile Include="Map.cpp" />
     <ClCompile Include="MapDriver.cpp" />
-    <ClCompile Include="Player.cpp" />
+    <ClCompile Include="MapLoader.cpp" />
+    <ClCompile Include="MapLoaderDriver.cpp" />
   </ItemGroup>
   <ItemGroup>
-    <ClInclude Include="Biding.h" />
     <ClInclude Include="Map.h" />
+    <ClInclude Include="MapLoader.h" />
     <ClInclude Include="Player.h" />
+  </ItemGroup>
+  <ItemGroup>
+    <Text Include="Map1.txt" />
+    <Text Include="Map2.txt" />
+    <Text Include="Map3.txt" />
   </ItemGroup>
   <Import Project="$(VCTargetsPath)\Microsoft.Cpp.targets" />
   <ImportGroup Label="ExtensionTargets">

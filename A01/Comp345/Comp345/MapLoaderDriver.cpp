@@ -8,7 +8,7 @@ void Test() {
 	MapLoader* test = new MapLoader("Map3.txt");
 }
 
-int main(){
+int mapLoaderTest(){
 	try {
 		Test();
 	}

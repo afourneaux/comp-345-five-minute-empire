@@ -2,10 +2,11 @@
 #include <iostream>
 #include "Map.h"
 #include "Player.h"
-#include "Biding.h"
+#include "MapLoader.h"
 
 int main() {
-	test_BiddingMain();
+	//test_BiddingMain();
 	TestMap();
-	
+
+	mapLoaderTest();
 }
