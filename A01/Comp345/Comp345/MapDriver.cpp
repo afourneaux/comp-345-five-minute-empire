@@ -11,7 +11,7 @@ int TestMap() {
 
 	cout << "XXXXXXXXXXXXXXXXXXXXXXXXXXXXXXX" << endl;
 	cout << "TESTING MAP CLASS" << endl;
-	cout << "XXXXXXXXXXXXXXXXXXXXXXXXXXXXXXX" << endl;\
+	cout << "XXXXXXXXXXXXXXXXXXXXXXXXXXXXXXX" << endl << endl;
 	cout << "---------------------------------------------------" << endl;
 	cout << "Test case 1: map with non-connected node" << endl;
 	cout << "---------------------------------------------------" << endl;
@@ -25,7 +25,7 @@ int TestMap() {
 	testMap->AddEdge(2, 3);
 	testMap->AddEdge(0, 3);
 	cout << *testMap;
-	cout << "Map validate() result: " << testMap->Validate() << endl;
+	cout << "Map validate() result: " << testMap->Validate() << endl << endl;
 	delete testMap;
 
 	cout << "---------------------------------------------------" << endl;
@@ -35,7 +35,7 @@ int TestMap() {
 	testMap->AddEdge(0, 1);
 	testMap->AddEdge(2, 3);
 	cout << *testMap;
-	cout << "Map validate() result: " << testMap->Validate() << endl;
+	cout << "Map validate() result: " << testMap->Validate() << endl << endl;
 	delete testMap;
 
 	cout << "---------------------------------------------------" << endl;
@@ -48,7 +48,7 @@ int TestMap() {
 	testMap->AddEdge(1, 3);
 	testMap->AddEdge(2, 3);
 	cout << *testMap;
-	cout << "Map validate() result: " << testMap->Validate() << endl;
+	cout << "Map validate() result: " << testMap->Validate() << endl << endl;
 	delete testMap;
 
 	cout << "---------------------------------------------------" << endl;
@@ -66,7 +66,7 @@ int TestMap() {
 	testMap->GetTerritory(0)->head = testMap->GetTerritory(0)->head->next;
 	delete edge_to_delete;
 	cout << *testMap;
-	cout << "Map validate() result: " << testMap->Validate() << endl;
+	cout << "Map validate() result: " << testMap->Validate() << endl << endl;
 	delete testMap;
 
 	cout << "---------------------------------------------------" << endl;
@@ -80,19 +80,19 @@ int TestMap() {
 	testMap->AddEdge(1, 2);
 	testMap->AddEdge(2, 3);
 	cout << *testMap;
-	cout << "Map validate() result: " << testMap->Validate() << endl;
+	cout << "Map validate() result: " << testMap->Validate() << endl << endl;
 
 	cout << "---------------------------------------------------" << endl;
 	cout << "Test case 6: copy constructor: copying previous map and printing:" << endl;
 	cout << "---------------------------------------------------" << endl;
 	Map* copyMap = new Map(testMap);
-	cout << *copyMap;
+	cout << *copyMap << endl;
 
 	cout << "---------------------------------------------------" << endl;
 	cout << "Test case 6: assignment operator: assigning map and printing:" << endl;
 	cout << "---------------------------------------------------" << endl;
 	*copyMap = *testMap;
-	cout << *copyMap;
+	cout << *copyMap << endl;
 	
 	delete copyMap;
 	delete testMap;
