@@ -5,10 +5,15 @@ using namespace std;
 
 int main() 
 {
-	string lastName = "";
-	int numOfPlayers = 2;
+	cout << "XXXXXXXXXXXXXXXXXXXXXXXXXXXXXXX" << endl;
+	cout << "      TESTING PLAYER CLASS     " << endl;
+	cout << "XXXXXXXXXXXXXXXXXXXXXXXXXXXXXXX" << endl;
+	
 
-	//Opening the board game
+	string lastName = "";
+	const int numOfPlayers = 2;
+
+	//Instantiating a Test Map
 	int* arr = new int[4];
 	arr[0] = 0;
 	arr[1] = 1;
@@ -16,16 +21,13 @@ int main()
 	arr[3] = 0;
 	Map* testMap = new Map(arr, 4, 2, 2);
 
-	//Players sit at the table
+	//Instantiating Test Players
 	Player* table = new Player[numOfPlayers];
-	Player player1 = table[0];
-	Player player2 = table[1];
 
-	//Prompting players for last name
+	//Getting lastname of players
 	for (int i = 0; i < numOfPlayers; i++) {
 		cout << "Enter the name of Player " << i+1 << ": ";
 		cin >> lastName;
-		table[i] = Player();
 		table[i].setLastName(lastName);
 	}
 	cout << endl << "Players for this game are: " << endl;
@@ -33,73 +35,216 @@ int main()
 		cout << j+1 << ". " << table[j].getLastName() << endl;
 	}
 	cout << endl;
+
 	//Testing variables
 	Territory* testLocation;
 	Territory* testLocation2;
-	Territory* testLocation3;
-	Territory* testLocation4;
-	int testPayment;
-	int testID; //placeNewArmy
-	int testID2; //moveArmy
-	int testID3; //moveOverLand
-	int testID4; // buildCity
+	int payment; // payCoins()
+	int testID;
+	int testID2;
 
-
-	//testing PayCoins
-	cout << "Testing payCoins method..." << endl;
-	cout << "P1: How many coins would you like to Pay? ";
-	cin >> testPayment;
-	table[0].PayCoin(testPayment);
+	//testing payCoins()
+	cout << "-------------------------------------------------" << endl;
+	cout << "         Testing payCoins(): Enough money        " << endl;
+	cout << "-------------------------------------------------" << endl;
+	table[0].PayCoin(5);
 	cout << endl;
 	
-	//testing placeNewArmy
-	cout << "Testing placeNewArmy method..." << endl;
-	cout << "P1: Where would you like to place a new army? (integer) ";
-	cin >> testID;
-	testLocation = testMap->getTerritory(testID);
-	player1.PlaceNewArmies(testLocation);
+	cout << "-------------------------------------------------" << endl;
+	cout << "    Testing payCoins(): Exactly enough money     " << endl;
+	cout << "-------------------------------------------------" << endl;
+	table[1].PayCoin(14);
 	cout << endl;
 
-	//testing moveArmy
-	cout << "Testing moveArmy method..." << endl;
-	cout << "P1: Where would you like to move army at territoryID " << testID << " to (integer)? ";
-	cin >> testID2;
-	testLocation2 = testMap->getTerritory(testID2);
-	player1.MoveArmies(testLocation, testLocation2);
+	cout << "-------------------------------------------------" << endl;
+	cout << "       Testing payCoins(): Not Enough money      " << endl;
+	cout << "-------------------------------------------------" << endl;
+	table[0].PayCoin(10);
 	cout << endl;
+
+	cout << "-------------------------------------------------" << endl;
+	cout << "          Testing payCoins(): Prompting          " << endl;
+	cout << "-------------------------------------------------" << endl;
+	cout << "P1, how much would you like to pay? ";
+	cin >> payment;
+	table[0].PayCoin(payment);
+	cout << endl;
+
+	cout << table[0].getCubes()[0]->isPlaced << endl;
+	cout << table[0];
+	cout << table[0].getCubes()[0]->isPlaced << endl;
+	cout << table[1];
+	
+	//testing placeNewArmy
+	cout << "-------------------------------------------------" << endl;
+	cout << "      Testing placeNewArmy(): Valid entry (1)    " << endl;
+	cout << "-------------------------------------------------" << endl;
+	testLocation = testMap->getTerritory(1);
+	table[0].PlaceNewArmies(testLocation);
+	cout << endl;
+
+	cout << "-------------------------------------------------" << endl;
+	cout << "   Testing placeNewArmy(): Non-Valid entry (6)   " << endl;
+	cout << "-------------------------------------------------" << endl;
+	testLocation = testMap->getTerritory(6);
+	table[0].PlaceNewArmies(testLocation);
+	cout << endl;
+
+	cout << "-------------------------------------------------" << endl;
+	cout << "        Testing placeNewArmy(): Prompting        " << endl;
+	cout << "-------------------------------------------------" << endl;
+	cout << table[0].getLastName() << ", please input where you would like to place an army: ";
+	cin >> testID;
+	testLocation = testMap->getTerritory(testID);
+	table[0].PlaceNewArmies(testLocation);
+	cout << endl;
+
+	cout << table[0];
+	cout << table[1];
+
+	//testing moveArmy
+	cout << "-------------------------------------------------" << endl;
+	cout << "      Testing moveArmy(): Valid entry (1->2)     " << endl;
+	cout << "-------------------------------------------------" << endl;
+	testLocation = testMap->getTerritory(1);
+	testLocation2 = testMap->getTerritory(2);
+	table[0].MoveArmies(testLocation, testLocation2);
+	cout << endl;
+
+	cout << "-------------------------------------------------" << endl;
+	cout << "    Testing moveArmy(): Non-Valid entry (1->2)   " << endl;
+	cout << "-------------------------------------------------" << endl;
+	testLocation = testMap->getTerritory(1);
+	testLocation2 = testMap->getTerritory(2);
+	table[0].MoveArmies(testLocation, testLocation2);
+	cout << endl;
+
+	cout << "-------------------------------------------------" << endl;
+	cout << "           Testing moveArmy(): Prompting         " << endl;
+	cout << "-------------------------------------------------" << endl;
+	cout << "Territory A ID: ";
+	cin >> testID;
+	cout << "Territory B ID: ";
+	cin >> testID2;
+	testLocation = testMap->getTerritory(testID);
+	testLocation2 = testMap->getTerritory(testID2);
+	table[0].MoveArmies(testLocation, testLocation2);
+	cout << endl;
+
+	cout << table[0];
+	cout << table[1];
 
 
 	//testing moveOverLand
-	//testing moveArmy
-	cout << "Testing moveOverLand method..." << endl;
-	cout << "P1: Where would you like to move army at territoryID " << testID2 << " to (integer)? ";
-	cin >> testID3;
-	testLocation3 = testMap->getTerritory(testID3);
-	player1.MoveOverLand(testLocation2, testLocation3);
+	cout << "-------------------------------------------------" << endl;
+	cout << "    Testing moveOverLand(): Valid entry (1->2)   " << endl;
+	cout << "-------------------------------------------------" << endl;
+	testLocation = testMap->getTerritory(1);
+	testLocation2 = testMap->getTerritory(2);
+	table[0].MoveOverLand(testLocation,testLocation2);
 	cout << endl;
+
+	cout << "-------------------------------------------------" << endl;
+	cout << "  Testing moveOverLand(): Non-Valid entry (1->2) " << endl;
+	cout << "-------------------------------------------------" << endl;
+	testLocation = testMap->getTerritory(1);
+	testLocation2 = testMap->getTerritory(2);
+	table[0].MoveOverLand(testLocation, testLocation2);
+	cout << endl;
+
+	cout << "-------------------------------------------------" << endl;
+	cout << "        Testing moveOverLand(): Prompting        " << endl;
+	cout << "-------------------------------------------------" << endl;
+	cout << "Player 1, where would you like to move over land? " << endl;
+	cout << "Territory A ID: ";
+	cin >> testID;
+	cout << "Territory B ID: ";
+	cin >> testID2;
+	testLocation = testMap->getTerritory(testID);
+	testLocation2 = testMap->getTerritory(testID2);
+	table[0].MoveOverLand(testLocation, testLocation2);
+	cout << endl;
+
+	cout << table[0];
+	cout << table[1];
 
 
 	
 	//testing buildCity
-	cout << "Testing buildCity method..." << endl;
-	cout << "P1: Where would you like to build a city? (0, 1 are empty) ";
-	cin >> testID4;
-	testLocation4 = testMap->getTerritory(testID4);
-	player1.BuildCity(testLocation4);
+	cout << "-------------------------------------------------" << endl;
+	cout << "        Testing buildCity(): Valid (2)      " << endl;
+	cout << "-------------------------------------------------" << endl;
+	testLocation = testMap->getTerritory(2);
+	table[0].BuildCity(testLocation);
 	cout << endl;
 
-	//testing buildCity2
-	cout << "Testing buildCity method..." << endl;
-	cout << "P1: Where would you like to build a city? (0, 1 are empty) ";
-	cin >> testID4;
-	testLocation4 = testMap->getTerritory(testID4);
-	player1.BuildCity(testLocation4);
+	cout << "-------------------------------------------------" << endl;
+	cout << "          Testing buildCity(): Non-Valid (1)        " << endl;
+	cout << "-------------------------------------------------" << endl;
+	testLocation = testMap->getTerritory(0);
+	table[0].BuildCity(testLocation);
 	cout << endl;
+
+	cout << "-------------------------------------------------" << endl;
+	cout << "           Testing buildCity(): Prompting        " << endl;
+	cout << "-------------------------------------------------" << endl;
+	cout << "Player 1, where would you like to build a city? ";
+	cin >> testID;
+	testLocation = testMap->getTerritory(testID);
+	table[0].BuildCity(testLocation);
+	cout << endl;
+
+	cout << table[0];
+	cout << table[1];
 
 	//testing destroyArmy
-	cout << "Testing destroyArmy method..." << endl;
-	cout << "P1: Destroying army from ID 3 (ally) with ID 2 (ennemy)? (integer) ";
-	Territory* testLocation5 = testMap->getTerritory(2);
-	player1.MoveArmies(testLocation4, testLocation5);
+	cout << "--------------------------------------------------" << endl;
+	cout << "        Testing destroyArmy() -> Prompting        " << endl;
+	cout << "--------------------------------------------------" << endl;
+	cout << table[0].getLastName() << ", where would you like to place an army: ";
+	cin >> testID;
+	cout << table[1].getLastName() << "where would you like to place an army: ";
+	cin >> testID2;
+	testLocation = testMap->getTerritory(testID);
+	testLocation2 = testMap->getTerritory(testID2);
+	table[0].PlaceNewArmies(testLocation);
+	table[1].PlaceNewArmies(testLocation2);
+	table[0].DestroyArmy(testLocation, testLocation2, table[1]);
+
+	cout << table[0];
+	cout << table[1];
+
+	cout << "--------------------------------------------------" << endl;
+	cout << "        Testing destroyArmy() -> Prompting        " << endl;
+	cout << "--------------------------------------------------" << endl;
+	cout << table[0].getLastName() << ", where would you like to place an army: ";
+	cin >> testID;
+	cout << table[1].getLastName() << "where would you like to place an army: ";
+	cin >> testID2;
+	testLocation = testMap->getTerritory(testID);
+	testLocation2 = testMap->getTerritory(testID2);
+	table[0].PlaceNewArmies(testLocation);
+	table[1].PlaceNewArmies(testLocation2);
+	table[0].DestroyArmy(testLocation, testLocation2, table[1]);
+
+	cout << table[0];
+	cout << table[1];
+
+	cout << "--------------------------------------------------" << endl;
+	cout << "        Testing destroyArmy() -> Prompting        " << endl;
+	cout << "--------------------------------------------------" << endl;
+	cout << table[0].getLastName() << ", where would you like to place an army: ";
+	cin >> testID;
+	cout << table[1].getLastName() << ", where would you like to place an army: ";
+	cin >> testID2;
+	testLocation = testMap->getTerritory(testID);
+	testLocation2 = testMap->getTerritory(testID2);
+	table[0].PlaceNewArmies(testLocation);
+	table[1].PlaceNewArmies(testLocation2);
+	table[0].DestroyArmy(testLocation, testLocation2, table[1]);
+
+	cout << table[0];
+	cout << table[1];
 	
+
 }

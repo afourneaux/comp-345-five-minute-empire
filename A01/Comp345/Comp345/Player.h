@@ -5,9 +5,13 @@
 #include "Card.h"
 #include <iostream>
 using namespace std;
+
+const int STARTING_COINS = 14;
+const int STARTING_ARMIES = 18;
+
 struct Cube {
 	Territory* location;
-	bool isPlaced = false;
+	bool isPlaced;
 };
 struct Disk {
 	Territory* location;
@@ -19,31 +23,36 @@ struct Player {
 public:
 	Player();
 	~Player();
+	Player(const Player* player);
+	//Player& operator= (const Player& player);
+	friend ostream& operator<<(ostream& out, const Player player);
 	bool PayCoin(int amt);
 	bool PlaceNewArmies(Territory* dest);
 	bool MoveArmies(Territory* src, Territory* dest);
 	bool MoveOverLand(Territory* src, Territory* dest);
 	bool BuildCity(Territory* dest);
-	bool DestroyArmy(Cube* friendly, Cube* ennemie);
+	bool DestroyArmy(Territory* friendly, Territory* ennemie, Player ennemy);
 	void InitializePlayer();
 	//Accessors
-	string getLastName() { return lastName; };
+	string getLastName() const { return lastName; };
 	void setLastName(string last) { lastName = last; };
-	vector<Territory*> getTerritories() { return territories; };
-	vector<Cube*> getCubes() { return cubes; };
-	vector<Disk*> getDisks() { return disks; };
-	vector <Card*> getHand() { return hand; };
-	BidingFacility* getBf() { return bf; };
-	int getCoins() { return coins; };
+	vector<Territory*> getTerritories() const { return territories; };
+	vector<Cube*> getCubes() const { return cubes; };
+	vector<Disk*> getDisks() const { return disks; };
+	vector <Card*> getHand() const { return hand; };
+	BidingFacility* getBf() const { return bf; };
+	int getCoins() const { return coins; };
+	int getArmiesLeft() const { return armiesLeft; };
 	void setCoins(int amt) { coins = amt; };
 
 private:
-	string lastName = "";
+	string lastName;
 	vector<Territory*> territories;
 	vector<Cube*> cubes;
 	vector<Disk*> disks;
 	vector <Card*> hand;
 	BidingFacility* bf;
-	int coins = 14;
+	int coins = STARTING_COINS;
+	int armiesLeft = STARTING_ARMIES;
 };
 
