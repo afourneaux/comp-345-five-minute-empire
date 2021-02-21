@@ -269,7 +269,11 @@ Card* Hand::Exchange(const int index, Player player)
 	int cost = GetCostAtIndex(index);
 	player.payCoin(&cost);
 	Card* card = &cards[index];
-	cards[index] = deck->Draw();
+	// Shift each card down one on the track
+	for (int i = index; i < HAND_SIZE - 1; i++) {
+		cards[i] = cards[i + 1];
+	}
+	cards[HAND_SIZE - 1] = deck->Draw();
 	return card;
 }
 
