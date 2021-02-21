@@ -1,55 +1,49 @@
-//============================================================================
-// Name        : Player.h
-// Author      : Amir Hossein Hadinezhad
-// Version     : First Assainment
-// Description : Player class implented code needed for biding part constrc , Player_Name,coin,bid,ID and their setters and getters , paymentCheck, Treasuary_Report, payCoin
-//============================================================================
 #pragma once
-#include<iostream>
-#include "BiddingF.h"
-/// <summary>
-/// //////////////////////////////////  PLEASE PAY attention to THe name of the following as they are being used in bidding 
-/// ?////////////////////////////////   getPlayer_Name   Treasuary_Report  getCoin  payCoin 
-/// /////////////////////////////////   to create Player OBJ i also used   : setCoin   setPlayer_Name
-/// </summary>
-class Player
-{
+#include <iostream>
+#include <vector>
+#include "Map.h"
+#include "Card.h"
+#include <iostream>
+using namespace std;
+struct Cube {
+	Territory* location;
+	bool isPlaced = false;
+};
+struct Disk {
+	Territory* location;
+	bool isBuilt = false;
+};
+struct BidingFacility {
+};
+struct Player {
 public:
-	//getters
 	Player();
-	Player(std::string name, int initCoin);
-	//setters
-	void setPlayer_Name(std::string name);
-	void setCoin(int value);
-	void setID(int id);
-
-/** ******************** */ //Moved to nested Class BiddingF
-	//void setBid(int* bidval);
-	//getters
-///////////////////////////
-	int getCoin();
-	std::string getPlayer_Name();
-	int getID();
-	//int getBid();
-
-	
-	bool paymentCheck(int* payment);
-	void Treasuary_Report();
-	void payCoin(int* payment);
-	/// <summary>
-	/// Nested class Taking Care of Bidding//////////  our nsted Class  Its PUBLIC
-	/// </summary>
-	class BiddingF bf {};
-
-
-
-
+	~Player();
+	bool PayCoin(int amt);
+	bool PlaceNewArmies(Territory* dest);
+	bool MoveArmies(Territory* src, Territory* dest);
+	bool MoveOverLand(Territory* src, Territory* dest);
+	bool BuildCity(Territory* dest);
+	bool DestroyArmy(Cube* friendly, Cube* ennemie);
+	void InitializePlayer();
+	//Accessors
+	string getLastName() { return lastName; };
+	void setLastName(string last) { lastName = last; };
+	vector<Territory*> getTerritories() { return territories; };
+	vector<Cube*> getCubes() { return cubes; };
+	vector<Disk*> getDisks() { return disks; };
+	vector <Card*> getHand() { return hand; };
+	BidingFacility* getBf() { return bf; };
+	int getCoins() { return coins; };
+	void setCoins(int amt) { coins = amt; };
 
 private:
-	std::string player_Name;
-	int coin;
-///***********/Moved to BiddingF class************************
-/// 	int bid;
-	int ID;
-	
+	string lastName = "";
+	vector<Territory*> territories;
+	vector<Cube*> cubes;
+	vector<Disk*> disks;
+	vector <Card*> hand;
+	BidingFacility* bf;
+	int coins = 14;
 };
+
