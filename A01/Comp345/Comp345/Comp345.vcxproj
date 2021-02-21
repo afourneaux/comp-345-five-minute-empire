@@ -138,6 +138,7 @@
     </Link>
   </ItemDefinitionGroup>
   <ItemGroup>
+    <ClCompile Include="BiddingF.cpp" />
     <ClCompile Include="Biding.cpp" />
     <ClCompile Include="BidingMain.cpp" />
     <ClCompile Include="Driver.cpp" />
@@ -146,6 +147,7 @@
     <ClCompile Include="Player.cpp" />
   </ItemGroup>
   <ItemGroup>
+    <ClInclude Include="BiddingF.h" />
     <ClInclude Include="Biding.h" />
     <ClInclude Include="Map.h" />
     <ClInclude Include="Player.h" />
