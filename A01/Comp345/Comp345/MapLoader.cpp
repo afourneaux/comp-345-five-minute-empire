@@ -78,7 +78,6 @@ MapLoader::MapLoader(string filename) {
 
 	// Finally time to make our map!
 	Map* userMap = new Map(regions, regionsSize, players, continents); // Use map class to create map
-	cout << *userMap;
 	myFile.ignore(100, '\n');				// Ignore label
 	myFile.ignore(100, '\n');				// Ignore label
 

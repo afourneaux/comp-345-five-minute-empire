@@ -9,6 +9,11 @@ void Test() {
 }
 
 int mapLoaderTest(){
+	cout << endl << endl;
+	cout << "XXXXXXXXXXXXXXXXXXXXXXXXXXXXXXX" << endl;
+	cout << "TESTING MAP LOADER CLASS" << endl;
+	cout << "XXXXXXXXXXXXXXXXXXXXXXXXXXXXXXX" << endl; \
+
 	try {
 		Test();
 	}
