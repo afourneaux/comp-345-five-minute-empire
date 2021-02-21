@@ -1,3 +1,7 @@
+// COMP345 Assignment 1
+// Map class driver
+// Author: Georges Grondin (40034160)
+
 #include "Map.h"
 #include <iostream>
 

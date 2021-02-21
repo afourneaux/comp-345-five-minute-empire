@@ -1,3 +1,7 @@
+// COMP345 Assignment 1
+// Map class implementation
+// Author: Georges Grondin (40034160)
+
 #include "Map.h"
 
 using namespace std;
@@ -264,6 +268,8 @@ int Map::CountWaterConnections(int territory_index) {
 	return count;
 }
 
+// Checks if two territories are adjacent
+// Returns -1 if they are not adjacent, otherwise returns the movement cost (1 or 3)
 int Map::CheckAdjacency(int origin, int destination) {
 	Edge* temp = territories[origin].head;
 	while (temp != nullptr) {
