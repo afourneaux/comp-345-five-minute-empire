@@ -83,19 +83,28 @@ int TestMap() {
 	cout << "Map validate() result: " << testMap->Validate() << endl << endl;
 
 	cout << "---------------------------------------------------" << endl;
-	cout << "Test case 6: copy constructor: copying previous map and printing:" << endl;
+	cout << "Test case 6: copy constructor: copying previous map, deleting it and printing:" << endl;
 	cout << "---------------------------------------------------" << endl;
 	Map* copyMap = new Map(testMap);
+	delete testMap;
 	cout << *copyMap << endl;
 
+	testMap = new Map(arr, 4, 2, 2);
+	testMap->AddEdge(0, 1);
+	testMap->AddEdge(0, 2);
+	testMap->AddEdge(0, 3);
+	testMap->AddEdge(1, 3);
+	testMap->AddEdge(1, 2);
+	testMap->AddEdge(2, 3);
+
 	cout << "---------------------------------------------------" << endl;
-	cout << "Test case 6: assignment operator: assigning map and printing:" << endl;
+	cout << "Test case 7: assignment operator: assigning map, deleting input map and printing:" << endl;
 	cout << "---------------------------------------------------" << endl;
 	*copyMap = *testMap;
+	delete testMap;
 	cout << *copyMap << endl;
 	
 	delete copyMap;
-	delete testMap;
 	delete[] arr;
 
 	return 0;
