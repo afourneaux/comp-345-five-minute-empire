@@ -54,6 +54,8 @@ public:
 	Map& operator= (const Map& map);				// Assignment operator
 	friend std::ostream& operator<< (std::ostream& out, const Map& map); // Stream insertion operator
 private:
+	const int LAND_MOVEMENT_COST = 1;
+	const int WATER_MOVEMENT_COST = 3;
 	int CountContiguousNodes();						// Used in validate() to check that all territories are connected
 	int CountContiguousNodesInContinent(TerritoryList* continent);	// Used in validate() to check that all continents are contiguous
 	int CountWaterConnections(int territory_index);	// Used in setStartingTerritory() to check if the placement is valid
