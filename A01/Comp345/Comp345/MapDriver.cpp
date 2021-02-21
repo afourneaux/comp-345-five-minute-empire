@@ -8,6 +8,7 @@
 using namespace std;
 
 int TestMap() {
+
 	cout << "XXXXXXXXXXXXXXXXXXXXXXXXXXXXXXX" << endl;
 	cout << "TESTING MAP CLASS" << endl;
 	cout << "XXXXXXXXXXXXXXXXXXXXXXXXXXXXXXX" << endl;\
@@ -80,6 +81,20 @@ int TestMap() {
 	testMap->AddEdge(2, 3);
 	cout << *testMap;
 	cout << "Map validate() result: " << testMap->Validate() << endl;
+
+	cout << "---------------------------------------------------" << endl;
+	cout << "Test case 6: copy constructor: copying previous map and printing:" << endl;
+	cout << "---------------------------------------------------" << endl;
+	Map* copyMap = new Map(testMap);
+	cout << *copyMap;
+
+	cout << "---------------------------------------------------" << endl;
+	cout << "Test case 6: assignment operator: assigning map and printing:" << endl;
+	cout << "---------------------------------------------------" << endl;
+	*copyMap = *testMap;
+	cout << *copyMap;
+	
+	delete copyMap;
 	delete testMap;
 	delete[] arr;
 
