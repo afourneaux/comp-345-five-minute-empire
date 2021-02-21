@@ -70,7 +70,7 @@ MapLoader::MapLoader(string filename) {
 	// Determine number of continents
 	for (i = 0; i < regionsSize; i++) {
 		if (continents < regions[i]) {
-			continents = regions[i];
+			continents = regions[i] + 1;
 		}
 	}
 	cout << "Continents: " << continents << endl;
