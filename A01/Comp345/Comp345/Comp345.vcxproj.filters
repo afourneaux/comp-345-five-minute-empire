@@ -42,6 +42,12 @@
     <ClCompile Include="BiddingF.cpp">
       <Filter>Source Files</Filter>
     </ClCompile>
+    <ClCompile Include="MapLoader.cpp">
+      <Filter>Source Files</Filter>
+    </ClCompile>
+    <ClCompile Include="MapLoaderDriver.cpp">
+      <Filter>Source Files</Filter>
+    </ClCompile>
   </ItemGroup>
   <ItemGroup>
     <ClInclude Include="Map.h">
@@ -59,5 +65,13 @@
     <ClInclude Include="BiddingF.h">
       <Filter>Header Files</Filter>
     </ClInclude>
+    <ClInclude Include="MapLoader.h">
+      <Filter>Header Files</Filter>
+    </ClInclude>
+  </ItemGroup>
+  <ItemGroup>
+    <Text Include="Map1.txt" />
+    <Text Include="Map2.txt" />
+    <Text Include="Map3.txt" />
   </ItemGroup>
 </Project>
