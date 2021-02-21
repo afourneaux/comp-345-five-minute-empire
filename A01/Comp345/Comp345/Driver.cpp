@@ -2,12 +2,14 @@
 
 #include <iostream>
 #include "Map.h"
+#include "MapLoader.h"
 #include "Cards.h"
 #include "Player.h"
 #include "Biding.h"
 
 int main() {
-	test_BiddingMain();
 	TestMap();
+	mapLoaderTest();
 	TestCards();
+	test_BiddingMain();
 }
