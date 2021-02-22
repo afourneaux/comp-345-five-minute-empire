@@ -64,14 +64,6 @@ int testPlayer()
 	table[0].PayCoin(10);
 	cout << endl;
 
-	/*cout << "-------------------------------------------------" << endl;
-	cout << "          Testing payCoins(): Prompting          " << endl;
-	cout << "-------------------------------------------------" << endl;
-	cout << "P1, how much would you like to pay? ";
-	cin >> payment;
-	table[0].PayCoin(payment);
-	cout << endl;*/
-
 	cout << table[0];
 	cout << table[1];
 
@@ -89,15 +81,6 @@ int testPlayer()
 	testLocation = testMap->GetTerritory(6);
 	table[0].PlaceNewArmies(testLocation);
 	cout << endl;
-
-	/*cout << "-------------------------------------------------" << endl;
-	cout << "        Testing placeNewArmy(): Prompting        " << endl;
-	cout << "-------------------------------------------------" << endl;
-	cout << table[0].getLastName() << ", please input where you would like to place an army: ";
-	cin >> testID;
-	testLocation = testMap->GetTerritory(testID);
-	table[0].PlaceNewArmies(testLocation);
-	cout << endl;*/
 
 	cout << table[0];
 	cout << table[1];
@@ -119,18 +102,6 @@ int testPlayer()
 	table[0].MoveArmies(testLocation, testLocation2);
 	cout << endl;
 
-	/*cout << "-------------------------------------------------" << endl;
-	cout << "           Testing moveArmy(): Prompting         " << endl;
-	cout << "-------------------------------------------------" << endl;
-	cout << "Territory A ID: ";
-	cin >> testID;
-	cout << "Territory B ID: ";
-	cin >> testID2;
-	testLocation = testMap->GetTerritory(testID);
-	testLocation2 = testMap->GetTerritory(testID2);
-	table[0].MoveArmies(testLocation, testLocation2);
-	cout << endl;*/
-
 	cout << table[0];
 	cout << table[1];
 
@@ -151,19 +122,6 @@ int testPlayer()
 	table[0].MoveOverLand(testLocation, testLocation2);
 	cout << endl;
 
-	/*cout << "-------------------------------------------------" << endl;
-	cout << "        Testing moveOverLand(): Prompting        " << endl;
-	cout << "-------------------------------------------------" << endl;
-	cout << "Player 1, where would you like to move over land? " << endl;
-	cout << "Territory A ID: ";
-	cin >> testID;
-	cout << "Territory B ID: ";
-	cin >> testID2;
-	testLocation = testMap->GetTerritory(testID);
-	testLocation2 = testMap->GetTerritory(testID2);
-	table[0].MoveOverLand(testLocation, testLocation2);
-	cout << endl;*/
-
 	cout << table[0];
 	cout << table[1];
 
@@ -181,15 +139,6 @@ int testPlayer()
 	testLocation = testMap->GetTerritory(0);
 	table[0].BuildCity(testLocation);
 	cout << endl;
-
-	/*cout << "-------------------------------------------------" << endl;
-	cout << "           Testing buildCity(): Prompting        " << endl;
-	cout << "-------------------------------------------------" << endl;
-	cout << "Player 1, where would you like to build a city? ";
-	cin >> testID;
-	testLocation = testMap->GetTerritory(testID);
-	table[0].BuildCity(testLocation);
-	cout << endl;*/
 
 	cout << table[0];
 	cout << table[1];

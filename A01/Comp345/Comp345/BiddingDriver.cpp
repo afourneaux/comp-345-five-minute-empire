@@ -34,7 +34,7 @@ int TestBiddingFacility()
 	CheckBidWinner(table);
 
 	cout << "Testing Bidding Facility Stream insertion" << endl;
-	BiddingFacility* bf = table[0].getBf();
+	BiddingFacility* bf = table[0].GetBf();
 	cout << *bf;
 	cout << "Testing Bidding Facility Copy constructor" << endl;
 	BiddingFacility* bf2 = new BiddingFacility(bf);

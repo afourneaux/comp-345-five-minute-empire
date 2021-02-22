@@ -33,8 +33,8 @@ Player::Player(const Player* player) {
 		disks[i]->isBuilt = player->getDisks()[i]->isBuilt;
 		disks[i]->location = player->getDisks()[i]->location;
 	}
-	bf = player->getBf(); //Need copy constructor of Bf
-	lastName = player->getLastName();
+	bf = player->GetBf(); //Need copy constructor of Bf
+	lastName = player->GetLastName();
 	//Copying territories
 	for (int i = 0; i < player->getTerritories().size(); i++) {
 		territories[i]->army_count = player->getTerritories()[i]->army_count;
@@ -58,8 +58,8 @@ Player& Player::operator= (const Player& player) {
 		disks[i]->isBuilt = player.getDisks()[i]->isBuilt;
 		disks[i]->location = player.getDisks()[i]->location;
 	}
-	bf = player.getBf(); //Need copy constructor of Bf
-	lastName = player.getLastName();
+	bf = player.GetBf(); //Need copy constructor of Bf
+	lastName = player.GetLastName();
 	//Copying territories
 	for (int i = 0; i < player.getTerritories().size(); i++) {
 		territories[i]->army_count = player.getTerritories()[i]->army_count;
