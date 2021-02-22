@@ -7,6 +7,8 @@ using namespace std;
 const int DECK_SIZE = 11;	// The total number of implemented cards in the deck
 const int HAND_SIZE = 6;	// The number of face-up cards in the hand
 
+struct Player;
+
 // The different possible actions granted by a card
 enum CardAction {
 	eAction_None,

@@ -267,7 +267,7 @@ Hand::~Hand() {
 Card* Hand::Exchange(const int index, Player player)
 {
 	int cost = GetCostAtIndex(index);
-	player.payCoin(&cost);
+	player.PayCoin(cost);
 	Card* card = &cards[index];
 	cards[index] = deck->Draw();
 	return card;

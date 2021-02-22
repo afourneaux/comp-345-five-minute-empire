@@ -8,13 +8,14 @@
 #include "MapLoader.h"
 #include "Cards.h"
 #include "Player.h"
-#include "Biding.h"
+#include "BiddingFacility.h"
 
 int main() {
 	TestMap();
 	mapLoaderTest();
+	testPlayer();
 	TestCards();
-	test_BiddingMain();
+	testBiddingFacility();
 
 	//Check for memory leaks at the end of execution
 	_CrtDumpMemoryLeaks();

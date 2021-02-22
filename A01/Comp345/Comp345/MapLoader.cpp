@@ -1,9 +1,7 @@
 #pragma once
 #include "MapLoader.h"
-#include "Map.h"
 #include <iostream>		// used for cin & cout
 #include <fstream>		// used for file i/o
-#include <string>
 
 using namespace std;
 
