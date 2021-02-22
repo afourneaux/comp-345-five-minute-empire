@@ -32,7 +32,7 @@ int testPlayer()
 	}
 	cout << endl << "Players for this game are: " << endl;
 	for (int j = 0; j < numOfPlayers; j++) {
-		cout << j + 1 << ". " << table[j].getLastName() << endl;
+		cout << j + 1 << ". " << table[j].GetLastName() << endl;
 	}
 	cout << endl;
 
@@ -196,9 +196,9 @@ int testPlayer()
 	cout << "--------------------------------------------------" << endl;
 	cout << "        Testing destroyArmy() -> Prompting        " << endl;
 	cout << "--------------------------------------------------" << endl;
-	cout << table[0].getLastName() << ", where would you like to place an army: ";
+	cout << table[0].GetLastName() << ", where would you like to place an army: ";
 	cin >> testID;
-	cout << table[1].getLastName() << ", where would you like to place an army: ";
+	cout << table[1].GetLastName() << ", where would you like to place an army: ";
 	cin >> testID2;
 	testLocation = testMap->GetTerritory(testID);
 	testLocation2 = testMap->GetTerritory(testID2);

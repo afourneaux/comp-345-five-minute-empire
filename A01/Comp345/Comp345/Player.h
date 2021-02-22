@@ -37,13 +37,13 @@ public:
 	bool DestroyArmy(Territory* friendly, Territory* ennemie, Player* ennemy);
 	void InitializePlayer();
 	//Accessors
-	string getLastName() const { return lastName; };
+	string GetLastName() const { return lastName; };
 	void setLastName(string last) { lastName = last; };
 	vector<Territory*> getTerritories() const { return territories; };
 	vector<Cube*> getCubes() const { return cubes; };
 	vector<Disk*> getDisks() const { return disks; };
 	vector <Card*> getHand() const { return hand; };
-	BiddingFacility* getBf() const { return bf; };
+	BiddingFacility* GetBf() const { return bf; };
 	int getCoins() const { return coins; };
 	int getArmiesLeft() const { return armiesLeft; };
 	void setCoins(int amt) { coins = amt; };

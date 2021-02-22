@@ -24,12 +24,12 @@ int TestBiddingFacility()
 	}
 	cout << endl << "Players for this game are: " << endl;
 	for (int j = 0; j < NUM_OF_PLAYERS; j++) {
-		cout << j + 1 << ". " << table[j].getLastName() << endl;
+		cout << j + 1 << ". " << table[j].GetLastName() << endl;
 	}
 	cout << endl;
 
 	for (int i = 0; i < NUM_OF_PLAYERS; i++)
-		table[i].getBf()->SetBid(AskForBid(&table[i]));
+		table[i].GetBf()->SetBid(AskForBid(&table[i]));
 
 	CheckBidWinner(table);
 

@@ -55,7 +55,7 @@ Player& Player::operator= (const Player& player) {
 
 // Stream insertion operator
 ostream& operator<<(ostream& out, const Player &player) {
-	out << "--- " << player.getLastName() << " ---" << endl;
+	out << "--- " << player.GetLastName() << " ---" << endl;
 	out << "Coins: " << player.getCoins() << endl;
 	//Army locations
 	out << "Armies locations: " << endl;

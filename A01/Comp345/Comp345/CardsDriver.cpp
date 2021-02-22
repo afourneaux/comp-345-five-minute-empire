@@ -26,21 +26,6 @@ int TestCards() {
 
 	cout << endl;
 
-	cout << "Taking from Hand..." << endl;
-	Player* player = new Player();
-	player->setLastName("Moneybags");
-	cout << "Player coins: " << player->getCoins() << endl;
-	Card* cardFromHand = hand->Exchange(2, *player);
-	cout << "Drawn card..." << endl;
-	cout << "Player coins: " << player->getCoins() << endl;
-	cout << "Card drawn:" << endl;
-	cout << *cardFromHand;
-	cout << "New hand:" << endl;
-	cout << *hand;
-
-	delete cardFromHand;
-	delete player;
-
 	cout << "Copying deck..." << endl;
 	Deck* secondDeck = new Deck(deck);
 	delete deck;
