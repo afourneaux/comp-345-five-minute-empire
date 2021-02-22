@@ -264,11 +264,11 @@ Hand::~Hand() {
 
 // Spend coins to obtain a card
 // Assume coin count in player has already been validated by the calling function
-Card* Hand::Exchange(const int index, Player player)
+Card* Hand::Exchange(const int index, Player& player)
 {
 	int cost = GetCostAtIndex(index);
 	player.PayCoin(cost);
-	Card* card = &cards[index];
+	Card* card = new Card(&cards[index]);
 	// Shift each card down one on the track
 	for (int i = index; i < HAND_SIZE - 1; i++) {
 		cards[i] = cards[i + 1];
@@ -330,7 +330,9 @@ Hand& Hand::operator= (const Hand& hand) {
 
 // Default constructor
 Card::Card() {
-
+	abilityCount = 0;
+	actionCount = 0;
+	actionChoice = eChoice_None;
 }
 
 // Copy Constructor
@@ -359,8 +361,12 @@ Card::Card(const Card* card) {
 
 // Destructor
 Card::~Card() {
-	delete[] actions;
-	delete[] abilities;
+	if (actionCount > 0) {
+		delete[] actions;
+	}
+	if (abilityCount > 0) {
+		delete[] abilities;
+	}
 }
 
 // Assignment operator

@@ -88,7 +88,7 @@ public:
 	Hand(Deck* deck);									// Default constructor
 	Hand(const Hand* hand);								// Copy constructor
 	~Hand();											// Destructor
-	Card* Exchange(const int index, Player player);		// Spend coins to obtain a card 
+	Card* Exchange(const int index, Player& player);		// Spend coins to obtain a card 
 	Card* GetCardAtIndex(const int index) const;		// Returns card data at a given index
 	int GetCostAtIndex(const int index) const;			// Returns the coin cost to retrieve a card at a given index
 	Hand& operator= (const Hand& hand);								// Assignment operator
