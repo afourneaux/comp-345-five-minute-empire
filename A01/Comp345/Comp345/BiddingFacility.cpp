@@ -140,5 +140,26 @@ void CheckBidWinner(Player* players)
 
 }
 
+BiddingFacility::BiddingFacility() {
+	this->bid = 0;
+}
 
+BiddingFacility::BiddingFacility(BiddingFacility* bf) {
+	this->bid = bf->bid;
+}
 
+BiddingFacility& BiddingFacility::operator=(const BiddingFacility& bf)
+{
+	//Check for self-assignment
+	if (this == &bf) {
+		return *this;
+	}
+	this->bid = bf.bid;
+	return *this;
+}
+
+std::ostream& operator<<(std::ostream& out, const BiddingFacility& bf)
+{
+	out << "Bidding Facility: bid value " << bf.bid << endl;
+	return out;
+}

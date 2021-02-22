@@ -3,6 +3,8 @@
 #include "Map.h"
 using namespace std;
 
+
+
 int testPlayer()
 {
 	cout << "XXXXXXXXXXXXXXXXXXXXXXXXXXXXXXX" << endl;
@@ -209,5 +211,6 @@ int testPlayer()
 	cout << table[0];
 	cout << table[1];
 
+	delete testMap;
 	return 0;
 }

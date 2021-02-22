@@ -19,6 +19,11 @@ class BiddingFacility{
 public:
 	int GetBid() { return bid; };
 	void SetBid(int bidding) { bid = bidding; };
+	BiddingFacility();
+	BiddingFacility(BiddingFacility* bf);
+	BiddingFacility& operator= (const BiddingFacility& bf);				// Assignment operator
+	friend std::ostream& operator<< (std::ostream& out, const BiddingFacility& bf); // Stream insertion operator
+
 private:
 	int bid;
 };
