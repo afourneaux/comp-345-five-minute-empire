@@ -27,8 +27,8 @@ public:
 	Player();
 	~Player();
 	Player(const Player* player);
-	//Player& operator= (const Player& player);
-	friend ostream& operator<<(ostream& out, const Player &player);
+	Player& operator= (const Player& player);
+	friend std::ostream& operator<<(std::ostream& out, const Player &player);
 	bool PayCoin(int amt);
 	bool PlaceNewArmies(Territory* dest);
 	bool MoveArmies(Territory* src, Territory* dest);

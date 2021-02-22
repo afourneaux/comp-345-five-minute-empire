@@ -23,38 +23,59 @@ Player::~Player()
 }
 //copy constructor
 Player::Player(const Player* player) {
-	/*cubes = new Cube[18];
-
-
-	coins = player->coins;
-	cubes = player->cubes;
-	disks = player->disks;
-	hand = player->hand.copy;
-	bf = player->bf;
+	//Copying armies
+	for (int i = 0; i < player->getCubes().size(); i++) {
+		cubes[i]->isPlaced = player->getCubes()[i]->isPlaced;
+		cubes[i]->location = player->getCubes()[i]->location;
+	}
+	//Copying disks
+	for (int i = 0; i < player->getDisks().size(); i++) {
+		disks[i]->isBuilt = player->getDisks()[i]->isBuilt;
+		disks[i]->location = player->getDisks()[i]->location;
+	}
+	bf = player->getBf(); //Need copy constructor of Bf
 	lastName = player->getLastName();
-	territories = player->getTerritories();
-	armiesLeft = player->armiesLeft;*/
+	//Copying territories
+	for (int i = 0; i < player->getTerritories().size(); i++) {
+		territories[i]->army_count = player->getTerritories()[i]->army_count;
+		territories[i]->city_count = player->getTerritories()[i]->city_count;
+		territories[i]->continentID = player->getTerritories()[i]->continentID;
+		territories[i]->head = player->getTerritories()[i]->head;
+		territories[i]->territoryID = player->getTerritories()[i]->territoryID;
+	}
+	armiesLeft = player->armiesLeft;
+	coins = player->coins;
 }
 // Assignment operator
-/*
 Player& Player::operator= (const Player& player) {
-	Check for self-assignment
-	if (this == &deck) {
-		return *this;
+		//Copying armies
+	for (int i = 0; i < player.getCubes().size(); i++) {
+		cubes[i]->isPlaced = player.getCubes()[i]->isPlaced;
+		cubes[i]->location = player.getCubes()[i]->location;
 	}
-
-	deckIndex = deck.deckIndex;
-	cards = new Card[DECK_SIZE];
-
-	for (int i = 0; i < DECK_SIZE; i++) {
-		cards[i] = new Card(deck.cards[i]);
+	//Copying disks
+	for (int i = 0; i < player.getDisks().size(); i++) {
+		disks[i]->isBuilt = player.getDisks()[i]->isBuilt;
+		disks[i]->location = player.getDisks()[i]->location;
 	}
+	bf = player.getBf(); //Need copy constructor of Bf
+	lastName = player.getLastName();
+	//Copying territories
+	for (int i = 0; i < player.getTerritories().size(); i++) {
+		territories[i]->army_count = player.getTerritories()[i]->army_count;
+		territories[i]->city_count = player.getTerritories()[i]->city_count;
+		territories[i]->continentID = player.getTerritories()[i]->continentID;
+		territories[i]->head = player.getTerritories()[i]->head;
+		territories[i]->territoryID = player.getTerritories()[i]->territoryID;
+	}
+	armiesLeft = player.armiesLeft;
+	coins = player.coins;
 
 	return *this;
-}*/
+}
 
 // Stream insertion operator
-ostream& operator<<(ostream& out, const Player &player) {
+std::ostream& operator<<(std::ostream& out, const Player &player) {
 	out << "--- " << player.getLastName() << " ---" << endl;
 	out << "Coins: " << player.getCoins() << endl;
 	//Army locations
@@ -189,23 +210,23 @@ bool Player::BuildCity(Territory* dest) {
 //Checks if friendly & ennemy in same location -> Returns if it was destroyed
 bool Player::DestroyArmy(Territory* friendlyTerr, Territory* ennemyTerr, Player *ennemy) {
 	bool isDestoyed = false;
-	/*for (int i = 0; i < cubes.size(); i++) {
+	for (int i = 0; i < cubes.size(); i++) {
 		if (friendlyTerr == cubes[i]->location && cubes[i]->location->territoryID == ennemyTerr->territoryID) {
-			for (int j = 0; j < ennemy.getCubes().size(); j++) {
-				if (ennemy.getCubes()[j]->location == nullptr)
+			for (int j = 0; j < ennemy->getCubes().size(); j++) {
+				if (ennemy->getCubes()[j]->location == nullptr)
 					continue;
-				if (ennemy.getCubes()[j]->location->territoryID == ennemyTerr->territoryID) {
-					ennemy.getCubes()[j]->isPlaced = false;
-					ennemy.getCubes()[j]->location = nullptr;
+				if (ennemy->getCubes()[j]->location->territoryID == ennemyTerr->territoryID) {
+					ennemy->getCubes()[j]->isPlaced = false;
+					ennemy->getCubes()[j]->location = nullptr;
 					isDestoyed = true;
 				}
 			}
 		}
 	}
 	if (isDestoyed)
-		cout << lastName << " destroyed his enemy " << ennemy.lastName << " at " << ennemyTerr->territoryID << " with his army at " << friendlyTerr->territoryID << "." << endl;
+		cout << lastName << " destroyed his enemy " << ennemy->lastName << " at " << ennemyTerr->territoryID << " with his army at " << friendlyTerr->territoryID << "." << endl;
 	else
-		cout << lastName << " could not defeat his enemy " << ennemy.lastName << " at " << ennemyTerr->territoryID << ", with his army is at " << friendlyTerr->territoryID << endl;*/
+		cout << lastName << " could not defeat his enemy " << ennemy->lastName << " at " << ennemyTerr->territoryID << ", with his army is at " << friendlyTerr->territoryID << endl;
 	return isDestoyed;
 }
 
@@ -216,8 +237,6 @@ void Player::InitializePlayer() {
 	}
 	for (int j = 0; j < 3; j++)
 		disks.push_back(new Disk());
-	for (int v = 0; v < 3; v++)
-		hand.push_back(new Card());
 }
 
 
