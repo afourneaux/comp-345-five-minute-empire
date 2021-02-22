@@ -267,7 +267,7 @@ Hand::~Hand() {
 Card* Hand::Exchange(const int index, Player player)
 {
 	int cost = GetCostAtIndex(index);
-	player.payCoin(&cost);
+	player.PayCoin(cost);
 	Card* card = &cards[index];
 	// Shift each card down one on the track
 	for (int i = index; i < HAND_SIZE - 1; i++) {
