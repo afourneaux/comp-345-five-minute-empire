@@ -15,7 +15,7 @@ int main() {
 	mapLoaderTest();
 	testPlayer();
 	TestCards();
-	testBiddingFacility();
+	TestBiddingFacility();
 
 	//Check for memory leaks at the end of execution
 	_CrtDumpMemoryLeaks();
