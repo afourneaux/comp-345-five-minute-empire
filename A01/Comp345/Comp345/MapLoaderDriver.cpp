@@ -6,6 +6,7 @@ using namespace std;
 
 void Test() {
 	MapLoader* test = new MapLoader("Map3.txt");
+	delete test;
 }
 
 int mapLoaderTest(){

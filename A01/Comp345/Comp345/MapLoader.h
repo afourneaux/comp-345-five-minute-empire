@@ -13,6 +13,7 @@ class MapLoader
 public:
 	MapLoader(string);		// Constructor passing file name
 	MapLoader();			// Default constructor
+	~MapLoader();			// Destructor
 	string userFileName;	// To hold user's file name
 	string line;			// To hold input stream line
 	ifstream myFile;		// Input stream

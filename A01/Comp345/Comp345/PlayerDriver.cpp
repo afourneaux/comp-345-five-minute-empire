@@ -22,6 +22,7 @@ int testPlayer()
 	arr[2] = 1;
 	arr[3] = 0;
 	Map* testMap = new Map(arr, 4, 2, 2);
+	delete[] arr;
 
 	//Instantiating Test Players
 	Player* table = new Player[numOfPlayers];
@@ -161,5 +162,6 @@ int testPlayer()
 	cout << table[1];
 
 	delete testMap;
+	delete[] table;
 	return 0;
 }

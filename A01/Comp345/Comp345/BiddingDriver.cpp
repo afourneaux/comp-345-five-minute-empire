@@ -47,7 +47,6 @@ int TestBiddingFacility()
 	cout << *bf3;
 	delete bf3;
 
-
 	return 0;
 }
 

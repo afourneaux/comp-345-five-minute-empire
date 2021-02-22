@@ -166,6 +166,10 @@ MapLoader::MapLoader(string filename) {
 	
 }
 
+MapLoader::~MapLoader() {
+	delete[] regions;
+}
+
 std::ostream& operator<<(std::ostream& strm, const MapLoader& file)
 {
 	return strm << "MapLoader(" << file.userFileName << ")";

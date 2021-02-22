@@ -129,8 +129,8 @@ void CheckBidWinner(Player* players)
 	cout << "		         " << players[winnerIndex].GetLastName() << " won the bid " << endl;
 	cout << "		            Bid :   " << players[winnerIndex].GetBf()->GetBid() << endl;
 	cout << endl;
-	int b = players[winnerIndex].GetBf()->GetBid();
-	players[winnerIndex].PayCoin(b);
+	int winningBid = players[winnerIndex].GetBf()->GetBid();
+	players[winnerIndex].PayCoin(winningBid);
 	cout << endl;
 	cout << "		            ********" << endl;
 	cout << "		        ****************" << endl;
