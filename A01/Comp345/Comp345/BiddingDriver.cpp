@@ -33,6 +33,21 @@ int testBiddingFacility()
 
 	CheckBidWinner(table);
 
+	cout << "Testing Bidding Facility Stream insertion" << endl;
+	BiddingFacility* bf = table[0].getBf();
+	cout << *bf;
+	cout << "Testing Bidding Facility Copy constructor" << endl;
+	BiddingFacility* bf2 = new BiddingFacility(bf);
+	delete bf;
+	cout << *bf2;
+	cout << "Testing Bidding Facility Assignment operator" << endl;
+	BiddingFacility* bf3 = new BiddingFacility();
+	*bf3 = *bf2; 
+	delete bf2;
+	cout << *bf3;
+	delete bf3;
+
+
 	return 0;
 }
 
