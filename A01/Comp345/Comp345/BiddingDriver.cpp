@@ -10,13 +10,13 @@
 #include "Player.h"
 #include "BiddingFacility.h"
 
-int testBiddingFacility()
+int TestBiddingFacility()
 {
 	string lastName = "";
 	//Instantiating Test Players
 	Player* table = new Player[NUM_OF_PLAYERS];
 
-	//Getting lastname of players
+	//Getting last name of players
 	for (int i = 0; i < NUM_OF_PLAYERS; i++) {
 		cout << "Enter the name of Player " << i + 1 << ": ";
 		cin >> lastName;

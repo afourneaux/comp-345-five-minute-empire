@@ -25,6 +25,6 @@ private:
 
 int AskForBid (Player *player);
 void CheckBidWinner(Player* table);
-int testBiddingFacility();
+int TestBiddingFacility();
 
 

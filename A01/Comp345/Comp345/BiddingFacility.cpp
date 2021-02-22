@@ -11,28 +11,28 @@
 #include <conio.h>
 using namespace std;
 
-
+// Query the user for their bid, but do not display their input in the window
 int AskForBid(Player* player)
 {
 	int out;
-	int val;   // STAND FOR "value" :)
-	int max = player->getCoins();
+	int numericInput;
 	char bid[5];
-	char c;
-	//string value;
-	int counter = 0;  // counter
-	bool toInf = true;
-	// do untill get the right result
-	cout << player->getLastName() << ", please input your bid (ex: 1 -> 01)";
-	while (toInf)
+	char input;
+	int counter = 0;
+	cout << player->GetLastName() << ", please input a two-digit bid (example: input 03 instead of 3)";
+	// Loop until a valid value is input
+	while (true)
 	{
-		bid[counter] = _getch();
-		c = bid[counter];
+		// Get the next key without displaying it
+		input = _getch();
+		bid[counter] = input;
 		// 2 digit format checking 
 		if (counter > 2 && counter != 13)
 		{
-
-			cout << endl << "in order to be Private  only two digits format will be accepted , for exp : 01 for 1  " << endl << endl << "Try Again " << endl;
+			cout << endl;
+			cout << "Invalid format. please input a two-digit bid (example: input \"03\" instead of \"3\")" << endl;
+			cout << endl;
+			cout << "Try Again" << endl;
 			counter = 0;
 			bid[0] = 0;
 			bid[1] = 0;
@@ -41,8 +41,8 @@ int AskForBid(Player* player)
 			break;
 		}
 		counter++;
-		// ASCII for Enter
-		if (c == 13)
+		// When the Enter key is detected
+		if (input == 13)
 		{
 			// 2 digit format checking
 			cout << endl;
@@ -52,71 +52,71 @@ int AskForBid(Player* player)
 				bid[0] = 0;
 				bid[1] = 0;
 				bid[2] = 0;
-				cout << endl << "in order to be Private  only two digits format will be accepted , for exp : 01 for 1 " << endl << endl << "Try Again " << endl;
+				cout << endl;
+				cout << "Invalid format. please input a two-digit bid (example: input \"03\" instead of \"3\")" << endl;
+				cout << endl;
+				cout << "Try Again" << endl;
 				out = AskForBid(player);
 				break;
 			}
-			// save user input to "val"
-			val = (bid[0] - 48) * 10 + (bid[1] - 48);  // char to int with ASCII calculation
-			if (val > max)
+			// Save user input
+			numericInput = (bid[0] - 48) * 10 + (bid[1] - 48);  // char to int with ASCII calculation
+			if (numericInput > player->getCoins())
 			{
 				counter = 0;
 				bid[0] = 0;
 				bid[1] = 0;
 				bid[2] = 0;
-				cout << endl << "Attention to your Treasuary" << endl;
-				cout << player->getLastName() << " currently has " << player->getCoins() << " coins." << endl;
+				cout << endl << "You do not have enough coins." << endl;
+				cout << player->GetLastName() << " currently has " << player->getCoins() << " coins." << endl;
 
 				cout << endl << "Try Again " << endl;
 				out = AskForBid(player);
 				break;
 			}
-			//when our bid val is in right format and amount
+			// User input is a valid format and value
 			else
 			{
-				out = val;
-				toInf = false;
-				//return bid value
-				return out;
-				break;
+				return numericInput;
 			}
-
 		}
 		else
 		{
-			// print * instead to keep it private
+			// Print * instead to keep it private
 			cout << "*";
 		}
 	}
 }
+
+// Compare each player's bid and determine a winner
 void CheckBidWinner(Player* players)
 {
 	cout << endl;
 	cout << "  __________________________________________________________" << endl;
 	cout << endl;
-	int winner_Index = 0;
-	int winner_bid = -1;
+	int winnerIndex = 0;
+	int winnerBid = -1;
 	for (int i = 0; i < NUM_OF_PLAYERS; i++)
 	{
-		//Print everyones name and their bid value
+		// Print everyone's name and their bid value
 		cout << "             *================================*" << endl;
-		cout << "		" << players[i].getLastName() << " : " << endl;
-		cout << "		Bid :   " << players[i].getBf()->GetBid() << endl;
+		cout << "		" << players[i].GetLastName() << " : " << endl;
+		cout << "		Bid :   " << players[i].GetBf()->GetBid() << endl;
 		cout << "             ===============================" << endl << endl;
 
-		//find the highest bid
-		if (players[i].getBf()->GetBid() > winner_bid)
+		// Find the highest bid
+		if (players[i].GetBf()->GetBid() > winnerBid)
 		{
-			winner_Index = i;
-			winner_bid = players[i].getBf()->GetBid();
+			winnerIndex = i;
+			winnerBid = players[i].GetBf()->GetBid();
 		}
-		//if bid are equal compare names
-		if (players[i].getBf()->GetBid() == winner_bid)
+		// Break ties by last name
+		if (players[i].GetBf()->GetBid() == winnerBid)
 		{
-			if (players[i].getLastName().compare(players[winner_Index].getLastName()) < 0)
+			if (players[i].GetLastName().compare(players[winnerIndex].GetLastName()) < 0)
 			{
-				winner_Index = i;
-				winner_bid = players[i].getBf()->GetBid();
+				winnerIndex = i;
+				winnerBid = players[i].GetBf()->GetBid();
 			}
 		}
 	}
@@ -126,11 +126,11 @@ void CheckBidWinner(Player* players)
 	cout << "		        ****************" << endl;
 	cout << "		            ********" << endl;
 	cout << endl;
-	cout << "		         " << players[winner_Index].getLastName() << " won the bid " << endl;
-	cout << "		            Bid :   " << players[winner_Index].getBf()->GetBid() << endl;
+	cout << "		         " << players[winnerIndex].GetLastName() << " won the bid " << endl;
+	cout << "		            Bid :   " << players[winnerIndex].GetBf()->GetBid() << endl;
 	cout << endl;
-	int b = players[winner_Index].getBf()->GetBid();
-	players[winner_Index].PayCoin(b);
+	int b = players[winnerIndex].GetBf()->GetBid();
+	players[winnerIndex].PayCoin(b);
 	cout << endl;
 	cout << "		            ********" << endl;
 	cout << "		        ****************" << endl;
