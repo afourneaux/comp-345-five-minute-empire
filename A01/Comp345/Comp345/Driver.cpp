@@ -13,7 +13,7 @@
 int main() {
 	TestMap();
 	mapLoaderTest();
-	//testPlayer();
+	testPlayer();
 	TestCards();
 	TestBiddingFacility();
 
