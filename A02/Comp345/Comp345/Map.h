@@ -4,6 +4,7 @@
 
 #pragma once
 #include <iostream>
+#include <vector>
 
 struct Edge;
 
@@ -11,8 +12,15 @@ struct Territory {
 	Edge* head;							// Pointer to head of linked list of edge objects (edge object contains a pointer to an adjacent territory)
 	int continentID;					// Index of continent that the territory belongs to - maps to continents[] array in Map class
 	int territoryID;					// Index of the territory in the territories[] array of Map class
-	int* army_count;					// army_count and city_count are arrays indexed by player index (eg if player 0 has 5 armies in the territory, army_count[0]==5)
-	int* city_count;
+	std::vector<int> army_count;				// army_count and city_count are arrays indexed by player index (eg if player 0 has 5 armies in the territory, army_count[0]==5)
+	std::vector<int> city_count;
+	int controlling_player = -1;
+	int max_count = 0;
+	void addArmy(int player_index);
+	void addCity(int player_index);
+	void removeArmy(int player_index);
+	void UpdateControl();
+	int CheckAdjacency(Territory* destination);	// Checks if the current territory and destination are adjacent. Returns the movement cost if they are connected, otherwise -1
 };
 
 struct Edge {

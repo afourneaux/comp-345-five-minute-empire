@@ -22,6 +22,12 @@ int testPlayer()
 	arr[2] = 1;
 	arr[3] = 0;
 	Map* testMap = new Map(arr, 4, 2, 2);
+	testMap->AddEdge(0, 1);
+	testMap->AddEdge(0, 2);
+	testMap->AddEdge(0, 3);
+	testMap->AddEdge(1, 3);
+	testMap->AddEdge(1, 2);
+	testMap->AddEdge(2, 3);
 	delete[] arr;
 
 	//Instantiating Test Players
@@ -32,6 +38,7 @@ int testPlayer()
 		cout << "Enter the name of Player " << i + 1 << ": ";
 		cin >> lastName;
 		table[i].setLastName(lastName);
+		table[i].setPosition(i);
 	}
 	cout << endl << "Players for this game are: " << endl;
 	for (int j = 0; j < numOfPlayers; j++) {
@@ -160,6 +167,8 @@ int testPlayer()
 
 	cout << table[0];
 	cout << table[1];
+
+	cout << *testMap;
 
 	delete testMap;
 	delete[] table;

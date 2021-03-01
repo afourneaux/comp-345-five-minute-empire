@@ -28,8 +28,8 @@ Map::Map(int* territories, int territory_count, int player_count, int continent_
 		this->territories[i].head = nullptr;
 		this->territories[i].continentID = territories[i];
 		this->territories[i].territoryID = i;
-		this->territories[i].army_count = new int[player_count];
-		this->territories[i].city_count = new int[player_count];
+		this->territories[i].army_count.resize(player_count);
+		this->territories[i].city_count.resize(player_count);
 		//Append territory to its corresponding continent list
 		this->continents[territories[i]].head = new TerritoryListNode{ &this->territories[i], continents[territories[i]].head };
 		this->continents[territories[i]].length++;
@@ -60,8 +60,8 @@ Map::Map(Map* map) {
 	for (int i = 0; i < territory_count; i++) {
 		this->territories[i].continentID = map->territories[i].continentID;
 		this->territories[i].territoryID = i;
-		this->territories[i].army_count = new int[map->player_count];
-		this->territories[i].city_count = new int[map->player_count];
+		this->territories[i].army_count.resize(map->player_count);
+		this->territories[i].city_count.resize(map->player_count);
 		for (int j = 0; j < player_count; j++) {
 			this->territories[i].army_count[j] = map->territories[i].army_count[j];
 			this->territories[i].city_count[j] = map->territories[i].city_count[j];
@@ -95,8 +95,8 @@ Map::~Map() {
 			delete current;
 			current = temp;
 		}
-		delete[] territories[i].army_count;
-		delete[] territories[i].city_count;
+		//delete territories[i].army_count;
+		//delete territories[i].city_count;
 	}
 	delete[] territories;
 	territories = nullptr;
@@ -319,6 +319,8 @@ Territory* Map::SetStartingTerritory(int territory_index) {
 }
 
 
+
+
 Map& Map::operator= (const Map& map) {
 	//Check for self-assignment
 	if (this == &map) {
@@ -334,8 +336,8 @@ Map& Map::operator= (const Map& map) {
 			delete current;
 			current = temp;
 		}
-		delete[] territories[i].army_count;
-		delete[] territories[i].city_count;
+		//delete[] territories[i].army_count;
+		//delete[] territories[i].city_count;
 	}
 	delete[] territories;
 	territories = nullptr;
@@ -371,8 +373,8 @@ Map& Map::operator= (const Map& map) {
 	for (int i = 0; i < territory_count; i++) {
 		this->territories[i].continentID = map.territories[i].continentID;
 		this->territories[i].territoryID = i;
-		this->territories[i].army_count = new int[map.player_count];
-		this->territories[i].city_count = new int[map.player_count];
+		this->territories[i].army_count.resize(map.player_count);
+		this->territories[i].city_count.resize(map.player_count);
 		for (int j = 0; j < player_count; j++) {
 			this->territories[i].army_count[j] = map.territories[i].army_count[j];
 			this->territories[i].city_count[j] = map.territories[i].city_count[j];
@@ -413,6 +415,51 @@ std::ostream& operator<< (std::ostream& out, const Map& map) {
 		}
 	}
 	return out;
+}
+
+void Territory::addArmy(int player_index) {
+	army_count[player_index]++;
+	UpdateControl();
+}
+
+void Territory::addCity(int player_index) {
+	city_count[player_index]++;
+	UpdateControl();
+}
+
+void Territory::removeArmy(int player_index) {
+	army_count[player_index]--;
+	UpdateControl();
+}
+
+// Checks if two territories are adjacent
+// Returns -1 if they are not adjacent, otherwise returns the movement cost (1 or 3)
+int Territory::CheckAdjacency(Territory* destination) {
+	Edge* temp = this->head;
+	while (temp != nullptr) {
+		if (temp->destination_territory->territoryID == destination->territoryID) {
+			return temp->movement_cost;
+		}
+		temp = temp->next;
+	}
+	return -1;
+}
+
+void Territory::UpdateControl() {
+	int current_max = -1;
+	if (controlling_player != -1) {
+		current_max = army_count[controlling_player] + city_count[controlling_player];
+	}
+	for (int i = 0; i < army_count.size(); i++) {
+		if (i == controlling_player) continue;
+		int player_control_score = army_count[i] + city_count[i];
+		if (current_max == player_control_score)
+			controlling_player = -1;
+		else if (current_max < player_control_score) {
+			controlling_player = i;
+			current_max = player_control_score;
+		}
+	}
 }
 
 

@@ -47,6 +47,7 @@ public:
 	int getCoins() const { return coins; };
 	int getArmiesLeft() const { return armiesLeft; };
 	void setCoins(int amt) { coins = amt; };
+	void setPosition(int pos) { position = pos; };
 
 private:
 	string lastName;
@@ -57,6 +58,7 @@ private:
 	BiddingFacility* bf;
 	int coins = STARTING_COINS;
 	int armiesLeft = STARTING_ARMIES;
+	int position; // the position of the player at the table
 };
 int testPlayer();
 

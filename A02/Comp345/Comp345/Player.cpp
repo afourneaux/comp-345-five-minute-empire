@@ -118,6 +118,7 @@ bool Player::PlaceNewArmies(Territory* dest) {
 		if (!cubes[i]->isPlaced) {
 			cubes[i]->location = dest;
 			cubes[i]->isPlaced = true;
+			dest->addArmy(position);
 			placed = true;
 			armiesLeft--;
 			break;
@@ -134,11 +135,17 @@ bool Player::MoveArmies(Territory* src, Territory* dest) {
 	bool placed = false;
 	if (src == nullptr || dest == nullptr)
 		return placed;
+	if (src->CheckAdjacency(dest) == -1) {
+		cout << "Unable to move armies from territory " << src->territoryID << " to territory " << dest->territoryID << ", the territories are not connected.";
+		return false;
+	}
 	for (int i = 0; i < getCubes().size(); i++) {
 		if (cubes[i]->location == nullptr)
 			continue;
 		if (cubes[i]->location->territoryID == src->territoryID) {
 			cubes[i]->location = dest;
+			src->removeArmy(position);
+			dest->addArmy(position);
 			placed = true;
 			cout << "Successfully moved Army from ID: " << src->territoryID << " to ID: " << dest->territoryID << endl;
 			//Todo: Need to remove amount of moves based on territoryID
@@ -153,11 +160,17 @@ bool Player::MoveOverLand(Territory* src, Territory* dest) {
 	bool placed = false;
 	if (src == nullptr || dest == nullptr)
 		return placed;
+	if (src->CheckAdjacency(dest) == -1) {
+		cout << "Unable to move armies from territory " << src->territoryID << " to territory " << dest->territoryID << ", the territories are not connected.";
+		return false;
+	}
 	for (int i = 0; i < getCubes().size(); i++) {
 		if (cubes[i]->location == nullptr)
 			continue;
 		if (cubes[i]->location->territoryID == src->territoryID) {
 			cubes[i]->location = dest;
+			src->removeArmy(position);
+			dest->addArmy(position);
 			placed = true;
 			cout << "Successfully moved army over land from ID: " << src->territoryID << " to ID: " << dest->territoryID << endl;
 			//Todo: Need to remove amount of moves based on territoryID
@@ -200,6 +213,7 @@ bool Player::BuildCity(Territory* dest) {
 		city->location = dest;
 		city->isBuilt = true;
 		isCityBuilt = true;
+		dest->addCity(position);
 		cout << "->" << lastName << " built a city at territory ID: " << dest->territoryID << "." << endl;
 	}
 	else
@@ -218,6 +232,7 @@ bool Player::DestroyArmy(Territory* friendlyTerr, Territory* ennemyTerr, Player 
 				if (ennemy->getCubes()[j]->location->territoryID == ennemyTerr->territoryID) {
 					ennemy->getCubes()[j]->isPlaced = false;
 					ennemy->getCubes()[j]->location = nullptr;
+					ennemyTerr->removeArmy(ennemy->position);
 					isDestoyed = true;
 				}
 			}
