@@ -4,18 +4,13 @@
 #include <crtdbg.h>
 #include <iostream>
 
-#include "Map.h"
-#include "MapLoader.h"
-#include "Cards.h"
-#include "Player.h"
-#include "BiddingFacility.h"
+#include "Game.h"
 
 int main() {
-	TestMap();
-	mapLoaderTest();
-	testPlayer();
-	TestCards();
-	TestBiddingFacility();
+	Game* game = new Game();
+	game->Setup();
+	game->MainLoop();
+	game->GetWinner();
 
 	//Check for memory leaks at the end of execution
 	_CrtDumpMemoryLeaks();
