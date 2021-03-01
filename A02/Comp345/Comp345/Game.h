@@ -4,9 +4,13 @@
 #include "Map.h"
 
 // Constants
-const int CARDS_TO_WIN_2_PLAYERS = 11;
-const int CARDS_TO_WIN_3_PLAYERS = 10;
-const int CARDS_TO_WIN_4_PLAYERS = 8;
+const int GAME_TURNS_2_PLAYERS = 11;
+const int GAME_TURNS_3_PLAYERS = 10;
+const int GAME_TURNS_4_PLAYERS = 8;
+
+const int STARTING_COINGS_2_PLAYERS = 12;
+const int STARTING_COINGS_3_PLAYERS = 11;
+const int STARTING_COINGS_4_PLAYERS = 9;
 
 // Declare custom classes to be used
 class Player;
@@ -20,6 +24,7 @@ public:
 	void MainLoop();					// Process each player's turn until the game is over
 	void GetWinner();					// Calculate the victorious player and congratulate them
 	void PlayerTurn(Player* player);	// Perform the current player's turn
+	~Game();							// Destructor
 private:
 	Player* players;
 	Deck* deck;
@@ -27,4 +32,5 @@ private:
 	Hand* hand;
 	int playerCount;
 	int coinBank;
+	int gameTurns;
 };

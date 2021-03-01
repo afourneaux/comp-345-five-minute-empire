@@ -13,28 +13,46 @@ void Game::Setup() {
 	for (int i = 0; i < playerCount; i++) {
 		players[i].setLastName("defaultPlayer" + to_string(i + 1));
 	}
-	map = new Map(new int[4]{ 0, 1, 1, 0 }, 4, playerCount, 2);
+	int* arr = new int[4];
+	arr[0] = 0;
+	arr[1] = 1;
+	arr[2] = 1;
+	arr[3] = 0;
+	map = new Map(arr, 4, playerCount, 2);
 	map->AddEdge(0, 1);
 	map->AddEdge(0, 2);
 	map->AddEdge(0, 3);
 	map->AddEdge(1, 3);
 	map->AddEdge(1, 2);
 	map->AddEdge(2, 3);
+	delete arr;
+
+	if (playerCount == 2) {
+		gameTurns = GAME_TURNS_2_PLAYERS;
+	}
+	if (playerCount == 3) {
+		gameTurns = GAME_TURNS_3_PLAYERS;
+	}
+	if (playerCount == 4) {
+		gameTurns = GAME_TURNS_4_PLAYERS;
+	}
+
+	// DEBUG:
+	gameTurns = 1;
 }
 
 void Game::MainLoop() {
-	bool isGameOver = false;		// Set to true when a player reaches the requisite amount of cards
-
-	while (isGameOver == false) {
-		// Setup at the start of a round
-
+	cout << "Press Enter to start!";
+	cin.ignore(INT_MAX, '\n');
+	for (int turn = 0; turn < gameTurns; turn++) {
+		cout << "XXXXXXXXXXXX" << endl;
+		cout << "BEGIN TURN " << turn + 1 << endl;
+		cout << "XXXXXXXXXXXX" << endl;
 		// Run through each player's turn
 		// TODO: Sort by bid
 		for (int currentPlayer = 0; currentPlayer < playerCount; currentPlayer++) {
 			PlayerTurn(&players[currentPlayer]);
 		}
-		isGameOver = true;
-
 	}
 }
 
@@ -48,9 +66,11 @@ void Game::PlayerTurn(Player* player) {
 	cout << player->GetLastName() << " - It is your turn!" << endl;
 	cout << "========================================" << endl;
 
-	cout << "Press Enter to start...";
-	cin.ignore();
-	cin.get();
+	cout << "Press Enter to continue...";
+	// TODO: This requires two taps of enter on the first go.
+	//       Figure out a more elegant solution
+	cin.ignore(INT_MAX, '\n');
+	cin.ignore(INT_MAX, '\n');
 
 	cout << *hand;
 
@@ -91,8 +111,15 @@ void Game::PlayerTurn(Player* player) {
 	Card* card = hand->Exchange(desiredCardIndex);
 
 	cout << *card;
-	// TODO: Add the card to the player object
-	// Player.AddCard(card) or some equivalent
+	// TODO: Add the card to the player object and perform its actions
+	// Player.PerformActionOfCard(card) or some equivalent
+	delete card;	// TODO: Delete as part of the player destructor
+}
 
-	// TODO: Perform the action(s) on the card
+// Destructor
+Game::~Game() {
+	delete deck;
+	delete hand;
+	delete[] players;
+	delete map;
 }

@@ -11,6 +11,7 @@ int main() {
 	game->Setup();
 	game->MainLoop();
 	game->GetWinner();
+	delete game;
 
 	//Check for memory leaks at the end of execution
 	_CrtDumpMemoryLeaks();
