@@ -30,12 +30,8 @@ void Game::MainLoop() {
 
 		// Run through each player's turn
 		// TODO: Sort by bid
-		for (int i = 0; i < playerCount; i++) {
-			cout << "========================================" << endl;
-			cout << players[i].GetLastName() << " - It is your turn!" << endl;
-			cout << "========================================" << endl;
-
-
+		for (int currentPlayer = 0; currentPlayer < playerCount; currentPlayer++) {
+			PlayerTurn(&players[currentPlayer]);
 		}
 		isGameOver = true;
 
@@ -45,4 +41,58 @@ void Game::MainLoop() {
 // TODO: Make use of the Player::ComputeScore() function to determine the winner
 void Game::GetWinner() {
 	cout << "The real winner here is you." << endl;
+}
+
+void Game::PlayerTurn(Player* player) {
+	cout << "========================================" << endl;
+	cout << player->GetLastName() << " - It is your turn!" << endl;
+	cout << "========================================" << endl;
+
+	cout << "Press Enter to start...";
+	cin.ignore();
+	cin.get();
+
+	cout << *hand;
+
+	cout << "You have " << player->getCoins() << " coins." << endl;
+	cout << "Please select a card to draw:" << endl;
+	for (int handIndex = 0; handIndex < HAND_SIZE; handIndex++) {
+		Card* cardAtIndex = hand->GetCardAtIndex(handIndex);
+		cout << handIndex << ". \"" << cardAtIndex->name << "\" (" << hand->GetCostAtIndex(handIndex) << " coins)" << endl;
+	}
+
+	int desiredCardIndex;
+	player->setCoins(1);
+	bool validCardIndex = false;
+
+	// Select a card from the hand
+	while (validCardIndex == false)
+	{
+		cin >> desiredCardIndex;
+		if (cin.fail() || desiredCardIndex < 0 || desiredCardIndex >= HAND_SIZE) {
+			cout << "Please enter a number from 0 to " << HAND_SIZE - 1 << endl;
+			// Clear the CIN buffer
+			cin.clear();
+			cin.ignore(INT_MAX, '\n');
+		}
+		else {
+			// Card index is valid, check if the player can afford this card
+			if (player->getCoins() < hand->GetCostAtIndex(desiredCardIndex)) {
+				cout << "You cannot afford this card. You have " << player->getCoins() << " coins." << endl;
+			}
+			else {
+				validCardIndex = true;
+			}
+		}
+	}
+
+	// Pay for the card
+	player->PayCoin(hand->GetCostAtIndex(desiredCardIndex));
+	Card* card = hand->Exchange(desiredCardIndex);
+
+	cout << *card;
+	// TODO: Add the card to the player object
+	// Player.AddCard(card) or some equivalent
+
+	// TODO: Perform the action(s) on the card
 }

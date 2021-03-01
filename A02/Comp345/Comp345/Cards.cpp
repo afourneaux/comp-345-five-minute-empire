@@ -262,12 +262,10 @@ Hand::~Hand() {
 	deck = nullptr;
 }
 
-// Spend coins to obtain a card
-// Assume coin count in player has already been validated by the calling function
-Card* Hand::Exchange(const int index, Player& player)
+// Take a card from the hand and shift all other cards in the hand down one index
+Card* Hand::Exchange(const int index)
 {
 	int cost = GetCostAtIndex(index);
-	player.PayCoin(cost);
 	Card* card = new Card(&cards[index]);
 	// Shift each card down one on the track
 	for (int i = index; i < HAND_SIZE - 1; i++) {
@@ -302,7 +300,7 @@ int Hand::GetCostAtIndex(const int index) const
 // Stream insertion operator
 ostream& operator<<(ostream& out, const Hand& hand) {
 	for (int i = 0; i < HAND_SIZE; i++) {
-		out << "*****SLOT " << i + 1 << endl;
+		out << "SLOT " << i << endl;
 		out << "Card cost: " << hand.GetCostAtIndex(i) << endl;
 		out << *hand.GetCardAtIndex(i) << endl;
 	}
@@ -403,16 +401,16 @@ Card& Card::operator= (const Card& card) {
 // Stream insertion operator
 ostream& operator<<(ostream& out, const Card& card) {
 	// Print identifying information
-	out << "===============" << endl;
+	out << "---------------" << endl;
 	out << card.name << endl;
 	out << "Image source: " << card.image << endl;
 	// Print ability/abilities
-	out << "===ABILITIES===" << endl;
+	out << "ABILITIES" << endl;
 	for (int i = 0; i < card.abilityCount; i++) {
 		out << card.abilities[i] << endl;
 	}
 	// Print action(s)
-	out << "====ACTIONS====" << endl;
+	out << "ACTIONS" << endl;
 	for (int i = 0; i < card.actionCount; i++) {
 		out << card.actions[i];
 		if (i < card.actionCount - 1) {
@@ -427,7 +425,7 @@ ostream& operator<<(ostream& out, const Card& card) {
 		}
 	}
 	out << endl;
-	out << "===============" << endl;
+	out << "---------------" << endl;
 	return out;
 }
 

@@ -16,13 +16,15 @@ class Hand;
 
 class Game {
 public:
-	void Setup();			// Get number of players, perform bidding, distribute tokens, generate deck
-	void MainLoop();		// Process each player's turn until the game is over
-	void GetWinner();		// Calculate the victorious player and congratulate them
+	void Setup();						// Get number of players, perform bidding, distribute tokens, generate deck
+	void MainLoop();					// Process each player's turn until the game is over
+	void GetWinner();					// Calculate the victorious player and congratulate them
+	void PlayerTurn(Player* player);	// Perform the current player's turn
 private:
 	Player* players;
 	Deck* deck;
 	Map* map;
 	Hand* hand;
 	int playerCount;
+	int coinBank;
 };
