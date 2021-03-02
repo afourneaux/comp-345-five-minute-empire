@@ -6,14 +6,16 @@ using namespace std;
 
 void Test() {
 	MapLoader* test = new MapLoader("Map3.txt");
-	delete test;
+	test->readFile();
+	test->buildMap(test->regions, test->regionsSize, test->players, test->continents);
 }
 
-int mapLoaderTest(){
+//int mapLoaderTest(){
+int main(){
 	cout << endl << endl;
 	cout << "XXXXXXXXXXXXXXXXXXXXXXXXXXXXXXX" << endl;
 	cout << "TESTING MAP LOADER CLASS" << endl;
-	cout << "XXXXXXXXXXXXXXXXXXXXXXXXXXXXXXX" << endl; \
+	cout << "XXXXXXXXXXXXXXXXXXXXXXXXXXXXXXX" << endl;
 
 	try {
 		Test();

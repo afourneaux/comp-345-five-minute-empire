@@ -14,7 +14,6 @@ MapLoader::MapLoader() {
 	this->userFileName = "";
 	this->i = 0;
 	this->temp = 0;
-	cout << "Where file name, amigo? No me gusta this." << endl;
 }
 
 MapLoader::MapLoader(string filename) {
@@ -25,15 +24,25 @@ MapLoader::MapLoader(string filename) {
 	this->userFileName = filename;
 	this->i = 0;
 	this->origin = 0;
-	myFile.open(filename);					// Open stream file
-	
-	// Read # of players
+}
+
+void MapLoader::readFile()
+{
+	myFile.open(userFileName);				// Open stream file
+
+	//--------------------------------------//
+	//----------Read # of players-----------//
+	//--------------------------------------//
+
 	myFile.ignore(100, '\n');				// Ignore label string
 	myFile >> line;							// Store number of players in line variable
 	players = stoi(line);					// Parse line to int and store value in players
-	cout << "Players: " << players << endl;	// Print players
+											//cout << "Players: " << players << endl;	// Print players
 
-	// Determine number of boards
+	//--------------------------------------//
+	//--------Determine # of boards---------//
+	//--------------------------------------//
+
 	if (players == 2 || players == 3) {		// Check for valid number of users
 		boards = 3;							// Assign 3 continents for 2-3 users
 	}
@@ -43,37 +52,164 @@ MapLoader::MapLoader(string filename) {
 	else {
 		throw "Invalid number of players";  // Throw error if numbers of users is not between 2 and 4
 	}
-	cout << "Boards: " << boards << endl;
+	//cout << "Boards: " << boards << endl;
 
-	// Read # of regions
+	//--------------------------------------//
+	//----------Read # of regions-----------//
+	//--------------------------------------//
+
 	myFile.ignore(100, '\n');				// Ignore label string
 	myFile.ignore(100, '\n');				// Ignore label string
 	myFile >> line;							// Store number of regions
 	regionsSize = stoi(line);				// Parse line to int and store value in regionsSize
-	cout << "Regions: " << regionsSize << endl;
+											//cout << "Regions: " << regionsSize << endl;
 	this->regions = new int[regionsSize];	// Assign length of regions array
-	
-	// Read # continents for every region
-	myFile.ignore(100, '\n');				// Ignore label
-	cout << "Index region and Index continent: " << endl;
 
-	// Read continent label for every regions
+	//--------------------------------------//
+	//--Read each region's continent label--//
+	//--------------------------------------//
+
+	myFile.ignore(100, '\n');				// Ignore label
+											//cout << "Index region and Index continent: " << endl;
 	myFile.ignore(100, '\n');				// Ignore label
 	for (i = 0; i < regionsSize; i++) {		// Loop through the regions array and label them with a continent
 		myFile >> line;						// Read region entry, but skip it
 		myFile >> line;						// Read continent of the region index read above
 		regions[i] = stoi(line);			// Parse to int and store it (not sure how to fix the warnings)
-		cout << "Region[" << i << "]: " << regions[i] << endl;
+											//cout << "Region[" << i << "]: " << regions[i] << endl;
 	}
 
-	// Determine number of continents
+	//--------------------------------------//
+	//----Determine number of continents----//
+	//--------------------------------------//
+
 	for (i = 0; i < regionsSize; i++) {
-		if (continents < regions[i]) {
-			continents = regions[i] + 1;
+		if (continents < regions[i]) {		// if # of continents < region's continent label
+			continents = regions[i] + 1;	// # of continents = continent # + 1 (+1 because it's enumerated by index)
 		}
 	}
-	cout << "Continents: " << continents << endl;
+											//cout << "Continents: " << continents << endl;
+}
 
+Map* MapLoader::buildMap(int* regions, int regionsSize, int players, int continents)
+{
+	//--------------------------------------//
+	//----------Create map object-----------//
+	//--------------------------------------//
+
+	Map *userMap = new Map(regions, regionsSize, players, continents); // Use map class to create map
+	myFile.ignore(100, '\n');				// Ignore label
+	myFile.ignore(100, '\n');				// Ignore label
+
+	for (i = 0; i < regionsSize; i++) {		// Loop through region indexes and add adjacent edges
+		myFile >> line;						// Read origin index
+		origin = stoi(line);
+		while (line != ".") {				// '.' is a delimeter, if you match it then stop connecting regions within that board
+			myFile >> line;					// Store adjacent territory
+			if (line == ".") {				// Conditional to prevent a MASSIVE ERROR!
+				break;						// just so we don't parse a non-numerical string
+			}
+			temp = stoi(line);				// Parse adjacent territory to int
+			userMap->AddEdge(origin, temp);	// Add edge to and from origin
+											//cout << "New edge added: [" << origin << "<-->" << temp << "]" << endl;
+		}
+	}
+
+	//--------------------------------------//
+	//------Connect maps to each other------//
+	//--------------------------------------//
+
+	myFile.ignore(100, '\n');				// Ignore label
+	myFile.ignore(100, '\n');				// Ignore label
+
+	temp = 0;								// Reset values for destination index
+	origin = 0;								// Reset values for origin index
+
+	myFile >> line;							// Read first value index
+	if (line != ".") {						// If line == '.' there are no regions in board
+		origin = stoi(line);				// Store index in origin
+	}
+	myFile.ignore(100, '\n');				// Ignore the rest of the index for this line
+
+											// cout << "Origin: " << line;
+
+	myFile >> line;
+	if (line != ".") {						
+		temp = stoi(line);
+	}
+	myFile.ignore(100, '\n');
+
+											// cout << "Destination: " << line << endl;
+
+	if (line != ".") {
+		userMap->AddEdge(origin, temp);		// Add edge to and from origin
+	}
+
+	origin = temp;							// Replace destination with origin
+											// cout << "Origin: " << origin;
+
+	myFile >> line;
+	if (line != ".") {
+		temp = stoi(line);
+	}
+											// cout << "Destination: " << line << endl;
+
+	if (line != ".") {
+		userMap->AddEdge(origin, temp);		// Add edge to and from origin
+	}
+
+	if (boards == 4) {						// Do this process again if we need to connect 4 maps
+		myFile.ignore(100, '\n');
+		origin = temp;						// Replace destination with origin
+											// cout << "Origin: " << origin;
+
+		myFile >> line;
+		if (line != ".") {
+			temp = stoi(line);
+		}
+		myFile.ignore(100, '\n');
+
+											// cout << "Destination: " << temp << endl;
+
+		if (line != ".") {
+			userMap->AddEdge(origin, temp);	// Add edge to and from origin
+		}
+	}
+
+	//--------------------------------------//
+	//------------Print user map------------//
+	//--------------------------------------//
+
+	cout << *userMap;
+
+	//--------------------------------------//
+	//----------Validate user map-----------//
+	//--------------------------------------//
+
+	cout << "Map validate() result: " << userMap->Validate() << endl;
+
+	//delete userMap;
+	delete[] regions;
+	regions = nullptr;
+
+	myFile.close();
+
+	return userMap;
+}
+
+
+std::ostream& operator<<(std::ostream& strm, const MapLoader& file)
+{
+	return strm << "MapLoader(" << file.userFileName << ")";
+}
+
+/*	IGNORE IGNORE IGNORE IGNORE IGNORE IGNORE IGNORE IGNORE
+	IGNORE IGNORE IGNORE IGNORE IGNORE IGNORE IGNORE IGNORE
+	IGNORE IGNORE IGNORE IGNORE IGNORE IGNORE IGNORE IGNORE
+	IGNORE IGNORE IGNORE IGNORE IGNORE IGNORE IGNORE IGNORE
+	IGNORE IGNORE IGNORE IGNORE IGNORE IGNORE IGNORE IGNORE
+	IGNORE IGNORE IGNORE IGNORE IGNORE IGNORE IGNORE IGNORE
+	IGNORE IGNORE IGNORE IGNORE IGNORE IGNORE IGNORE IGNORE
 	// Finally time to make our map!
 	Map* userMap = new Map(regions, regionsSize, players, continents); // Use map class to create map
 	myFile.ignore(100, '\n');				// Ignore label
@@ -92,7 +228,7 @@ MapLoader::MapLoader(string filename) {
 			cout << "New edge added: [" << origin << "<-->" << temp << "]" << endl;
 		}
 	}
-	
+
 	// To connect maps to each other!
 	myFile.ignore(100, '\n');				// Ignore label
 	myFile.ignore(100, '\n');				// Ignore label
@@ -151,26 +287,17 @@ MapLoader::MapLoader(string filename) {
 			userMap->AddEdge(origin, temp);		// Add edge to and from origin
 		}
 	}
-	
+
 	// Let's print our map!
 	cout << *userMap;
-	
+
 	// Validate it!
 	cout << "Map validate() result: " << userMap->Validate() << endl;
-	
+
 	delete userMap;
 	delete[] regions;
 	regions = nullptr;
-	
+
 	myFile.close();
-	
-}
 
-MapLoader::~MapLoader() {
-	delete[] regions;
-}
-
-std::ostream& operator<<(std::ostream& strm, const MapLoader& file)
-{
-	return strm << "MapLoader(" << file.userFileName << ")";
-}
+}*/
