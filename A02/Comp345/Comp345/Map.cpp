@@ -413,8 +413,58 @@ std::ostream& operator<< (std::ostream& out, const Map& map) {
 		for (int j = 0; j < map.player_count; j++) {
 			out << "\tPlayer " << j << ": \tarmy count: " << map.territories[i].army_count[j] << "\tcity count: " << map.territories[i].city_count[j] << endl;
 		}
+		out << "Controlling player: " << map.territories[i].controlling_player << endl;
 	}
 	return out;
+}
+
+int* Map::ComputeMapScores() {
+	int* scores = new int[player_count];
+	for (int i = 0; i < player_count; i++) scores[i] = 0;
+	//Loop through territories and increment each player's score for each territory they control
+	for (int i = 0; i < territory_count; i++) {
+		int controller = territories[i].controlling_player;
+		if (controller == -1) continue;
+		scores[controller]++;
+	}
+
+	//Loop through each continent
+	for (int i = 0; i < continent_count; i++) {
+		int* continent_scores = new int[player_count];
+		for (int j = 0; j < player_count; j++) continent_scores[j] = 0;
+		//count the number of territories each player controls on the continent
+		TerritoryListNode* temp = continents[i].head;
+		while (temp != nullptr) {
+			int controller = temp->territory->controlling_player;
+			if (controller == -1) {
+				temp = temp->next;
+				continue;
+			}
+			continent_scores[controller]++;
+			temp = temp->next;
+		}
+		// give 1 point to the player who controls the most territories in the continent (no points if tied)
+		int winning_player = -1;
+		int max_terr_controlled = -1;
+		for (int j = 0; j < player_count; j++) {
+			if (continent_scores[j] > max_terr_controlled) {
+				winning_player = j;
+				max_terr_controlled = continent_scores[j];
+			}
+			else if (continent_scores[j] == max_terr_controlled) {
+				winning_player = -1;
+			}
+		}
+		if (winning_player >= 0) {
+			scores[winning_player]++;
+		}
+			
+		delete[] continent_scores;
+
+	}
+
+	return scores;
+
 }
 
 void Territory::addArmy(int player_index) {

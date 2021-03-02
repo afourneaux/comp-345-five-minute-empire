@@ -9,14 +9,17 @@
 #include "Cards.h"
 #include "Player.h"
 #include "BiddingFacility.h"
+#include "ComputeScore.h"
 
 int main() {
+	TestComputeScore();
+	/*
 	TestMap();
 	mapLoaderTest();
 	testPlayer();
 	TestCards();
 	TestBiddingFacility();
-
+	*/
 	//Check for memory leaks at the end of execution
 	_CrtDumpMemoryLeaks();
 }
