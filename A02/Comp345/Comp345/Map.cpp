@@ -414,6 +414,7 @@ std::ostream& operator<< (std::ostream& out, const Map& map) {
 	return out;
 }
 
+<<<<<<< HEAD
 int* Map::ComputeMapScores() {
 	int* scores = new int[player_count];
 	for (int i = 0; i < player_count; i++) scores[i] = 0;
@@ -463,6 +464,8 @@ int* Map::ComputeMapScores() {
 
 }
 
+=======
+>>>>>>> origin/a2-map_player_sync
 void Territory::addArmy(int player_index) {
 	army_count[player_index]++;
 	UpdateControl();

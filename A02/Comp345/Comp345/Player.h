@@ -55,8 +55,13 @@ public:
 	BiddingFacility* GetBf() const { return bf; };
 	int getCoins() const { return coins; };
 	int getArmiesLeft() const { return armiesLeft; };
+<<<<<<< HEAD
 	void SetCoins(int amt) { coins = amt; };
 	int GetPos() { return pos; };
+=======
+	void setCoins(int amt) { coins = amt; };
+	void setPosition(int pos) { position = pos; };
+>>>>>>> origin/a2-map_player_sync
 
 private:
 	string lastName;
@@ -67,8 +72,12 @@ private:
 	BiddingFacility* bf;
 	int coins = STARTING_COINS;
 	int armiesLeft = STARTING_ARMIES;
+<<<<<<< HEAD
 	int STARTING_REGION_ID = 0;
 	int pos;
+=======
+	int position; // the position of the player at the table
+>>>>>>> origin/a2-map_player_sync
 };
 int testPlayer();
 
