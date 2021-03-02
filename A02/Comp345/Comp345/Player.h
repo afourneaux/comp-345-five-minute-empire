@@ -9,6 +9,8 @@ using namespace std;
 
 const int STARTING_COINS = 14;
 const int STARTING_ARMIES = 18;
+int NUM_OF_PLAYERS = 2;
+static vector<Player*> round_table[NUM_OF_PLAYERS];
 
 class Map;
 struct Card;
@@ -37,7 +39,8 @@ public:
 	bool DestroyArmy();
 	bool DoAction(Card* card);
 	Territory* PromptForAction(string action);
-	Territory* HasTerritory(int id);
+	Territory* HasArmyAtLocation(int id);
+	Territory* HasCityAtLocation(int id);
 	bool HasArmiesToPlace();
 	void PlayerStatus();
 	void InitializePlayer();
