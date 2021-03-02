@@ -11,11 +11,11 @@
 #include "BiddingFacility.h"
 
 int main() {
-	TestMap();
-	mapLoaderTest();
+	//TestMap();
+	//mapLoaderTest();
 	testPlayer();
-	TestCards();
-	TestBiddingFacility();
+	//TestCards();
+	//TestBiddingFacility();
 
 	//Check for memory leaks at the end of execution
 	_CrtDumpMemoryLeaks();

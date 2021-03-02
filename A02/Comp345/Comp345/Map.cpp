@@ -1,7 +1,3 @@
-// COMP345 Assignment 1
-// Map class implementation
-// Author: Georges Grondin (40034160)
-
 #include "Map.h"
 
 using namespace std;
@@ -28,8 +24,8 @@ Map::Map(int* territories, int territory_count, int player_count, int continent_
 		this->territories[i].head = nullptr;
 		this->territories[i].continentID = territories[i];
 		this->territories[i].territoryID = i;
-		this->territories[i].army_count = new int[player_count];
-		this->territories[i].city_count = new int[player_count];
+		this->territories[i].army_count.resize(player_count);
+		this->territories[i].city_count.resize(player_count);
 		//Append territory to its corresponding continent list
 		this->continents[territories[i]].head = new TerritoryListNode{ &this->territories[i], continents[territories[i]].head };
 		this->continents[territories[i]].length++;
@@ -60,8 +56,8 @@ Map::Map(Map* map) {
 	for (int i = 0; i < territory_count; i++) {
 		this->territories[i].continentID = map->territories[i].continentID;
 		this->territories[i].territoryID = i;
-		this->territories[i].army_count = new int[map->player_count];
-		this->territories[i].city_count = new int[map->player_count];
+		this->territories[i].army_count.resize(map->player_count);
+		this->territories[i].city_count.resize(map->player_count);
 		for (int j = 0; j < player_count; j++) {
 			this->territories[i].army_count[j] = map->territories[i].army_count[j];
 			this->territories[i].city_count[j] = map->territories[i].city_count[j];
@@ -95,8 +91,8 @@ Map::~Map() {
 			delete current;
 			current = temp;
 		}
-		delete[] territories[i].army_count;
-		delete[] territories[i].city_count;
+		//delete territories[i].army_count;
+		//delete territories[i].city_count;
 	}
 	delete[] territories;
 	territories = nullptr;
@@ -219,7 +215,7 @@ int Map::CountContiguousNodes() {
 		while (outEdge != nullptr) {
 			if (!seen[outEdge->destination_territory->territoryID]) {
 				visitQueue.Push(outEdge->destination_territory);
-				seen[outEdge->destination_territory->territoryID]=true;
+				seen[outEdge->destination_territory->territoryID] = true;
 			}
 			outEdge = outEdge->next;
 		}
@@ -230,12 +226,12 @@ int Map::CountContiguousNodes() {
 }
 
 
-int Map::CountContiguousNodesInContinent(TerritoryList *continent) {
+int Map::CountContiguousNodesInContinent(TerritoryList* continent) {
 	if (continent->head == nullptr) return 0;
 	bool* seen = new bool[territory_count];
 	for (int i = 0; i < territory_count; i++) seen[i] = false;
 	int seenCount{ 0 };
-	TerritoryList *visitQueue = new TerritoryList();
+	TerritoryList* visitQueue = new TerritoryList();
 	visitQueue->Push(continent->head->territory);
 	seen[continent->head->territory->territoryID] = true;
 	while (visitQueue->length > 0) {
@@ -319,12 +315,14 @@ Territory* Map::SetStartingTerritory(int territory_index) {
 }
 
 
+
+
 Map& Map::operator= (const Map& map) {
 	//Check for self-assignment
 	if (this == &map) {
 		return *this;
 	}
-	
+
 	//Deallocate currently used memory:
 	//Iterate through territories and delete corresponding edges
 	for (int i = 0; i < territory_count; i++) {
@@ -334,8 +332,8 @@ Map& Map::operator= (const Map& map) {
 			delete current;
 			current = temp;
 		}
-		delete[] territories[i].army_count;
-		delete[] territories[i].city_count;
+		//delete[] territories[i].army_count;
+		//delete[] territories[i].city_count;
 	}
 	delete[] territories;
 	territories = nullptr;
@@ -352,7 +350,7 @@ Map& Map::operator= (const Map& map) {
 	}
 	delete[] continents;
 	continents = nullptr;
-	
+
 	//reallocate new values:
 	this->territory_count = map.territory_count;
 	this->continent_count = map.continent_count;
@@ -371,8 +369,8 @@ Map& Map::operator= (const Map& map) {
 	for (int i = 0; i < territory_count; i++) {
 		this->territories[i].continentID = map.territories[i].continentID;
 		this->territories[i].territoryID = i;
-		this->territories[i].army_count = new int[map.player_count];
-		this->territories[i].city_count = new int[map.player_count];
+		this->territories[i].army_count.resize(map.player_count);
+		this->territories[i].city_count.resize(map.player_count);
 		for (int j = 0; j < player_count; j++) {
 			this->territories[i].army_count[j] = map.territories[i].army_count[j];
 			this->territories[i].city_count[j] = map.territories[i].city_count[j];
@@ -400,7 +398,7 @@ Map& Map::operator= (const Map& map) {
 
 
 std::ostream& operator<< (std::ostream& out, const Map& map) {
-	for (int i = 0; i < map.territory_count; i++) {		
+	for (int i = 0; i < map.territory_count; i++) {
 		out << "Territory index " << i << ", ContinentID " << map.territories[i].continentID << ". Connections to: ";
 		Edge* current = map.territories[i].head;
 		while (current != nullptr) {
@@ -411,8 +409,103 @@ std::ostream& operator<< (std::ostream& out, const Map& map) {
 		for (int j = 0; j < map.player_count; j++) {
 			out << "\tPlayer " << j << ": \tarmy count: " << map.territories[i].army_count[j] << "\tcity count: " << map.territories[i].city_count[j] << endl;
 		}
+		out << "Controlling player: " << map.territories[i].controlling_player << endl;
 	}
 	return out;
+}
+
+int* Map::ComputeMapScores() {
+	int* scores = new int[player_count];
+	for (int i = 0; i < player_count; i++) scores[i] = 0;
+	//Loop through territories and increment each player's score for each territory they control
+	for (int i = 0; i < territory_count; i++) {
+		int controller = territories[i].controlling_player;
+		if (controller == -1) continue;
+		scores[controller]++;
+	}
+
+	//Loop through each continent
+	for (int i = 0; i < continent_count; i++) {
+		int* continent_scores = new int[player_count];
+		for (int j = 0; j < player_count; j++) continent_scores[j] = 0;
+		//count the number of territories each player controls on the continent
+		TerritoryListNode* temp = continents[i].head;
+		while (temp != nullptr) {
+			int controller = temp->territory->controlling_player;
+			if (controller == -1) {
+				temp = temp->next;
+				continue;
+			}
+			continent_scores[controller]++;
+			temp = temp->next;
+		}
+		// give 1 point to the player who controls the most territories in the continent (no points if tied)
+		int winning_player = -1;
+		int max_terr_controlled = -1;
+		for (int j = 0; j < player_count; j++) {
+			if (continent_scores[j] > max_terr_controlled) {
+				winning_player = j;
+				max_terr_controlled = continent_scores[j];
+			}
+			else if (continent_scores[j] == max_terr_controlled) {
+				winning_player = -1;
+			}
+		}
+		if (winning_player >= 0) {
+			scores[winning_player]++;
+		}
+
+		delete[] continent_scores;
+
+	}
+
+	return scores;
+
+}
+
+void Territory::addArmy(int player_index) {
+	army_count[player_index]++;
+	UpdateControl();
+}
+
+void Territory::addCity(int player_index) {
+	city_count[player_index]++;
+	UpdateControl();
+}
+
+void Territory::removeArmy(int player_index) {
+	army_count[player_index]--;
+	UpdateControl();
+}
+
+// Checks if two territories are adjacent
+// Returns -1 if they are not adjacent, otherwise returns the movement cost (1 or 3)
+int Territory::CheckAdjacency(Territory* destination) {
+	Edge* temp = this->head;
+	while (temp != nullptr) {
+		if (temp->destination_territory->territoryID == destination->territoryID) {
+			return temp->movement_cost;
+		}
+		temp = temp->next;
+	}
+	return -1;
+}
+
+void Territory::UpdateControl() {
+	int current_max = -1;
+	if (controlling_player != -1) {
+		current_max = army_count[controlling_player] + city_count[controlling_player];
+	}
+	for (int i = 0; i < army_count.size(); i++) {
+		if (i == controlling_player) continue;
+		int player_control_score = army_count[i] + city_count[i];
+		if (current_max == player_control_score)
+			controlling_player = -1;
+		else if (current_max < player_control_score) {
+			controlling_player = i;
+			current_max = player_control_score;
+		}
+	}
 }
 
 
@@ -435,4 +528,3 @@ TerritoryListNode* TerritoryList::Pop() {
 	head = temp->next;
 	return temp;
 }
-
