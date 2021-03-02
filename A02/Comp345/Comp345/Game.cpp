@@ -82,7 +82,6 @@ void Game::PlayerTurn(Player* player) {
 	}
 
 	int desiredCardIndex;
-	player->setCoins(1);
 	bool validCardIndex = false;
 
 	// Select a card from the hand
