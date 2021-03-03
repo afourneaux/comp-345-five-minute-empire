@@ -227,10 +227,10 @@ bool Player::DestroyArmy() {//Checks if friendly & ennemy in same location -> Re
 		if (battlefield_terr == nullptr) continue;
 		if (ennemy < 0 || ennemy >= NUM_OF_PLAYERS) continue;
 		if (battlefield_terr->army_count[ennemy] > 0 && battlefield_terr->army_count[pos] > 0) {
-			for (int i = 0; i < players[ennemy]->getCubes().size(); i++) {
-				if (players[ennemy]->getCubes()[i]->location == battlefield_terr) {
-					players[ennemy]->getCubes()[i]->location = nullptr;
-					players[ennemy]->getCubes()[i]->isPlaced = false;
+			for (int i = 0; i < Game::players[ennemy]->getCubes().size(); i++) {
+				if (Game::players[ennemy]->getCubes()[i]->location == battlefield_terr) {
+					Game::players[ennemy]->getCubes()[i]->location = nullptr;
+					Game::players[ennemy]->getCubes()[i]->isPlaced = false;
 					break;
 				}
 			}
@@ -295,7 +295,7 @@ Disk* Player::HasCityAtLocation(int id) {
 	return nullptr;
 }
 Territory* Player::GetTerritory(int id) {
-	return map->GetTerritory(id);
+	return Game::map->GetTerritory(id);
 }
 //**********
 //HasArmiesToPlace
@@ -303,6 +303,16 @@ Territory* Player::GetTerritory(int id) {
 bool Player::HasArmiesToPlace() {
 	for (int i = 0; i < cubes.size(); i++) {
 		if (!cubes[i]->isPlaced)
+			return true;
+	}
+	return false;
+}
+//**********
+//HasCitiesToPlace
+//**********
+bool Player::HasCitiesToPlace() {
+	for (int i = 0; i < disks.size(); i++) {
+		if (!disks[i]->isBuilt)
 			return true;
 	}
 	return false;

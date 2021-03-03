@@ -9,7 +9,6 @@ using namespace std;
 
 const int STARTING_COINS = 14;
 const int STARTING_ARMIES = 18;
-static vector<Player*> round_table;
 
 class Map;
 struct Card;
@@ -42,6 +41,7 @@ public:
 	Disk* HasCityAtLocation(int id);
 	Territory* GetTerritory(int id);
 	bool HasArmiesToPlace();
+	bool HasCitiesToPlace();
 	void PlayerStatus();
 	void InitializePlayer();
 

@@ -140,16 +140,11 @@
   <ItemGroup>
     <ClCompile Include="BiddingFacility.cpp" />
     <ClCompile Include="Cards.cpp" />
-    <ClCompile Include="CardsDriver.cpp" />
-    <ClCompile Include="BiddingDriver.cpp" />
     <ClCompile Include="Driver.cpp" />
     <ClCompile Include="Game.cpp" />
     <ClCompile Include="Map.cpp" />
-    <ClCompile Include="MapDriver.cpp" />
     <ClCompile Include="MapLoader.cpp" />
-    <ClCompile Include="MapLoaderDriver.cpp" />
     <ClCompile Include="Player.cpp" />
-    <ClCompile Include="PlayerDriver.cpp" />
   </ItemGroup>
   <ItemGroup>
     <ClInclude Include="BiddingFacility.h" />

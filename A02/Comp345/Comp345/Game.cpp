@@ -27,7 +27,6 @@ void Game::Setup() {
 	map->AddEdge(1, 2);
 	map->AddEdge(2, 3);
 	delete arr;
-
 	if (playerCount == 2) {
 		gameTurns = GAME_TURNS_2_PLAYERS;
 	}
@@ -122,5 +121,5 @@ Game::~Game() {
 	delete deck;
 	delete hand;
 	//delete players;
-	delete map;
+	//delete map;
 }
