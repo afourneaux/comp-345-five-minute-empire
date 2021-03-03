@@ -126,4 +126,9 @@ void TestComputeScore() {
 
 	ComputeScore(testMap, table, 2);
 
+	delete[] table;
+	delete deck;
+	delete hand;
+	delete[] arr;
+	delete testMap;
 }
