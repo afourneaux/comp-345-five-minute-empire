@@ -1,20 +1,20 @@
 #pragma once
 #include <iostream>
 #include <vector>
-#include "Map.h"
 #include "Cards.h"
 #include "BiddingFacility.h"
+#include "Map.h"
 #include <iostream>
 using namespace std;
 
 const int STARTING_COINS = 14;
 const int STARTING_ARMIES = 18;
-int NUM_OF_PLAYERS = 2;
-static vector<Player*> round_table[NUM_OF_PLAYERS];
+static vector<Player*> round_table;
 
 class Map;
 struct Card;
 class BiddingFacility;
+class Game;
 
 struct Cube {
 	Territory* location;
@@ -38,16 +38,20 @@ public:
 	bool BuildCity(); // if (player has a city to build and has an army at the destination) -> Build city and return true.
 	bool DestroyArmy();
 	bool DoAction(Card* card);
+	bool AddArmy(int player_idx, Territory* terr);
+	bool RemoveArmy(int player_idx, Territory* terr);
 	Territory* PromptForAction(string action);
-	Territory* HasArmyAtLocation(int id);
-	Territory* HasCityAtLocation(int id);
+	Cube* HasArmyAtLocation(int id);
+	Disk* HasCityAtLocation(int id);
+	Territory* GetTerritory(int id);
 	bool HasArmiesToPlace();
+	bool HasCitiesToPlace();
 	void PlayerStatus();
 	void InitializePlayer();
 
 	//Accessors
 	string GetLastName() const { return lastName; };
-	void setLastName(string last) { lastName = last; };
+	void SetLastName(string last) { lastName = last; };
 	vector<Territory*> GetTerritories() const { return territories; };
 	vector<Cube*> getCubes() const { return cubes; };
 	vector<Disk*> getDisks() const { return disks; };
@@ -55,13 +59,10 @@ public:
 	BiddingFacility* GetBf() const { return bf; };
 	int getCoins() const { return coins; };
 	int getArmiesLeft() const { return armiesLeft; };
-<<<<<<< HEAD
 	void SetCoins(int amt) { coins = amt; };
 	int GetPos() { return pos; };
-=======
 	void setCoins(int amt) { coins = amt; };
 	void setPosition(int pos) { position = pos; };
->>>>>>> origin/a2-map_player_sync
 
 private:
 	string lastName;
@@ -72,12 +73,9 @@ private:
 	BiddingFacility* bf;
 	int coins = STARTING_COINS;
 	int armiesLeft = STARTING_ARMIES;
-<<<<<<< HEAD
 	int STARTING_REGION_ID = 0;
 	int pos;
-=======
 	int position; // the position of the player at the table
->>>>>>> origin/a2-map_player_sync
 };
 int testPlayer();
 

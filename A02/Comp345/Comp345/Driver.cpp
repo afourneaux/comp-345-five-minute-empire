@@ -3,7 +3,6 @@
 #include <stdlib.h>
 #include <crtdbg.h>
 #include <iostream>
-
 #include "Game.h"
 
 int main() {

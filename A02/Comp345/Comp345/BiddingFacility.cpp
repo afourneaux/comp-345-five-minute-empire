@@ -9,6 +9,7 @@
 #include <vector>
 #include "BiddingFacility.h"
 #include <conio.h>
+
 using namespace std;
 
 // Query the user for their bid, but do not display their input in the window
@@ -96,7 +97,7 @@ void CheckBidWinner(Player* players)
 	cout << endl;
 	int winnerIndex = 0;
 	int winnerBid = -1;
-	for (int i = 0; i < NUM_OF_PLAYERS; i++)
+	for (int i = 0; i < 3; i++)
 	{
 		// Print everyone's name and their bid value
 		cout << "             *================================*" << endl;

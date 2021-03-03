@@ -9,9 +9,10 @@ void Game::Setup() {
 	deck = new Deck();
 	hand = new Hand(deck);
 	playerCount = 3;
-	players = new Player[playerCount];
 	for (int i = 0; i < playerCount; i++) {
-		players[i].setLastName("defaultPlayer" + to_string(i + 1));
+		players.push_back(new Player());
+		players.at(i)->setPosition(i);
+		players.at(i)->SetLastName("defaultPlayer" + to_string(i + 1));
 	}
 	int* arr = new int[4];
 	arr[0] = 0;
@@ -51,7 +52,7 @@ void Game::MainLoop() {
 		// Run through each player's turn
 		// TODO: Sort by bid
 		for (int currentPlayer = 0; currentPlayer < playerCount; currentPlayer++) {
-			PlayerTurn(&players[currentPlayer]);
+			PlayerTurn(players.at(currentPlayer));
 		}
 	}
 }
@@ -82,7 +83,7 @@ void Game::PlayerTurn(Player* player) {
 	}
 
 	int desiredCardIndex;
-	player->setCoins(1);
+	//player->setCoins(1);
 	bool validCardIndex = false;
 
 	// Select a card from the hand
@@ -120,6 +121,6 @@ void Game::PlayerTurn(Player* player) {
 Game::~Game() {
 	delete deck;
 	delete hand;
-	delete[] players;
+	//delete players;
 	delete map;
 }
