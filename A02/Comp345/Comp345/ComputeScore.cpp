@@ -3,6 +3,11 @@
 using namespace std;
 
 void ComputeScore(Map* map, Player* players, int player_count) {
+	cout << endl;
+	cout << "XXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXX" << endl;
+	cout << "XXX          CALCULATING FINAL SCORES           XXXX" << endl;
+	cout << "XXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXX" << endl << endl;
+
 	//Calculate the scores for controlled continents + territories
 	int* final_scores = map->ComputeMapScores();
 
@@ -51,14 +56,16 @@ void ComputeScore(Map* map, Player* players, int player_count) {
 			elixir_winner = -1;
 		}
 	}
-
-	final_scores[elixir_winner] += ELIXIR_BONUS;
-	delete[] elixir_count;
+	if (elixir_winner >= 0) final_scores[elixir_winner] += ELIXIR_BONUS;
 
 	cout << "FINAL SCORES" << endl;
 	for (int i = 0; i < player_count; i++) {
 		cout << "Player " << i << " total score " << final_scores[i] << endl;
 	}
+
+	delete[] elixir_count;
+	delete[] final_scores;
+
 
 }
 
@@ -105,10 +112,17 @@ void TestComputeScore() {
 	Deck* deck = new Deck();
 	Hand* hand = new Hand(deck);
 
-	table[0].getHand().push_back(hand->Exchange(0, table[0]));
-	table[0].getHand().push_back(hand->Exchange(0, table[0]));
-	table[1].getHand().push_back(hand->Exchange(0, table[1]));
-	table[1].getHand().push_back(hand->Exchange(0, table[1]));
+	table[0].getHand().push_back(hand->GetCardAtIndex(0));
+	table[0].getHand().push_back(hand->GetCardAtIndex(1));
+	table[1].getHand().push_back(hand->GetCardAtIndex(2));
+	table[1].getHand().push_back(hand->GetCardAtIndex(3));
+	
+	for (int i = 0; i < 2; i++) {
+		cout << "Player " << i << " hand contents:" << endl;
+		for (int j = 0; j < table[i].getHand().size(); j++) {
+			cout << *table[i].getHand()[j] << endl;
+		}
+	}
 
 	ComputeScore(testMap, table, 2);
 

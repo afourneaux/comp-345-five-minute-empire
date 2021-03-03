@@ -428,6 +428,11 @@ int* Map::ComputeMapScores() {
 		scores[controller]++;
 	}
 
+	cout << "Player scores for controlled territories: " << endl;
+	for (int i = 0; i < player_count; i++) {
+		cout << "Player " << i << ": " << scores[i] << endl;
+	}
+
 	//Loop through each continent
 	for (int i = 0; i < continent_count; i++) {
 		int* continent_scores = new int[player_count];
@@ -456,6 +461,7 @@ int* Map::ComputeMapScores() {
 			}
 		}
 		if (winning_player >= 0) {
+			cout << "Player " << winning_player << " controls Continent " << i << ", gets 1 bonus point." << endl;
 			scores[winning_player]++;
 		}
 			
