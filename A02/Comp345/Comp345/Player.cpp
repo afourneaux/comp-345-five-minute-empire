@@ -10,14 +10,11 @@ Player::Player()
 //Destructor
 Player::~Player()
 {
-	//iterate through armies
-	for (int i = 0; i < cubes.size(); i++)
+	for (int i = 0; i < cubes.size(); i++)  // iterate through armies
 		delete cubes[i];
-	//iterat trough disks
-	for (int i = 0; i < disks.size(); i++)
+	for (int i = 0; i < disks.size(); i++) // iterate trough disks
 		delete disks[i];
-	//iterate through hand
-	for (int i = 0; i < hand.size(); i++)
+	for (int i = 0; i < hand.size(); i++) // iterate through hand
 		delete hand[i];
 	delete bf;
 }
@@ -36,12 +33,12 @@ Player::Player(const Player* player) {
 	bf = player->GetBf(); //Need copy constructor of Bf
 	lastName = player->GetLastName();
 	//Copying territories
-	for (int i = 0; i < player->getTerritories().size(); i++) {
-		territories[i]->army_count = player->getTerritories()[i]->army_count;
-		territories[i]->city_count = player->getTerritories()[i]->city_count;
-		territories[i]->continentID = player->getTerritories()[i]->continentID;
-		territories[i]->head = player->getTerritories()[i]->head;
-		territories[i]->territoryID = player->getTerritories()[i]->territoryID;
+	for (int i = 0; i < player->GetTerritories().size(); i++) {
+		territories[i]->army_count = player->GetTerritories()[i]->army_count;
+		territories[i]->city_count = player->GetTerritories()[i]->city_count;
+		territories[i]->continentID = player->GetTerritories()[i]->continentID;
+		territories[i]->head = player->GetTerritories()[i]->head;
+		territories[i]->territoryID = player->GetTerritories()[i]->territoryID;
 	}
 	armiesLeft = player->armiesLeft;
 	coins = player->coins;
@@ -61,12 +58,12 @@ Player& Player::operator= (const Player& player) {
 	bf = player.GetBf(); //Need copy constructor of Bf
 	lastName = player.GetLastName();
 	//Copying territories
-	for (int i = 0; i < player.getTerritories().size(); i++) {
-		territories[i]->army_count = player.getTerritories()[i]->army_count;
-		territories[i]->city_count = player.getTerritories()[i]->city_count;
-		territories[i]->continentID = player.getTerritories()[i]->continentID;
-		territories[i]->head = player.getTerritories()[i]->head;
-		territories[i]->territoryID = player.getTerritories()[i]->territoryID;
+	for (int i = 0; i < player.GetTerritories().size(); i++) {
+		territories[i]->army_count = player.GetTerritories()[i]->army_count;
+		territories[i]->city_count = player.GetTerritories()[i]->city_count;
+		territories[i]->continentID = player.GetTerritories()[i]->continentID;
+		territories[i]->head = player.GetTerritories()[i]->head;
+		territories[i]->territoryID = player.GetTerritories()[i]->territoryID;
 	}
 	armiesLeft = player.armiesLeft;
 	coins = player.coins;
@@ -109,127 +106,188 @@ bool Player::PayCoin(int amt) {
 	cout << lastName << " now has " << coins << " coins." << endl;
 	return enoughCoins;
 }
-//Loops through all armies and if not placed -> Assigns it a territory
-bool Player::PlaceNewArmies(Territory* dest) {
-	bool placed = false;
-	if (dest == nullptr)
-		return false;
-	for (int i = 0; i < cubes.size(); i++) {
-		if (!cubes[i]->isPlaced) {
-			cubes[i]->location = dest;
-			cubes[i]->isPlaced = true;
-			placed = true;
-			armiesLeft--;
-			break;
-		}
+//**********
+//PlaceNewArmies
+//**********
+bool Player::PlaceNewArmies() {
+	bool hasPlaced = false;
+	if (!HasArmiesToPlace()) return hasPlaced;
+	Territory* dest = PromptForAction("place an army");
+	while (!hasPlaced && dest != nullptr)
+	if (dest->city_count[pos] >= 0 || dest->territoryID == STARTING_REGION_ID) { // Checking if destination has a city of player or is starting region
+		dest->addArmy(pos);
+		hasPlaced = true;
 	}
-	if (armiesLeft > 0)
-		cout << lastName << ", successfully put an Army at territoryID: " << dest->territoryID << " and has " << armiesLeft << " armies left." << endl;
-	else
-		cout << "You do not have any more armies to place." << endl;
-	return placed;
+	return hasPlaced;
 }
-//Loops through all armies in a territory -> Assigns it a new territory (calculation for movement imissing)
-bool Player::MoveArmies(Territory* src, Territory* dest) {
-	bool placed = false;
-	if (src == nullptr || dest == nullptr)
-		return placed;
-	for (int i = 0; i < getCubes().size(); i++) {
-		if (cubes[i]->location == nullptr)
-			continue;
-		if (cubes[i]->location->territoryID == src->territoryID) {
-			cubes[i]->location = dest;
-			placed = true;
-			cout << "Successfully moved Army from ID: " << src->territoryID << " to ID: " << dest->territoryID << endl;
-			//Todo: Need to remove amount of moves based on territoryID
-			return placed;
-		}
-	}
-	cout << lastName << ", you cannot make the move, you currently have no armies at ID: " << src->territoryID << "." << endl;
-	return placed;
+//**********
+//MoveArmies
+//**********
+bool Player::MoveArmies() {
+	bool hasMoved = false;
+	Territory* src = PromptForAction("move army from");
+	if (src == nullptr) return hasMoved; // if user exits action
+	Territory* dest = PromptForAction("move army to");
+	if (dest == nullptr) return hasMoved; // if user exits action
+	src->removeArmy(pos);
+	dest->addArmy(pos);
+	return hasMoved;
 }
-//Loops through all armies in a territory -> Assigns it a new territory (calculation for movement imissing)
-bool Player::MoveOverLand(Territory* src, Territory* dest) {
-	bool placed = false;
-	if (src == nullptr || dest == nullptr)
-		return placed;
-	for (int i = 0; i < getCubes().size(); i++) {
-		if (cubes[i]->location == nullptr)
-			continue;
-		if (cubes[i]->location->territoryID == src->territoryID) {
-			cubes[i]->location = dest;
-			placed = true;
-			cout << "Successfully moved army over land from ID: " << src->territoryID << " to ID: " << dest->territoryID << endl;
-			//Todo: Need to remove amount of moves based on territoryID
-			return placed;
-		}
-	}
-	cout << lastName << ", you cannot make the move, you currently have no armies at ID: " << src->territoryID << "." << endl;
-	return placed;
+//**********
+//MoveOverLand
+//**********
+bool Player::MoveOverLand() {
+	bool hasMoved = false;
+	Territory* src = PromptForAction("move army over land from");
+	if (src == nullptr) return hasMoved; // if user exits action
+	Territory* dest = PromptForAction("move army over land to");
+	if (dest == nullptr) return hasMoved; // if user exits action
+	src->removeArmy(pos);
+	dest->addArmy(pos);
+	return hasMoved;
 }
-//Returns true if player has a city to build && has an army at the destination
-bool Player::BuildCity(Territory* dest) {
+//**********
+//BuildCity
+//**********
+bool Player::BuildCity() {
 	bool isCityBuilt = false;
 	bool hasCity = false;
 	bool hasArmy = false;
 	Disk* city = nullptr;
-	//Check if player has a city to build
-	for (int i = 0; i < 3; i++) {
+	Territory* settlement = PromptForAction("build a city");
+	if (settlement == nullptr) return isCityBuilt; // if user exits action
+	for (int i = 0; i < 3; i++) {  // Check if player has a city to build
 		if (!disks[i]->isBuilt) {
 			city = disks[i];
 			hasCity = true;
+			cout << lastName << " - You DO have atleast one city available for building at location ID: " << settlement->territoryID << "." << endl;
+		}
+		else {
+			cout << lastName << " - You DO NOT have atleast one city available for buildingat location ID: " << settlement->territoryID << "." << endl;
+			return false;
 		}
 	}
-	cout << endl;
-	//Check if player has army at location
-	for (int j = 0; j < cubes.size(); j++)
-		if (cubes[j]->location != nullptr && cubes[j]->location->territoryID == dest->territoryID)
+	for (int j = 0; j < cubes.size(); j++) // Check if player has army at location
+		if (cubes[j]->location == settlement) {
 			hasArmy = true;
-
-	if (hasCity)
-		cout << lastName << " has a city to build." << endl;
-	else
-		cout << lastName << " does not have a city to build." << endl;
-	if (hasArmy)
-		cout << lastName << " has an army at territory ID: " << dest->territoryID << "." << endl;
-	else
-		cout << lastName << " does not have an army at territory ID: " << dest->territoryID << "." << endl;
-
-	//Check if above conditions are met
-	if (hasArmy && city != nullptr) {
-		city->location = dest;
+			cout << lastName << " - You DO have atleast one city at location ID: " << settlement->territoryID << "." << endl;
+		}
+			
+		else {
+			cout << lastName << " - You DO NOT have atleast one army at location ID: " << settlement->territoryID << "." << endl;
+			return false;
+		}
+	if (hasArmy && hasCity) { // Check if above conditions are met
+		city->location = settlement;
 		city->isBuilt = true;
 		isCityBuilt = true;
-		cout << "->" << lastName << " built a city at territory ID: " << dest->territoryID << "." << endl;
+		cout << lastName << " - Successfully built a city at territory ID: " << settlement << "." << endl;
 	}
 	else
-		cout << "->" << lastName << " did not build a city at territory ID: " << dest->territoryID << "." << endl;
+		cout << lastName << " - Failed to build a city at territory ID: " << settlement << "." << endl;
 	return isCityBuilt;
 }
 
 //Checks if friendly & ennemy in same location -> Returns if it was destroyed
-bool Player::DestroyArmy(Territory* friendlyTerr, Territory* ennemyTerr, Player *ennemy) {
+bool Player::DestroyArmy() {
 	bool isDestoyed = false;
-	for (int i = 0; i < cubes.size(); i++) {
-		if (friendlyTerr == cubes[i]->location && cubes[i]->location->territoryID == ennemyTerr->territoryID) {
-			for (int j = 0; j < ennemy->getCubes().size(); j++) {
-				if (ennemy->getCubes()[j]->location == nullptr)
-					continue;
-				if (ennemy->getCubes()[j]->location->territoryID == ennemyTerr->territoryID) {
-					ennemy->getCubes()[j]->isPlaced = false;
-					ennemy->getCubes()[j]->location = nullptr;
-					isDestoyed = true;
-				}
-			}
+	int ennemy = -1;
+	bool ennemyfound = false;
+	Territory* battlefield = PromptForAction("destroy an ennemy army");
+	if (battlefield == nullptr) return isDestoyed; // if user exits action
+	while (!ennemyfound) {
+		cout << lastName << " - Who's army would you like to destroy (pos)? " << endl;
+		cin >> ennemy;
+		if (battlefield->army_count[ennemy] > 0) {
+			ennemyfound = true;
+			battlefield->removeArmy(ennemy); 
+			isDestoyed = true;
 		}
 	}
-	if (isDestoyed)
-		cout << lastName << " destroyed his enemy " << ennemy->lastName << " at " << ennemyTerr->territoryID << " with his army at " << friendlyTerr->territoryID << "." << endl;
-	else
-		cout << lastName << " could not defeat his enemy " << ennemy->lastName << " at " << ennemyTerr->territoryID << ", with his army is at " << friendlyTerr->territoryID << endl;
 	return isDestoyed;
 }
+//****************************************************************************************************************************************************************************
+//                                                                 HELPER METHODS
+//****************************************************************************************************************************************************************************
 
+//**********
+//DoAction
+//**********
+bool Player::DoAction(Card* card) {
+	bool hasActed = false;
+	for (int i = 0; i < card->abilityCount; i++) {
+		switch (card->actions[i].action) {
+		case eAction_BuildCity: if (BuildCity());
+				break;
+		case eAction_DestroyArmies: if (DestroyArmy()) hasActed = true;
+				break;
+		case eAction_MoveArmies: if (MoveArmies()) hasActed = true;
+				break;
+		case eAction_PlaceArmies: if (PlaceNewArmies()) hasActed = true;
+				break;
+		default:
+			cout << "Found an invalid action for card name:" << card->name;
+			break;
+		}
+	}
+	return hasActed;
+}
+//**********
+//PromptForAction
+//**********
+Territory* Player::PromptForAction(string action) {
+	PlayerStatus();
+	int terrId = -1;
+	bool exit = false; // set to true to exit loop
+	while (HasTerritory(terrId) == nullptr && !exit) {
+		cout << lastName << " - Where would you like to " << action << " (ID)? (-1 to exit): ";
+		cin >> terrId;
+		if (terrId == -1) {
+			exit = true;
+			cout << lastName << " - Did not take any actions." << endl;
+		}
+	}
+	return HasTerritory(terrId);
+}
+//**********
+//PlayerStatus
+//**********
+void Player::PlayerStatus() {
+	vector <Territory*> territories = GetTerritories();
+	Territory* terr = nullptr;
+	cout << lastName << " - Start Statistics:" << endl;
+	for (int i=0; i<territories.size(); i++) {
+		 terr = territories[i];
+		cout << "Territory Id " << terr->territoryID << " has currently " << terr->army_count[pos] << " unit(s) of army and " << terr->city_count[pos] << " unit(s) of city" << endl;
+	}
+	cout << lastName << " - End Statistics." << endl;
+}
+//**********
+//HasTerritory
+//**********
+Territory* Player::HasTerritory(int id) {
+	for (int i = 0; i < GetTerritories().size(); i++) {
+		if (cubes[i]->location->territoryID == id) {
+			cout << lastName << "- You currently have " << cubes[i]->location->army_count[pos] << " army unit(s) and " 
+				<< cubes[i]->location->city_count[pos] << " city unit(s) at territory id " << id << "." << endl;
+			return cubes[i]->location;
+		}
+	}
+	return nullptr;
+}
+//**********
+//HasTerritory
+//**********
+bool Player::HasArmiesToPlace() {
+	for (int i = 0; i < cubes.size(); i++) {
+		if (!cubes[i]->isPlaced)
+			return true;
+	}
+	return false;
+}
+//**********
+//InitializePlayer
+//**********
 void Player::InitializePlayer() {
 	for (int i = 0; i < 18; i++) {
 		cubes.push_back(new Cube());
