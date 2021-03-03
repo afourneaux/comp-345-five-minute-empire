@@ -38,14 +38,10 @@ public:
 	bool BuildCity(); // if (player has a city to build and has an army at the destination) -> Build city and return true.
 	bool DestroyArmy();
 	bool DoAction(Card* card);
-	bool AddArmy(int player_idx, Territory* terr);
-	bool RemoveArmy(int player_idx, Territory* terr);
-	Territory* PromptForAction(string action);
 	Cube* HasArmyAtLocation(int id);
 	Disk* HasCityAtLocation(int id);
 	Territory* GetTerritory(int id);
 	bool HasArmiesToPlace();
-	bool HasCitiesToPlace();
 	void PlayerStatus();
 	void InitializePlayer();
 
