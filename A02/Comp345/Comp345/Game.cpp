@@ -4,6 +4,9 @@
 // TODO: Currently, Setup is all hardcoded information. Replace this with
 //       proper setup including user input and map loading
 
+vector <Player*> Game::players;
+Map* Game::map;
+
 // Get number of players, perform bidding, distribute tokens, generate deck
 void Game::Setup() {
 	deck = new Deck();
@@ -26,7 +29,7 @@ void Game::Setup() {
 	map->AddEdge(1, 3);
 	map->AddEdge(1, 2);
 	map->AddEdge(2, 3);
-	delete arr;
+	delete[] arr;
 	if (playerCount == 2) {
 		gameTurns = GAME_TURNS_2_PLAYERS;
 	}
@@ -120,6 +123,8 @@ void Game::PlayerTurn(Player* player) {
 Game::~Game() {
 	delete deck;
 	delete hand;
-	//delete players;
-	//delete map;
+	for (int i = 0; i < playerCount; i++) {
+		delete players[i];
+	}
+	delete Game::map;
 }
