@@ -4,6 +4,7 @@
 #include "Map.h"
 
 // Constants
+const int NUM_OF_PLAYERS = 3;
 const int GAME_TURNS_2_PLAYERS = 11;
 const int GAME_TURNS_3_PLAYERS = 10;
 const int GAME_TURNS_4_PLAYERS = 8;
@@ -11,9 +12,11 @@ const int GAME_TURNS_4_PLAYERS = 8;
 const int STARTING_COINS_2_PLAYERS = 12;
 const int STARTING_COINS_3_PLAYERS = 11;
 const int STARTING_COINS_4_PLAYERS = 9;
+vector <Player*> players;
+Map* map;
 
 // Declare custom classes to be used
-class Player;
+struct Player;
 class Deck;
 class Map;
 class Hand;
@@ -26,9 +29,7 @@ public:
 	void PlayerTurn(Player* player);	// Perform the current player's turn
 	~Game();							// Destructor
 private:
-	Player* players;
 	Deck* deck;
-	Map* map;
 	Hand* hand;
 	int playerCount;
 	int coinBank;

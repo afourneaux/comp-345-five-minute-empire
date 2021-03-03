@@ -1,18 +1,20 @@
 #pragma once
 #include <iostream>
 #include <vector>
-#include "Map.h"
 #include "Cards.h"
 #include "BiddingFacility.h"
+#include "Map.h"
 #include <iostream>
 using namespace std;
 
 const int STARTING_COINS = 14;
 const int STARTING_ARMIES = 18;
+static vector<Player*> round_table;
 
 class Map;
 struct Card;
 class BiddingFacility;
+class Game;
 
 struct Cube {
 	Territory* location;
@@ -36,15 +38,16 @@ public:
 	bool BuildCity(); // if (player has a city to build and has an army at the destination) -> Build city and return true.
 	bool DestroyArmy();
 	bool DoAction(Card* card);
-	Territory* PromptForAction(string action);
-	Territory* HasTerritory(int id);
+	Cube* HasArmyAtLocation(int id);
+	Disk* HasCityAtLocation(int id);
+	Territory* GetTerritory(int id);
 	bool HasArmiesToPlace();
 	void PlayerStatus();
 	void InitializePlayer();
 
 	//Accessors
 	string GetLastName() const { return lastName; };
-	void setLastName(string last) { lastName = last; };
+	void SetLastName(string last) { lastName = last; };
 	vector<Territory*> GetTerritories() const { return territories; };
 	vector<Cube*> getCubes() const { return cubes; };
 	vector<Disk*> getDisks() const { return disks; };
@@ -54,6 +57,8 @@ public:
 	int getArmiesLeft() const { return armiesLeft; };
 	void SetCoins(int amt) { coins = amt; };
 	int GetPos() { return pos; };
+	void setCoins(int amt) { coins = amt; };
+	void setPosition(int pos) { position = pos; };
 
 private:
 	string lastName;
@@ -66,6 +71,7 @@ private:
 	int armiesLeft = STARTING_ARMIES;
 	int STARTING_REGION_ID = 0;
 	int pos;
+	int position; // the position of the player at the table
 };
 int testPlayer();
 

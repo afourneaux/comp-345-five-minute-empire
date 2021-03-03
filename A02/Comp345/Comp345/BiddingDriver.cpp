@@ -14,21 +14,21 @@ int TestBiddingFacility()
 {
 	string lastName = "";
 	//Instantiating Test Players
-	Player* table = new Player[NUM_OF_PLAYERS];
+	Player* table = new Player[3];
 
 	//Getting last name of players
-	for (int i = 0; i < NUM_OF_PLAYERS; i++) {
+	for (int i = 0; i < 3; i++) {
 		cout << "Enter the name of Player " << i + 1 << ": ";
 		cin >> lastName;
-		table[i].setLastName(lastName);
+		table[i].SetLastName(lastName);
 	}
 	cout << endl << "Players for this game are: " << endl;
-	for (int j = 0; j < NUM_OF_PLAYERS; j++) {
+	for (int j = 0; j < 3; j++) {
 		cout << j + 1 << ". " << table[j].GetLastName() << endl;
 	}
 	cout << endl;
 
-	for (int i = 0; i < NUM_OF_PLAYERS; i++)
+	for (int i = 0; i < 3; i++)
 		table[i].GetBf()->SetBid(AskForBid(&table[i]));
 
 	CheckBidWinner(table);

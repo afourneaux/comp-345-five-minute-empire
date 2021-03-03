@@ -1,5 +1,5 @@
 #include "Map.h"
-
+#include "MapLoader.h"
 using namespace std;
 
 //Initializes all vertices/nodes (ie territories) 
