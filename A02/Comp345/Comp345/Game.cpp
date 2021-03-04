@@ -53,8 +53,11 @@ void Game::MainLoop() {
 		cout << "XXXXXXXXXXXX" << endl;
 		// Run through each player's turn
 		// TODO: Sort by bid
-		for (int currentPlayer = 0; currentPlayer < playerCount; currentPlayer++) {
-			PlayerTurn(players.at(currentPlayer));
+		for (int i = 0; i < GAME_TURNS_3_PLAYERS; i++) {
+			for (int currentPlayer = 0; currentPlayer < playerCount; currentPlayer++) {
+				PlayerTurn(players.at(currentPlayer));
+			}
+			cout << "-------------  ROUND " << i + 1 << "  -------------" << endl;
 		}
 	}
 }
@@ -112,12 +115,13 @@ void Game::PlayerTurn(Player* player) {
 	// Pay for the card
 	player->PayCoin(hand->GetCostAtIndex(desiredCardIndex));
 	Card* card = hand->Exchange(desiredCardIndex);
-
 	cout << *card;
+	player->DoAction(card);
+	player->PlayerStatus();
 	// TODO: Add the card to the player object and perform its actions
 	// Player.PerformActionOfCard(card) or some equivalent
 	delete card;	// TODO: Delete as part of the player destructor
-}
+}  
 
 // Destructor
 Game::~Game() {

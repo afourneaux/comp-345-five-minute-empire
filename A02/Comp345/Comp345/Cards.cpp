@@ -141,6 +141,8 @@ void Deck::Generate()
 	cards[index].actions = new Action[1];
 	cards[index].abilities[0].type = eAbility_PlusOneMove;
 	cards[index].actions[0].action = eAction_BuildCity;
+	cards[index].actions[0].actionValue = 1;
+
 
 	index++;
 
@@ -156,6 +158,7 @@ void Deck::Generate()
 	cards[index].abilities[0].setName = "Cursed";
 	cards[index].abilities[0].countSetOnce = false;
 	cards[index].actions[0].action = eAction_BuildCity;
+	cards[index].actions[0].actionValue = 1;
 
 	index++;
 
