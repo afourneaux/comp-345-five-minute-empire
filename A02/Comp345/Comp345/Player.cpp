@@ -281,6 +281,77 @@ int Player::AndOrAction() {
 	}
 	return choice;
 }
+
+int Player::ComputeScore() {
+
+	//Calculate the scores for controlled continents + territories
+	int mapScore = Game::map->ComputeMapScore(position);
+	int score = 0;
+	int player_count = Game::players.size();
+
+	int* elixir_count = new int[Game::players.size()];
+	for (int i = 0; i < player_count; i++) elixir_count[i] = 0;
+
+	//Loop through each player
+	for (int player_index = 0; player_index < player_count; player_index++) {
+		Player* player = Game::players[player_index];
+		vector<Card*> hand = player->getHand();
+		//Loop through each card player owns
+		for (int card_index = 0; card_index < hand.size(); card_index++) {
+			//loop through each ability on each card
+			for (int ability_index = 0; ability_index < hand[card_index]->abilityCount; ability_index++) {
+				Ability* ability = &hand[card_index]->abilities[ability_index];
+				//count the number of elixirs each player owns
+				if (ability->type == eAbility_Elixir)
+					elixir_count[player_index]++;
+				//If the player iteration matches the calling player, compute scores from other points-giving cards
+				if (player == this) {
+					//If the card grants VP per cardName, count the number of cards with that name
+					if (ability->type == eAbility_VpPerCardName) {
+						int count = 0;
+						for (int i = 0; i < hand.size(); i++) {
+							if (hand[i]->name.find(ability->setName) != string::npos) {
+								count++;
+							}
+						}
+						if (count >= ability->setTarget) {
+							if (ability->countSetOnce)
+								score += ability->value;
+							else
+								score += ability->value * count;
+						}
+					}
+					else if (ability->type == eAbility_VpPerCoins) {
+						score += (coins / ability->setTarget) * ability->value;
+					}
+				}
+				
+			}
+		}
+	}
+	int elixir_winner = -1;
+	int elixir_max = -1;
+	for (int i = 0; i < player_count; i++) {
+		if (elixir_count[i] > elixir_max) {
+			elixir_winner = i;
+			elixir_max = elixir_count[i];
+		}
+		else if (elixir_count[i] == elixir_max) {
+			elixir_winner = -1;
+		}
+	}
+	if (elixir_winner == position) {
+		cout << "Player " << position << " has the most elixirs, gets " << ELIXIR_BONUS << " bonus points." << endl;
+		score += ELIXIR_BONUS;
+	}
+
+	int final_score = score + mapScore;
+	cout << "FINAL SCORE FOR PLAYER " << position << ": " << final_score << endl;
+
+	delete[] elixir_count;
+	return final_score;
+}
+
 //****************************************************************************************************************************************************************************
 //                                                                 HELPER METHODS
 //****************************************************************************************************************************************************************************

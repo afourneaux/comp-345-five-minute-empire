@@ -47,6 +47,7 @@ public:
 	void UpdateTerritory(Territory* terr);
 	bool Find(Territory* terr);
 	void InitializePlayer();
+	int ComputeScore();
 
 	//Accessors
 	string GetLastName() const { return lastName; };

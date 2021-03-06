@@ -33,6 +33,7 @@ struct TerritoryListNode {				// Node for use in TerritoryList linked list data 
 struct TerritoryList {					// Territorylist is a generic linked list data structure for tracking territories 
 	TerritoryListNode* head;			// Head of list
 	int length;							// length of linked list
+	int controlling_player = -1;		// The player controlling the most territories on the continent
 	TerritoryList();					// Default constructor
 	void Push(Territory* territory);	// Adds a territory to front of linked list
 	TerritoryListNode* Pop();			// Removes first territory from linked list
@@ -55,9 +56,10 @@ public:
 	Territory* SetStartingTerritory(int territory_index);	// Sets the starting territory for army placement
 	void PrintMapMemAddresses();					// DEBUG: prints a string representation of the map's memory addresses
 	bool Validate();								// Validates if the map is a valid game map
-	int* ComputeMapScores();
+	int ComputeMapScore(int playerIndex);
 	Map& operator= (const Map& map);				// Assignment operator
 	friend std::ostream& operator<< (std::ostream& out, const Map& map); // Stream insertion operator
+	int getNumberControlledTerritories(int playerIndex);
 private:
 	const int LAND_MOVEMENT_COST = 1;
 	const int WATER_MOVEMENT_COST = 3;
