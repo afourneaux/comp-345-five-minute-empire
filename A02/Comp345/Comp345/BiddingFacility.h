@@ -11,7 +11,6 @@
 #include "Player.h"
 using namespace std;
 
-const int NUM_OF_PLAYERS = 2;
 
 struct Player;
 

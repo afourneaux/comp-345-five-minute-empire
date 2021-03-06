@@ -3,23 +3,15 @@
 #include <stdlib.h>
 #include <crtdbg.h>
 #include <iostream>
-
-#include "Map.h"
-#include "MapLoader.h"
-#include "Cards.h"
-#include "Player.h"
-#include "BiddingFacility.h"
-#include "ComputeScore.h"
+#include "Game.h"
 
 int main() {
-	TestComputeScore();
-	/*
-	TestMap();
-	mapLoaderTest();
-	testPlayer();
-	TestCards();
-	TestBiddingFacility();
-	*/
+	Game* game = new Game();
+	game->Setup();
+	game->MainLoop();
+	game->GetWinner();
+	delete game;
+
 	//Check for memory leaks at the end of execution
 	_CrtDumpMemoryLeaks();
 }

@@ -1,7 +1,3 @@
-// COMP345 Assignment 1
-// Map class header
-// Author: Georges Grondin (40034160)
-
 #pragma once
 #include <iostream>
 #include <vector>
@@ -50,7 +46,7 @@ public:
 	int starting_territory_index;					// Index of starting territory for army placement
 	Territory* territories;							// Array of Territory objects - each Territory contains a linked list of Edges which are pointers to adjacent territories 
 	TerritoryList* continents;						// Array of linked lists mapping territories to continents
-	Map(int *territories, int territory_count, int player_count, int continent_count); // Parameterized constructor (territories* is an array mapping territories to their continent)
+	Map(int* territories, int territory_count, int player_count, int continent_count); // Parameterized constructor (territories* is an array mapping territories to their continent)
 	Map(Map* map);									// Copy constructor
 	~Map();											// Destructor
 	void AddEdge(int origin, int destination);		// Adds a bi-directional edge from territories[origin] to territories[destination]
@@ -70,4 +66,4 @@ private:
 	int CountWaterConnections(int territory_index);	// Used in setStartingTerritory() to check if the placement is valid
 };
 
-int TestMap();										//demo function
+int TestMap();

@@ -1,9 +1,5 @@
-// COMP345 Assignment 1
-// Map class implementation
-// Author: Georges Grondin (40034160)
-
 #include "Map.h"
-
+#include "MapLoader.h"
 using namespace std;
 
 //Initializes all vertices/nodes (ie territories) 
@@ -219,7 +215,7 @@ int Map::CountContiguousNodes() {
 		while (outEdge != nullptr) {
 			if (!seen[outEdge->destination_territory->territoryID]) {
 				visitQueue.Push(outEdge->destination_territory);
-				seen[outEdge->destination_territory->territoryID]=true;
+				seen[outEdge->destination_territory->territoryID] = true;
 			}
 			outEdge = outEdge->next;
 		}
@@ -230,12 +226,12 @@ int Map::CountContiguousNodes() {
 }
 
 
-int Map::CountContiguousNodesInContinent(TerritoryList *continent) {
+int Map::CountContiguousNodesInContinent(TerritoryList* continent) {
 	if (continent->head == nullptr) return 0;
 	bool* seen = new bool[territory_count];
 	for (int i = 0; i < territory_count; i++) seen[i] = false;
 	int seenCount{ 0 };
-	TerritoryList *visitQueue = new TerritoryList();
+	TerritoryList* visitQueue = new TerritoryList();
 	visitQueue->Push(continent->head->territory);
 	seen[continent->head->territory->territoryID] = true;
 	while (visitQueue->length > 0) {
@@ -326,7 +322,7 @@ Map& Map::operator= (const Map& map) {
 	if (this == &map) {
 		return *this;
 	}
-	
+
 	//Deallocate currently used memory:
 	//Iterate through territories and delete corresponding edges
 	for (int i = 0; i < territory_count; i++) {
@@ -354,7 +350,7 @@ Map& Map::operator= (const Map& map) {
 	}
 	delete[] continents;
 	continents = nullptr;
-	
+
 	//reallocate new values:
 	this->territory_count = map.territory_count;
 	this->continent_count = map.continent_count;
@@ -402,7 +398,7 @@ Map& Map::operator= (const Map& map) {
 
 
 std::ostream& operator<< (std::ostream& out, const Map& map) {
-	for (int i = 0; i < map.territory_count; i++) {		
+	for (int i = 0; i < map.territory_count; i++) {
 		out << "Territory index " << i << ", ContinentID " << map.territories[i].continentID << ". Connections to: ";
 		Edge* current = map.territories[i].head;
 		while (current != nullptr) {
@@ -538,4 +534,3 @@ TerritoryListNode* TerritoryList::Pop() {
 	head = temp->next;
 	return temp;
 }
-
