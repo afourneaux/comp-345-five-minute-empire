@@ -11,9 +11,9 @@
 #include "BiddingFacility.h"
 
 int main() {
-	TestMap();
-	mapLoaderTest();
-	testPlayer();
+	//TestMap();
+	//mapLoaderTest();
+	//testPlayer();
 	TestCards();
 	TestBiddingFacility();
 
