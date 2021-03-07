@@ -3,6 +3,7 @@
 #include "Cards.h"
 #include "Map.h"
 
+static int Bank = 100;
 // Constants
 const int GAME_TURNS_2_PLAYERS = 11;
 const int GAME_TURNS_3_PLAYERS = 10;

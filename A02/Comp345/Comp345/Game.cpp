@@ -71,7 +71,7 @@ void Game::PlayerTurn(Player* player) {
 	//       Figure out a more elegant solution
 	cin.ignore(INT_MAX, '\n');
 	cin.ignore(INT_MAX, '\n');
-
+	cout << "The number of Coins in the Bank of the game : " << Bank << endl << endl;
 	cout << *hand;
 
 	cout << "You have " << player->getCoins() << " coins." << endl;
@@ -108,6 +108,8 @@ void Game::PlayerTurn(Player* player) {
 	// Pay for the card
 	player->PayCoin(hand->GetCostAtIndex(desiredCardIndex));
 	Card* card = hand->Exchange(desiredCardIndex);
+	Bank -= hand->GetCostAtIndex(desiredCardIndex);
+	cout << "\n Bank : " << Bank << endl;
 
 	cout << *card;
 	// TODO: Add the card to the player object and perform its actions
