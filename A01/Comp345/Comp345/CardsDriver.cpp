@@ -4,6 +4,11 @@
 using namespace std;
 
 int TestCards() {
+	
+	cout <<endl << endl << endl << endl << endl;
+
+	//setShuffel();
+	cout << endl << endl << endl << endl << endl;
 	cout << "XXXXXXXXXXXXXXXXXXXXXXXXXXXXXXX" << endl;
 	cout << "TESTING CARDS CLASS" << endl;
 	cout << "XXXXXXXXXXXXXXXXXXXXXXXXXXXXXXX" << endl;

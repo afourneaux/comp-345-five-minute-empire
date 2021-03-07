@@ -77,10 +77,15 @@ public:
 	Card* Draw();				// Return and remove the first card from the deck
 	Deck& operator= (const Deck& deck);								// Assignment operator
 	friend ostream& operator<< (ostream& out, const Deck& deck);	// Stream insertion operator
+	void setShuffel( int arrShuffel [] );
+
+
 private:
 	void Generate();			// Populate the deck with hard-coded cards
+	
 	Card* cards;				// The contents of the deck
 	int deckIndex;				// The current index representing the top of the deck
+	int Shuffel [11];
 };
 
 class Hand {
