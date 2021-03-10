@@ -10,7 +10,7 @@
 Deck::Deck(int num_player) {
 	deckIndex = 0;
 	Generate(num_player);
-	cout << " start shff";
+	
 	setShuffel(Shuffel , num_player);
 
 }
@@ -32,6 +32,7 @@ Deck::~Deck() {
 // Create the deck and populate it with hardcoded card data
 void Deck::Generate(int num_player)
 {
+//fix
 	if (num_player == 4)
 	{
 		DECK_SIZE += 1;
@@ -194,7 +195,7 @@ void Deck::Generate(int num_player)
 
 	if (num_player >= 3)
 	{
-		cout << endl << "hiiiiiiiiii" << DECK_SIZE << endl;
+		
 		index++;
 		// index 10
 		cards[index].name = "Mountain Treasury";
@@ -228,7 +229,7 @@ void Deck::Generate(int num_player)
 		cards[index].actions[1].action = eAction_BuildCity;
 
 	}
-	cout << "done generate";
+	
 }
 
 // Retrieve the top card and remove it from the deck
@@ -253,26 +254,23 @@ void Deck::setShuffel(int arrShuffel[] ,  int const num_player)
 	}
 	srand(time(NULL));
 	//const int number_of_cards = 11;
-	int* arr = new int[num_player];
+
 
 	if (num_player == 3)
 	{
 		size = 11;
 	}
+
 	srand(time(NULL));
 	//const int number_of_cards = 11;
-	 arr = new int[size];
-	for (size_t a = 0; a < size + 1; a++)
+	 int* arr = new int[size];
+	for (size_t a = 0; a < size ; a++)
 	{
 		arr[a] = a;
 	}
 	random_shuffle(arr, arr + size);
 	Shuffel = arr;
-	//for (size_t i = 0; i < size; i++)
-	//{
-	//	
-	//	Shuffel[i] = arr[i];
-	//}
+
 
 }
 
