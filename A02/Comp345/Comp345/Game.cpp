@@ -8,7 +8,7 @@
 void Game::Setup() {
 	cout << "Press Enter to start!";
 	cin.ignore(INT_MAX, '\n');
-	deck = new Deck();
+	deck = new Deck(3);
 	hand = new Hand(deck);
 	playerCount = 3;	//Better to have this Global
 	players = new Player[playerCount];

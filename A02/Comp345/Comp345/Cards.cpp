@@ -7,10 +7,11 @@
  *******/
 
 // Default constructor
-Deck::Deck() {
+Deck::Deck(int num_player) {
 	deckIndex = 0;
-	Generate();
-	setShuffel(Shuffel);
+	Generate(num_player);
+	cout << " start shff";
+	setShuffel(Shuffel , num_player);
 
 }
 
@@ -29,8 +30,19 @@ Deck::~Deck() {
 }
 
 // Create the deck and populate it with hardcoded card data
-void Deck::Generate()
+void Deck::Generate(int num_player)
 {
+	if (num_player == 4)
+	{
+		DECK_SIZE += 1;
+
+	}
+	else if (num_player>=3)
+	{
+		DECK_SIZE += 1;
+
+	}
+
 	cards = new Card[DECK_SIZE];
 
 	int index = 0;
@@ -179,20 +191,44 @@ void Deck::Generate()
 	cards[index].actions[1].action = eAction_DestroyArmies;
 	cards[index].actions[1].actionValue = 1;
 
-	index++;
-	// index 10
-	cards[index].name = "Mountain Treasury";
-	cards[index].image = "card_mountain_treasury.png";
-	cards[index].actionCount = 1;
-	cards[index].abilityCount = 2;
-	cards[index].abilities = new Ability[2];
-	cards[index].actions = new Action[1];
-	cards[index].abilities[0].type = eAbility_Elixir;
-	cards[index].abilities[0].value = 1;
-	cards[index].abilities[1].type = eAbility_Coins;
-	cards[index].abilities[1].value = 2;
-	cards[index].actions[0].action = eAction_MoveArmies;
-	cards[index].actions[0].actionValue = 3;
+
+	if (num_player >= 3)
+	{
+		cout << endl << "hiiiiiiiiii" << DECK_SIZE << endl;
+		index++;
+		// index 10
+		cards[index].name = "Mountain Treasury";
+		cards[index].image = "card_mountain_treasury.png";
+		cards[index].actionCount = 1;
+		cards[index].abilityCount = 2;
+		cards[index].abilities = new Ability[2];
+		cards[index].actions = new Action[1];
+		cards[index].abilities[0].type = eAbility_Elixir;
+		cards[index].abilities[0].value = 1;
+		cards[index].abilities[1].type = eAbility_Coins;
+		cards[index].abilities[1].value = 2;
+		cards[index].actions[0].action = eAction_MoveArmies;
+		cards[index].actions[0].actionValue = 3;
+	}
+	if (num_player >= 4)
+	{
+		index++;
+		// index 12
+		cards[index].name = "Castle";
+		//cards[index].image = "";
+		cards[index].actionCount = 1;
+		cards[index].abilityCount = 1;
+		cards[index].abilities = new Ability[1];
+		cards[index].actions = new Action[2];
+		cards[index].abilities[0].type = eAbility_Elixir;
+		cards[index].abilities[0].value = 1;
+
+		cards[index].actions[0].action = eAction_MoveArmies;
+		cards[index].actions[0].actionValue = 3;
+		cards[index].actions[1].action = eAction_BuildCity;
+
+	}
+	cout << "done generate";
 }
 
 // Retrieve the top card and remove it from the deck
@@ -208,18 +244,35 @@ Card* Deck::Draw()
 }
 
 //shuffelling the data member, Shuffel[], that contains index of the cards
-void Deck::setShuffel(int arrShuffel[])
+void Deck::setShuffel(int arrShuffel[] ,  int const num_player)
 {
-	srand(time(NULL));
-	const int number_of_cards = 11;
-	int Cards_Index[number_of_cards] = { 0, 1, 2, 3, 4, 5, 6, 7, 8, 9, 10, };
-	random_shuffle(Cards_Index, Cards_Index + 11);
-
-	for (size_t i = 0; i < 11; i++)
+	int size=10;
+	if (num_player ==3)
 	{
-		
-		Shuffel[i] = Cards_Index[i];
+
 	}
+	srand(time(NULL));
+	//const int number_of_cards = 11;
+	int* arr = new int[num_player];
+
+	if (num_player == 3)
+	{
+		size = 11;
+	}
+	srand(time(NULL));
+	//const int number_of_cards = 11;
+	 arr = new int[size];
+	for (size_t a = 0; a < size + 1; a++)
+	{
+		arr[a] = a;
+	}
+	random_shuffle(arr, arr + size);
+	Shuffel = arr;
+	//for (size_t i = 0; i < size; i++)
+	//{
+	//	
+	//	Shuffel[i] = arr[i];
+	//}
 
 }
 

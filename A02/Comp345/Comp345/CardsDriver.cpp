@@ -7,7 +7,7 @@ int TestCards() {
 	cout << "XXXXXXXXXXXXXXXXXXXXXXXXXXXXXXX" << endl;
 	cout << "TESTING CARDS CLASS" << endl;
 	cout << "XXXXXXXXXXXXXXXXXXXXXXXXXXXXXXX" << endl;
-	Deck* deck = new Deck();
+	Deck* deck = new Deck(3);
 	Hand* hand = new Hand(deck);
 	cout << "*******PRINTING DECK CONTENTS*******" << endl;
 	cout << *deck;
