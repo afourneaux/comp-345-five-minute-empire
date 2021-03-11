@@ -96,7 +96,7 @@ int AskForBid(Player* player)
 }
 
 // Compare each player's bid and determine a winner
-int CheckBidWinner(Player* players)
+int CheckBidWinner(Player* players , int NUM_OF_PLAYERS)
 {
 	cout << endl;
 	cout << "  __________________________________________________________" << endl;

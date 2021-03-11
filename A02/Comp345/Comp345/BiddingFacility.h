@@ -11,7 +11,6 @@
 #include "Player.h"
 using namespace std;
 
-const int NUM_OF_PLAYERS = 3;
 
 
 struct Player;
@@ -30,7 +29,7 @@ private:
 };
 
 int AskForBid (Player *player);
-int CheckBidWinner(Player* table);
+int CheckBidWinner(Player* table , int NUM_OF_PLAYERS);
 int TestBiddingFacility();
 
 

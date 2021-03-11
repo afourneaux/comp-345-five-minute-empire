@@ -36,7 +36,7 @@ void Game::Setup() {
 		cout << "Your Bid has been submitted" << endl << endl;
 	}
 	//Winmer Index
-	Player_Starter = CheckBidWinner(players);
+	Player_Starter = CheckBidWinner(players , playerCount);
 	Bank += players[Player_Starter].GetBf()->GetBid();
 	cout << "\n Bank : " << Bank << endl;
 	

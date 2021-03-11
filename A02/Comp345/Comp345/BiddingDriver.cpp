@@ -12,6 +12,7 @@
 
 int TestBiddingFacility()
 {
+	int NUM_OF_PLAYERS = 2;
 	string lastName = "";
 	//Instantiating Test Players
 	Player* table = new Player[NUM_OF_PLAYERS];
@@ -31,7 +32,7 @@ int TestBiddingFacility()
 	for (int i = 0; i < NUM_OF_PLAYERS; i++)
 		table[i].GetBf()->SetBid(AskForBid(&table[i]));
 
-	CheckBidWinner(table);
+	CheckBidWinner(table , NUM_OF_PLAYERS);
 
 	cout << "Testing Bidding Facility Stream insertion" << endl;
 	BiddingFacility* bf = table[0].GetBf();
