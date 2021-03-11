@@ -27,10 +27,14 @@ int AskForBid(Player* player)
 		// Get the next key without displaying it
 		input = _getch();
 		bid[counter] = input;
-		// 2 digit format checking 
-		if (counter > 2 && counter != 13)
+		
+		counter++;
+
+		// 2 digit format checking
+		if (counter > 2 && bid[counter-1] != 13)
 		{
 			cout << endl;
+
 			cout << "Invalid format. please input a two-digit bid (example: input \"03\" instead of \"3\")" << endl;
 			cout << endl;
 			cout << "Try Again" << endl;
@@ -41,7 +45,9 @@ int AskForBid(Player* player)
 			out = AskForBid(player);
 			break;
 		}
-		counter++;
+		
+
+		
 		// When the Enter key is detected
 		if (input == 13)
 		{
