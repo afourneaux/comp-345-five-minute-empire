@@ -33,20 +33,22 @@ Deck::~Deck() {
 void Deck::Generate(int num_player)
 {
 //fix
+
+	int index = -1;
 	if (num_player == 4)
 	{
-		DECK_SIZE += 1;
+		DECK_SIZE = +2;
 
 	}
-	else if (num_player>=3)
+	if (num_player >= 3)
 	{
-		DECK_SIZE += 1;
+		DECK_SIZE += 4;
 
 	}
-
+	cout << " in gennerate num og palyer is  " << num_player << " and deck sixw " << DECK_SIZE << endl;
 	cards = new Card[DECK_SIZE];
 
-	int index = 0;
+	 index++;
 	// index 0
 	cards[index].name = "Dire Dragon";
 	cards[index].image = "card_dire_dragon.png";
@@ -173,31 +175,99 @@ void Deck::Generate(int num_player)
 	cards[index].abilities[0].countSetOnce = false;
 	cards[index].actions[0].action = eAction_BuildCity;
 
+	
 	index++;
 	// index 9
-	cards[index].name = "Mountain Dwarf";
-	cards[index].image = "card_mountain_dwarf.png";
-	cards[index].actionChoice = eChoice_And;
-	cards[index].actionCount = 2;
-	cards[index].abilityCount = 1;
-	cards[index].abilities = new Ability[1];
-	cards[index].actions = new Action[2];
-	cards[index].abilities[0].type = eAbility_VpPerCardName;
-	cards[index].abilities[0].value = 3;
-	cards[index].abilities[0].setTarget = 2;
-	cards[index].abilities[0].setName = "Mountain";
-	cards[index].abilities[0].countSetOnce = true;
-	cards[index].actions[0].action = eAction_PlaceArmies;
-	cards[index].actions[0].actionValue = 2;
-	cards[index].actions[1].action = eAction_DestroyArmies;
-	cards[index].actions[1].actionValue = 1;
+	cards[index].name = "Noble Hills";
 
+	index++;
+	// index 10
+	cards[index].name = "Noble Knight";
+
+	index++;
+	// index 11
+	cards[index].name = "Noble Unicorn";
+
+	index++;
+	// index 12
+	cards[index].name = "Night Hydra";
+
+	index++;
+	// index 13
+	cards[index].name = "Night Village";
+
+	index++;
+	// index 14
+	cards[index].name = "Forest Pixie";
+
+	index++;
+	// index 15
+	cards[index].name = "Stronghold";
+
+
+	index++;
+	// index 16
+	cards[index].name = "Ancient Phoenix";
+
+	index++;
+	// index 17
+	cards[index].name = "Ancient Tree Spirit";
+
+	index++;
+	// index 18
+	cards[index].name = "Ancient Woods";
+
+	index++;
+	// index 19
+	cards[index].name = "Ancient Sage";
+
+
+	index++;
+	// index 20
+	cards[index].name = "Cursed Banshee";
+
+	index++;
+	// index 21
+	cards[index].name = "Cursed Gargoyles";
+
+	index++;
+	// index 22
+	cards[index].name = "Cursed King";
+
+	index++;
+	// index 23
+	cards[index].name = "Cursed Mausolum";
+
+	index++;
+	// index 24
+	cards[index].name = "Cursed Tower";
 
 	if (num_player >= 3)
 	{
+
+		index++;
+		// index 25
+		cards[index].name = "Mountain Dwarf";
+		cards[index].image = "card_mountain_dwarf.png";
+		cards[index].actionChoice = eChoice_And;
+		cards[index].actionCount = 2;
+		cards[index].abilityCount = 1;
+		cards[index].abilities = new Ability[1];
+		cards[index].actions = new Action[2];
+		cards[index].abilities[0].type = eAbility_VpPerCardName;
+		cards[index].abilities[0].value = 3;
+		cards[index].abilities[0].setTarget = 2;
+		cards[index].abilities[0].setName = "Mountain";
+		cards[index].abilities[0].countSetOnce = true;
+		cards[index].actions[0].action = eAction_PlaceArmies;
+		cards[index].actions[0].actionValue = 2;
+		cards[index].actions[1].action = eAction_DestroyArmies;
+		cards[index].actions[1].actionValue = 1;
+
+
 		
 		index++;
-		// index 10
+		// index 26
 		cards[index].name = "Mountain Treasury";
 		cards[index].image = "card_mountain_treasury.png";
 		cards[index].actionCount = 1;
@@ -210,12 +280,36 @@ void Deck::Generate(int num_player)
 		cards[index].abilities[1].value = 2;
 		cards[index].actions[0].action = eAction_MoveArmies;
 		cards[index].actions[0].actionValue = 3;
+
+		index++;
+		// index 27
+		cards[index].name = "Arcane Sphinx";
+
+		index++;
+		// index 28
+		cards[index].name = "Arcane Temple";
 	}
 	if (num_player >= 4)
 	{
 		index++;
-		// index 12
+		// index 29
 		cards[index].name = "Castle";
+		//cards[index].image = "";
+		cards[index].actionCount = 1;
+		cards[index].abilityCount = 1;
+		cards[index].abilities = new Ability[1];
+		cards[index].actions = new Action[2];
+		cards[index].abilities[0].type = eAbility_Elixir;
+		cards[index].abilities[0].value = 1;
+
+		cards[index].actions[0].action = eAction_MoveArmies;
+		cards[index].actions[0].actionValue = 3;
+		cards[index].actions[1].action = eAction_BuildCity;
+
+
+		index++;
+		// index 30 ************
+		cards[index].name = "Castle2";
 		//cards[index].image = "";
 		cards[index].actionCount = 1;
 		cards[index].abilityCount = 1;
@@ -247,21 +341,22 @@ Card* Deck::Draw()
 //shuffelling the data member, Shuffel[], that contains index of the cards
 void Deck::setShuffel(int arrShuffel[] ,  int const num_player)
 {
-	int size=10;
-	if (num_player ==3)
+	int size=25;
+	cout << "num player " << num_player << endl;
+	if (num_player == 4)
 	{
+		size = +2;
+
+	}
+	if (num_player >= 3)
+	{
+		size += 4;
 
 	}
 	srand(time(NULL));
 	//const int number_of_cards = 11;
 
 
-	if (num_player == 3)
-	{
-		size = 11;
-	}
-
-	srand(time(NULL));
 	//const int number_of_cards = 11;
 	 int* arr = new int[size];
 	for (size_t a = 0; a < size ; a++)
@@ -270,6 +365,7 @@ void Deck::setShuffel(int arrShuffel[] ,  int const num_player)
 	}
 	random_shuffle(arr, arr + size);
 	Shuffel = arr;
+
 
 
 }

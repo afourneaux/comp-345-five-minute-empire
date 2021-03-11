@@ -4,7 +4,7 @@
 
 using namespace std;
 
-static int DECK_SIZE = 10;	// The total number of implemented cards in the deck
+static int DECK_SIZE = 25;	// The total number of implemented cards in the deck
 const int HAND_SIZE = 6;	// The number of face-up cards in the hand
 
 struct Player;
