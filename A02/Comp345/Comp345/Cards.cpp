@@ -45,7 +45,7 @@ void Deck::Generate(int num_player)
 		DECK_SIZE += 4;
 
 	}
-	cout << " in gennerate num og palyer is  " << num_player << " and deck sixw " << DECK_SIZE << endl;
+
 	cards = new Card[DECK_SIZE];
 
 	 index++;
@@ -342,7 +342,6 @@ Card* Deck::Draw()
 void Deck::setShuffel(int arrShuffel[] ,  int const num_player)
 {
 	int size=25;
-	cout << "num player " << num_player << endl;
 	if (num_player == 4)
 	{
 		size = +2;
