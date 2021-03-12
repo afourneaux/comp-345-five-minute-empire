@@ -1,21 +1,14 @@
 #include "Cards.h"
 #include <iostream>
-#include <algorithm>
 
 /*******
   DECK
  *******/
 
-// Default constructor
+ // Default constructor
 Deck::Deck() {
 	deckIndex = 0;
 	Generate();
-
-	
-		setShuffel(Shuffel);
-	//}
-
-
 }
 
 // Copy constructor
@@ -38,7 +31,7 @@ void Deck::Generate()
 	cards = new Card[DECK_SIZE];
 
 	int index = 0;
-	// index 0
+
 	cards[index].name = "Dire Dragon";
 	cards[index].image = "card_dire_dragon.png";
 	cards[index].actionChoice = eChoice_And;
@@ -53,7 +46,7 @@ void Deck::Generate()
 	cards[index].actions[1].actionValue = 1;
 
 	index++;
-	// index 1
+
 	cards[index].name = "Dire Eye";
 	cards[index].image = "card_dire_eye.png";
 	cards[index].actionCount = 1;
@@ -65,7 +58,7 @@ void Deck::Generate()
 	cards[index].actions[0].actionValue = 4;
 
 	index++;
-	// index 2
+
 	cards[index].name = "Dire Goblin";
 	cards[index].image = "card_dire_goblin.png";
 	cards[index].actionCount = 1;
@@ -78,7 +71,7 @@ void Deck::Generate()
 	cards[index].actions[0].actionValue = 5;
 
 	index++;
-	// index 3
+
 	cards[index].name = "Dire Ogre";
 	cards[index].image = "card_dire_ogre.png";
 	cards[index].actionCount = 1;
@@ -92,7 +85,7 @@ void Deck::Generate()
 	cards[index].actions[0].actionValue = 2;
 
 	index++;
-	// index 4
+
 	cards[index].name = "Lake";
 	cards[index].image = "card_lake.png";
 	cards[index].actionCount = 2;
@@ -111,7 +104,7 @@ void Deck::Generate()
 	cards[index].actions[1].actionValue = 3;
 
 	index++;
-	// index 5
+
 	cards[index].name = "Forest Elf";
 	cards[index].image = "card_forest_elf.png";
 	cards[index].actionCount = 2;
@@ -126,7 +119,7 @@ void Deck::Generate()
 	cards[index].actions[1].actionValue = 2;
 
 	index++;
-	// index 6
+
 	cards[index].name = "Forest Gnome";
 	cards[index].image = "card_forest_gnome.png";
 	cards[index].actionCount = 1;
@@ -139,7 +132,7 @@ void Deck::Generate()
 	cards[index].actions[0].actionValue = 2;
 
 	index++;
-	// index 7
+
 	cards[index].name = "Forest Tree Town";
 	cards[index].image = "card_forest_tree_town.png";
 	cards[index].actionCount = 1;
@@ -150,7 +143,7 @@ void Deck::Generate()
 	cards[index].actions[0].action = eAction_BuildCity;
 
 	index++;
-	// index 8
+
 	cards[index].name = "Graveyard";
 	cards[index].image = "card_graveyard.png";
 	cards[index].actionCount = 1;
@@ -165,7 +158,7 @@ void Deck::Generate()
 	cards[index].actions[0].action = eAction_BuildCity;
 
 	index++;
-	// index 9
+
 	cards[index].name = "Mountain Dwarf";
 	cards[index].image = "card_mountain_dwarf.png";
 	cards[index].actionChoice = eChoice_And;
@@ -184,7 +177,7 @@ void Deck::Generate()
 	cards[index].actions[1].actionValue = 1;
 
 	index++;
-	// index 10
+
 	cards[index].name = "Mountain Treasury";
 	cards[index].image = "card_mountain_treasury.png";
 	cards[index].actionCount = 1;
@@ -207,62 +200,25 @@ Card* Deck::Draw()
 		cout << "ERROR: Deck::Draw attempting to draw a card from an empty deck" << endl;
 		return nullptr;
 	}
-	int Card_Index_to_Draw;
-	return &cards[  Shuffel[(deckIndex++)] ];
+	return &cards[deckIndex++];
 }
-
-
-
-// suffel the deck
-//10
-//void Deck::
-void Deck::setShuffel(int arrShuffel[])
-{
-	srand(time(NULL));
-	const int number_of_cards = 11;
-	int Cards_Index[number_of_cards] = { 0, 1, 2, 3, 4, 5, 6, 7, 8, 9, 10, };
-	int num_Of_Shuffel_Times;
-	//cout << endl;
-	//cout << "Howmany Times Do you want to Shuffel? ";
-	//cin >> num_Of_Shuffel_Times;
-	
-
-
-		random_shuffle(Cards_Index, Cards_Index + 11);
-
-	
-	
-
-		for (size_t i = 0; i < 11; i++)
-		{
-			cout << "index " << i << " : " << Cards_Index[i] << " " << endl;
-			Shuffel[i] = Cards_Index [i];
-		}
-
-
-		
-	
-
-		
-}
-
 
 // Assignment operator
-//Deck& Deck::operator= (const Deck& deck) {
-//	// Check for self-assignment
-//	if (this == &deck) {
-//		return *this;
-//	}
-//
-//	deckIndex = deck.deckIndex;
-//	cards = new Card[DECK_SIZE];
-//
-//	for (int i = 0; i < DECK_SIZE; i++) {
-//		cards[i] = new Card(deck.cards[i]);
-//	}
-//
-//	return *this;
-//}
+Deck& Deck::operator= (const Deck& deck) {
+	// Check for self-assignment
+	if (this == &deck) {
+		return *this;
+	}
+
+	deckIndex = deck.deckIndex;
+	cards = new Card[DECK_SIZE];
+
+	for (int i = 0; i < DECK_SIZE; i++) {
+		cards[i] = new Card(deck.cards[i]);
+	}
+
+	return *this;
+}
 
 // Stream insertion operator
 ostream& operator<<(ostream& out, const Deck& deck) {
@@ -281,7 +237,7 @@ ostream& operator<<(ostream& out, const Deck& deck) {
   HAND
  *******/
 
-// Default constructor
+ // Default constructor
 Hand::Hand(Deck* newDeck) {
 	deck = newDeck;
 	cards = new Card[HAND_SIZE];
@@ -372,7 +328,7 @@ Hand& Hand::operator= (const Hand& hand) {
   CARD
  *******/
 
-// Default constructor
+ // Default constructor
 Card::Card() {
 	abilityCount = 0;
 	actionCount = 0;
@@ -479,7 +435,7 @@ ostream& operator<<(ostream& out, const Card& card) {
   ACTION
  *******/
 
-// Assignment operator
+ // Assignment operator
 Action& Action::operator= (const Action& newAction) {
 	// Check for self-assignment
 	if (this == &newAction) {
@@ -536,7 +492,7 @@ ostream& operator<<(ostream& out, const Action& action) {
   ABILITY
  *******/
 
-// Assignment operator
+ // Assignment operator
 Ability& Ability::operator= (const Ability& newAbility) {
 	// Check for self-assignment
 	if (this == &newAbility) {
