@@ -6,40 +6,13 @@
 
 // Get number of players, perform bidding, distribute tokens, generate deck
 void Game::Setup() {
-	cout << "Press Enter to start!";
-	cin.ignore(INT_MAX, '\n');
-	deck = new Deck(3);
+	deck = new Deck(2);
 	hand = new Hand(deck);
-	playerCount = 3;	//Better to have this Global
+	playerCount = 3;
 	players = new Player[playerCount];
-
-	cout << "\nThere are " << Bank << " Coins in The Bank For This Game \n";
-
 	for (int i = 0; i < playerCount; i++) {
 		players[i].setLastName("defaultPlayer" + to_string(i + 1));
-		Bank -= 14;
-		cout << "Player " << players[i].GetLastName() << " has Joined" << endl;
-		cout << "\n Bank : " << Bank  <<endl <<endl <<endl;
-
 	}
-	// set up the Bidding
-	cout << endl << "Players for this game are: " << endl;
-	for (int j = 0; j < playerCount; j++) {
-		cout << j + 1 << ". " << players[j].GetLastName() << endl;
-	}
-	cout << endl;
-
-	for (int i = 0; i < playerCount; i++)
-	{
-		cout << "___________________________________________________\n";
-		players[i].GetBf()->SetBid(AskForBid(&players[i]));
-		cout << "Your Bid has been submitted" << endl << endl;
-	}
-	//Winmer Index
-	Player_Starter = CheckBidWinner(players , playerCount);
-	Bank += players[Player_Starter].GetBf()->GetBid();
-	cout << "\n Bank : " << Bank << endl;
-	
 	int* arr = new int[4];
 	arr[0] = 0;
 	arr[1] = 1;
@@ -69,7 +42,8 @@ void Game::Setup() {
 }
 
 void Game::MainLoop() {
-
+	cout << "Press Enter to start!";
+	cin.ignore(INT_MAX, '\n');
 	for (int turn = 0; turn < gameTurns; turn++) {
 		cout << "XXXXXXXXXXXX" << endl;
 		cout << "BEGIN TURN " << turn + 1 << endl;
@@ -77,7 +51,7 @@ void Game::MainLoop() {
 		// Run through each player's turn
 		// TODO: Sort by bid
 		for (int currentPlayer = 0; currentPlayer < playerCount; currentPlayer++) {
-			PlayerTurn(&players[currentPlayer+ Player_Starter]);
+			PlayerTurn(&players[currentPlayer]);
 		}
 	}
 }
@@ -97,7 +71,7 @@ void Game::PlayerTurn(Player* player) {
 	//       Figure out a more elegant solution
 	cin.ignore(INT_MAX, '\n');
 	cin.ignore(INT_MAX, '\n');
-	cout << "The number of Coins in the Bank of the game : " << Bank << endl << endl;
+
 	cout << *hand;
 
 	cout << "You have " << player->getCoins() << " coins." << endl;
@@ -134,9 +108,6 @@ void Game::PlayerTurn(Player* player) {
 	// Pay for the card
 	player->PayCoin(hand->GetCostAtIndex(desiredCardIndex));
 	Card* card = hand->Exchange(desiredCardIndex);
-	Bank += hand->GetCostAtIndex(desiredCardIndex);
-	cout << "\n Bank : " << Bank << endl;
-
 
 	cout << *card;
 	// TODO: Add the card to the player object and perform its actions
