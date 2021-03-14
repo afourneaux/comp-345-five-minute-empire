@@ -20,7 +20,7 @@ int AskForBid(Player* player)
 	char input;
 	int counter = 0;
 	cout << player->GetLastName() << ", please input a two-digit bid (example: input 03 instead of 3)" << endl;
-	cout << "You Currently have 14 Coins to Bid";
+	cout << "You Currently have "<< player->getCoins()<<" Coins to Bid";
 	// Loop until a valid value is input
 	while (true)
 	{
@@ -96,14 +96,14 @@ int AskForBid(Player* player)
 }
 
 // Compare each player's bid and determine a winner
-int CheckBidWinner(Player* players , int NUM_OF_PLAYERS)
+int CheckBidWinner(Player* players , int const numPlayer)
 {
 	cout << endl;
 	cout << "  __________________________________________________________" << endl;
 	cout << endl;
 	int winnerIndex = 0;
 	int winnerBid = -1;
-	for (int i = 0; i < NUM_OF_PLAYERS; i++)
+	for (int i = 0; i < numPlayer; i++)
 	{
 		// Print everyone's name and their bid value
 		cout << "             *================================*" << endl;
@@ -146,86 +146,6 @@ int CheckBidWinner(Player* players , int NUM_OF_PLAYERS)
 	cout << endl;
 	return winnerIndex;
 }
-
-/// <summary>
-/// get Players data  
-/// </summary>
-/// <param name="players_In_Game"> ppl in the game</param>
-/// <returns>vector of Players Obj with theit names , bid and coin</returns>
-//std::vector <Player> askPlayersInfo(std::vector<Player> players_In_Game)
-//{
-//
-//	for (int i = 0; i < NumOfPlayer; i++)
-//	{
-//		std::string name;
-//		int pay;
-//
-//
-//
-//		std::cout << std::endl;
-//		std::cout << "________________________________" << std::endl;
-//		std::cout << "Player" << i << " :" << std::endl;
-//		std::cout << "What is your name?  ";
-//		std::cin >> name;
-//		players_In_Game[i].setPlayer_Name(name);
-//		players_In_Game[i].setCoin(10);
-//		//Player newPlayer(name, 10);
-//		std::cout << std::endl;
-//		std::cout << "How much do you want to bid?  ";
-//		//newPlayer.Treasuary_Report();
-//		players_In_Game[i].Treasuary_Report();
-//		std::cout << std::endl << "in order to be Private  only two digits format will be accepted , for exp : 01 for 1 " << std::endl << std::endl << std::endl;;
-//		pay = ask(players_In_Game[i]);
-//
-//
-//
-//
-//		//std::cin >> pay;
-//
-//		players_In_Game[i].setBid(&pay);
-//		//players_In_Game.push_back(newPlayer);
-//	}
-//
-//	return players_In_Game;
-//}
-/// <summary>
-/// Print The witter
-/// </summary>
-/// <param name="players_In_Game"> players in the game</param>
-//void WhoStart(std::vector<Player> players_In_Game)
-//{
-//	std::cout << std::endl;
-//	std::cout << "  __________________________________________________________" << std::endl;
-//	std::cout << std::endl;
-//	int winner_Index = 0;
-//	int winner_bid = -1;
-//	for (int i = 0; i < NumOfPlayer; i++)
-//	{
-//		//Print everyones name and their bid value
-//		std::cout << "             *================================*" << std::endl;
-//		std::cout << "		" << players_In_Game[i].getPlayer_Name() << " : " << std::endl;
-//		std::cout << "		Bid :   " << players_In_Game[i].getBid() << std::endl;
-//		std::cout << "             ===============================" << std::endl << std::endl;
-//
-//		//find the highest bid
-//		if (players_In_Game[i].getBid() > winner_bid)
-//		{
-//			winner_Index = i;
-//			winner_bid = players_In_Game[i].getBid();
-//		}
-//		//if bid are equal compare names
-//		if (players_In_Game[i].getBid() == winner_bid)
-//		{
-//			if (players_In_Game[i].getPlayer_Name().compare(players_In_Game.at(winner_Index).getPlayer_Name()) < 0)
-//			{
-//				winner_Index = i;
-//				winner_bid = players_In_Game[i].getBid();
-//
-//			}
-//
-//		}
-//
-//	}
 
 BiddingFacility::BiddingFacility() {
 	this->bid = 0;

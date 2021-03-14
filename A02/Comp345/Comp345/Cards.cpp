@@ -6,10 +6,12 @@
   DECK
  *******/
 
-// Default constructor
+
+// constructor
 Deck::Deck(int num_player) {
 	deckIndex = 0;
-	Generate(num_player);
+	CalcSize( num_player);
+	Generate();
 	
 	setShuffel(Shuffel , num_player);
 
@@ -18,9 +20,9 @@ Deck::Deck(int num_player) {
 // Copy constructor
 Deck::Deck(const Deck* deck) {
 	deckIndex = deck->deckIndex;
-	cards = new Card[DECK_SIZE];
+	cards = new Card[size];
 
-	for (int i = 0; i < DECK_SIZE; i++) {
+	for (int i = 0; i < size; i++) {
 		cards[i] = deck->cards[i];
 	}
 }
@@ -29,24 +31,36 @@ Deck::~Deck() {
 	delete[] cards;
 }
 
+void Deck::CalcSize(int num_player)
+{
+	size = 25;
+	if (num_player == 4)
+	{
+		size = 31;
+
+	}
+	if (num_player == 3)
+	{
+		size = 29;
+
+	}
+
+}
+
+int Deck::getSize()
+{
+	return size;
+}
+
 // Create the deck and populate it with hardcoded card data
-void Deck::Generate(int num_player)
+void Deck::Generate()
 {
 //fix
 
 	int index = -1;
-	if (num_player == 4)
-	{
-		DECK_SIZE = +2;
 
-	}
-	if (num_player >= 3)
-	{
-		DECK_SIZE += 4;
 
-	}
-
-	cards = new Card[DECK_SIZE];
+	cards = new Card[size];
 
 	 index++;
 	// index 0
@@ -242,7 +256,7 @@ void Deck::Generate(int num_player)
 	// index 24
 	cards[index].name = "Cursed Tower";
 
-	if (num_player >= 3)
+	if (size > 25)
 	{
 
 		index++;
@@ -289,7 +303,7 @@ void Deck::Generate(int num_player)
 		// index 28
 		cards[index].name = "Arcane Temple";
 	}
-	if (num_player >= 4)
+	if (size > 29)
 	{
 		index++;
 		// index 29
@@ -330,7 +344,7 @@ void Deck::Generate(int num_player)
 Card* Deck::Draw()
 {
 	// If the deck is empty, return a null pointer
-	if (deckIndex == DECK_SIZE) {
+	if (deckIndex == size) {
 		cout << "ERROR: Deck::Draw attempting to draw a card from an empty deck" << endl;
 		return nullptr;
 	}
@@ -341,24 +355,11 @@ Card* Deck::Draw()
 //shuffelling the data member, Shuffel[], that contains index of the cards
 void Deck::setShuffel(int arrShuffel[] ,  int const num_player)
 {
-	int size=25;
-	if (num_player == 4)
-	{
-		size = +2;
 
-	}
-	if (num_player >= 3)
-	{
-		size += 4;
+	//srand(time(NULL));
 
-	}
-	srand(time(NULL));
-	//const int number_of_cards = 11;
-
-
-	//const int number_of_cards = 11;
 	 int* arr = new int[size];
-	for (size_t a = 0; a < size ; a++)
+	for (int a = 0; a < size ; a++)
 	{
 		arr[a] = a;
 	}
@@ -377,22 +378,22 @@ Deck& Deck::operator= (const Deck& deck) {
 	}
 
 	deckIndex = deck.deckIndex;
-	cards = new Card[DECK_SIZE];
+	cards = new Card[size];
 
-	for (int i = 0; i < DECK_SIZE; i++) {
+	for (int i = 0; i < size; i++) {
 		cards[i] = new Card(deck.cards[i]);
 	}
 
 	return *this;
 }
 
-// Stream insertion operator
+ //Stream insertion operator 
 ostream& operator<<(ostream& out, const Deck& deck) {
-	out << "Original deck size: " << DECK_SIZE << endl;
+	out << "Original deck size: " << deck.size << endl;
 	out << "Total cards dealt: " << deck.deckIndex << endl;
-	out << "Cards remaining in the deck: " << DECK_SIZE - deck.deckIndex << endl;
+	out << "Cards remaining in the deck: " << deck.size - deck.deckIndex << endl;
 	out << "Card descriptions:" << endl;
-	for (int i = deck.deckIndex; i < DECK_SIZE; i++) {
+	for (int i = deck.deckIndex; i < deck.size; i++) {
 		out << deck.cards[i];
 		out << endl;
 	}

@@ -4,13 +4,7 @@
 #include "Map.h"
 
 static int Bank = 100;
-const int GAME_TURNS_2_PLAYERS = 11;
-const int GAME_TURNS_3_PLAYERS = 10;
-const int GAME_TURNS_4_PLAYERS = 8;
 
-const int STARTING_COINS_2_PLAYERS = 12;
-const int STARTING_COINS_3_PLAYERS = 11;
-const int STARTING_COINS_4_PLAYERS = 9;
 
 int doBidding(Player* players_In_Game , int numPlayer )
 {
@@ -44,11 +38,13 @@ int doBidding(Player* players_In_Game , int numPlayer )
 	cout << "\n Bank : " << Bank << endl;
 	return Player_Starter;
 }
-void initial_Player_setup(const int starterIndex ,Player* players_In_Game, int numAcctualPayer,   Player* Nutreal_Player, int numNutrealPlayer     ,Map* map, int numTerritory)
+
+// might delete the whole thing about neutrl as i diint find any instructions on assignment
+void initial_Player_setup(const int starterIndex ,Player* players_In_Game, int numAcctualPayer,   Player* Neutral_Player, int numNutrealPlayer     ,Map* map, int numTerritory)
 {
 	//Territory* testLocation;
 	int index = starterIndex;
-	for (size_t i = 0; i < numAcctualPayer; i++)
+	for (int i = 0; i < numAcctualPayer; i++)
 	{
 		int a = (index + i) % numAcctualPayer;
 		cout << endl << players_In_Game[a].GetLastName() << " placed 4 arrmies on the origin" << endl;
@@ -58,20 +54,25 @@ void initial_Player_setup(const int starterIndex ,Player* players_In_Game, int n
 			players_In_Game[a].PlaceNewArmies(testLocation);
 			players_In_Game[a].PlaceNewArmies(testLocation);
 	}
-	cout << endl << Nutreal_Player[0].GetLastName() << " placed 4 arrmies on the origin" << endl;
-	Territory* testLocation = map->GetTerritory(0);
-	Nutreal_Player[0].PlaceNewArmies(testLocation);
-	Nutreal_Player[0].PlaceNewArmies(testLocation);
-	Nutreal_Player[0].PlaceNewArmies(testLocation);
-	Nutreal_Player[0].PlaceNewArmies(testLocation);
-	cout << endl << Nutreal_Player[0].GetLastName() << " placed 4 arrmies on the origin" << endl;
+	if (Neutral_Player != NULL)
+	{
+		cout << endl << Neutral_Player[0].GetLastName() << " placed 4 arrmies on the origin" << endl;
+		Territory* testLocation = map->GetTerritory(0);
+		Neutral_Player[0].PlaceNewArmies(testLocation);
+		Neutral_Player[0].PlaceNewArmies(testLocation);
+		Neutral_Player[0].PlaceNewArmies(testLocation);
+		Neutral_Player[0].PlaceNewArmies(testLocation);
+
+	}
+
+	
 	index = starterIndex;
 	int count=1;
 	while (count <= 10)
 	{
 		cout << "\n*************************  Round " << count<<"  *************************";
 		
-		for (size_t i = 0; i < numAcctualPayer; i++)
+		for (int i = 0; i < numAcctualPayer; i++)
 		{
 			int a = (index + i) % numAcctualPayer;
 			cout << endl << "*_________________________";
@@ -85,7 +86,20 @@ void initial_Player_setup(const int starterIndex ,Player* players_In_Game, int n
 			Territory* testLocation = map->GetTerritory(armyLocarion);
 			players_In_Game[a].PlaceNewArmies(testLocation);
 
+			if (Neutral_Player != NULL && i== (numAcctualPayer-1))
+			{
+				int location = rand() % numTerritory;
+				cout << endl << "*_________________________\n";
+				Territory* testLocation = map->GetTerritory(location);
+				Neutral_Player[0].PlaceNewArmies(testLocation);
+			}
+
+
+
 		}
+
+
+
 		count++;
 
 	}
@@ -95,12 +109,13 @@ void initial_Player_setup(const int starterIndex ,Player* players_In_Game, int n
 
 }
 
-int StartupMain() {
+int main() {
 	cout << " Welcome to The Game " << endl;
 	cout << "Press Enter to start!";
 	cin.ignore(INT_MAX, '\n');
 
-	
+
+	srand(time(NULL));
 	cout << "\n For this assignment supposed to be \"2\" since there arennt any rules given for other numbers of players, most functions will still work anyways " << endl;
 	cout << "How many players ?" << endl;
 	int numOfPlayers;
@@ -110,11 +125,24 @@ int StartupMain() {
 	Hand* hand = new Hand(deck);
 
 	Player* players_In_Game = new Player[numOfPlayers];
-	Player* Nutreal_Player = new Player();
-	Nutreal_Player[0].setLastName("Nutreal_Player");
+	Player* Neutral_Player = NULL;
+
+	//neutral player only in 2 player game
+	if (numOfPlayers ==2)
+	{
+		Neutral_Player = new Player();
+		Neutral_Player[0].setLastName("Neutral_Player");
+
+	}
 	cout << "\nThere are " << Bank << " Coins in The Bank For This Game \n";
 
+
 	int starter_index = doBidding(players_In_Game, numOfPlayers);
+	cout << endl;
+	cout << "Bidding is done Press Enter ro creat a sample map with 4 territors start the player set up to place armies";
+	cin.ignore(INT_MAX, '\n');
+	cin.ignore(INT_MAX, '\n');
+
 
 	//Arbitary Map to test 
 	int* arr = new int[4];
@@ -131,26 +159,19 @@ int StartupMain() {
 	map->AddEdge(2, 3);
 	delete  arr;
 
-	initial_Player_setup(starter_index, players_In_Game, numOfPlayers, Nutreal_Player, 1, map, 4);
+
+
+	initial_Player_setup(starter_index, players_In_Game, numOfPlayers, Neutral_Player, 1, map, 4);
 	
 
-	int gameTurns;
-	if (numOfPlayers == 2) {
-		gameTurns = GAME_TURNS_2_PLAYERS;
-	}
-	if (numOfPlayers == 3) {
-		gameTurns = GAME_TURNS_3_PLAYERS;
-	}
-	if (numOfPlayers == 4) {
-		gameTurns = GAME_TURNS_4_PLAYERS;
-	}
 
-	// DEBUG:
-	gameTurns = 1;
+
 	cout << endl << "++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++"<< endl;
 	cout  << "++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++" << endl;
 	cout  << "++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++" << endl;
-	cout << "\nTest only the first round to see the cards , hand and their value\n";
+	cout << "\nTest only the first round to see the cards , hand and their value\n press enter";
+	cin.ignore(INT_MAX, '\n');
+	cin.ignore(INT_MAX, '\n');
 
 	cout << "The number of Coins in the Bank of the game : " << Bank << endl << endl;
 	cout << *hand;
