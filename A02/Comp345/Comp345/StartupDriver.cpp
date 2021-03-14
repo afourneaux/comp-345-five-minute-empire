@@ -109,7 +109,7 @@ void initial_Player_setup(const int starterIndex ,Player* players_In_Game, int n
 
 }
 
-int main() {
+int StartupMain() {
 	cout << " Welcome to The Game " << endl;
 	cout << "Press Enter to start!";
 	cin.ignore(INT_MAX, '\n');
