@@ -29,7 +29,7 @@ private:
 };
 
 int AskForBid (Player *player);
-int CheckBidWinner(Player* table , int numPlayer);
+int CheckBidWinner(Player* table , int const numPlayer);
 int TestBiddingFacility();
 
 

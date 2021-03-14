@@ -77,7 +77,7 @@ public:
 	Card* Draw();				// Return and remove the first card from the deck
 	Deck& operator= (const Deck& deck);								// Assignment operator
 	friend ostream& operator<< (ostream& out, const Deck& deck);	// Stream insertion operator
-	void setShuffel( int arrShuffel[] , int const num_player);		//Shuffel function that must be used in constructor
+	void setShuffel( int arrShuffel[] );		//Shuffel function that must be used in constructor
 	void CalcSize(int num_player);
 	int getSize();
 private:

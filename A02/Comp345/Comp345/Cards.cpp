@@ -13,7 +13,7 @@ Deck::Deck(int num_player) {
 	CalcSize( num_player);
 	Generate();
 	
-	setShuffel(Shuffel , num_player);
+	setShuffel(Shuffel);
 
 }
 
@@ -353,7 +353,7 @@ Card* Deck::Draw()
 }
 
 //shuffelling the data member, Shuffel[], that contains index of the cards
-void Deck::setShuffel(int arrShuffel[] ,  int const num_player)
+void Deck::setShuffel(int arrShuffel[] )
 {
 
 	//srand(time(NULL));
