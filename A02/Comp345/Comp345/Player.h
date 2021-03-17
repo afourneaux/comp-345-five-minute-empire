@@ -43,7 +43,7 @@ public:
 	Territory* GetTerritory(int id);
 	Cube* HasArmiesToPlace();
 	Disk* HasCitiesToPlace();
-	void PlayerStatus();
+	void PrintPlayerStatus();
 	void UpdateTerritory(Territory* terr);
 	bool Find(Territory* terr);
 	void InitializePlayer();
