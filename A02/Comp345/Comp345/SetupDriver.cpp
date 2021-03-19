@@ -3,6 +3,7 @@
 #include <string>
 #include "MapLoader.h"
 #include "Player.h"
+#include "Cards.h"
 
 using namespace std;
 
@@ -82,39 +83,17 @@ int main() {
 	mapObject->readFile();
 	mapObject->buildMap(mapObject->regions, mapObject->regionsSize, mapObject->players, mapObject->continents);
 
-	//cout << endl;
+	cout << "\nX X X X X X X X X X X X X X X X X X X" << endl;
+	cout << "       INFORMATION ABOUT DECK" << endl;
+	cout << "X X X X X X X X X X X X X X X X X X X\n" << endl;
 
 	//------------------------------------------//
 	//---------- CREATE DECK & HAND ------------//
 	//------------------------------------------//
-	Deck* deck = new Deck();
+	Deck* deck = new Deck(numOfPlayers);
 	Hand* hand = new Hand(deck);
 
-	/*IGNORE
-	vector<Territory*> territories;
-	vector<Cube*> cubes;
-	vector<Disk*> disks;
-	vector <Card*> hand;
-	BiddingFacility* bf;
-	int coins;
-	int armiesLeft;
-
-	territories = table[0].getTerritories();
-	cubes = table[0].getCubes();
-	disks = table[0].getDisks();
-	//hand = table[0].getHand();
-	bf = table[0].GetBf();
-	coins = table[0].getCoins();
-	armiesLeft = table[0].getArmiesLeft();
-
-	table[1].getTerritories();
-	table[1].getCubes();
-	table[1].getDisks();
-	table[1].getHand();
-	table[1].GetBf();
-	table[1].getCoins();
-	table[1].getArmiesLeft();
-	*/
+	cout << "Deck size: " << deck->getSize() << endl; // Display number of cards created
 
 	cout << "\nX X X X X X X X X X X X X X X X X X X" << endl;
 	cout << "      INFORMATION ABOUT PLAYERS" << endl;
@@ -122,18 +101,4 @@ int main() {
 
 	cout << table[0];
 	cout << table[1];
-
-	/*IGNORE
-	std::vector<int> input = territories;
-	print(input);
-	*/
 }
-
-/*IGNORE
-void print(std::vector<int> const& input)
-{
-	for (int i = 0; i < input.size(); i++) {
-		std::cout << input.at(i) << ' ';
-	}
-}
-*/
