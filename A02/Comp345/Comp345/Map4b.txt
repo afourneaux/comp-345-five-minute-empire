@@ -1,0 +1,51 @@
+players
+4
+regions
+20
+continents(indexTerritory,indexContinent)
+0 0
+1 0
+2 0
+3 0
+4 0
+5 0
+6 0
+7 1
+8 1
+9 1
+10 2
+11 2
+12 3
+13 3
+14 3
+15 3
+16 3
+17 4
+18 4
+19 5
+edges(originTerritory,adjacentTerritory)
+0 1 2 .
+1 2 .
+2 3 4 .
+3 5 .
+4 3 5 6 .
+5 6 .
+6 .
+7 8 .
+8 9 .
+9 .
+10 11 .
+11 13 .
+12 13 14 .
+13 14 15 .
+14 .
+15 16 .
+16 .
+17 18 .
+18 19 .
+19 .
+boards(linePerBoard)
+0 1 2 3 4 5 6 .
+7 8 9 .
+10 11 12 13 14 15 16 .
+17 18 19 .
