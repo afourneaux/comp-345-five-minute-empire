@@ -6,7 +6,7 @@
 
 // Get number of players, perform bidding, distribute tokens, generate deck
 void Game::Setup() {
-	deck = new Deck();
+	deck = new Deck(3);
 	hand = new Hand(deck);
 	playerCount = 3;
 	players = new Player[playerCount];

@@ -7,7 +7,7 @@
 
 using namespace std;
 
-int main() {
+int StartupDriver() {
 	//------------------------------------------//
 	//------------- MAP VARIABLES --------------//
 	//------------------------------------------//
@@ -101,4 +101,6 @@ int main() {
 
 	cout << table[0];
 	cout << table[1];
+
+	return 0;
 }
