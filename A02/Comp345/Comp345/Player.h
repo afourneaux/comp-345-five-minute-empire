@@ -9,7 +9,6 @@ using namespace std;
 
 const int STARTING_COINS = 14;
 const int STARTING_ARMIES = 18;
-static vector<Player*> round_table;
 
 class Map;
 struct Card;
@@ -37,12 +36,16 @@ public:
 	bool MoveOverLand(); //Loops through all armies in a territory -> Assigns it a new territory (calculation for movement imissing)
 	bool BuildCity(); // if (player has a city to build and has an army at the destination) -> Build city and return true.
 	bool DestroyArmy();
+	int AndOrAction();
 	bool DoAction(Card* card);
 	Cube* HasArmyAtLocation(int id);
 	Disk* HasCityAtLocation(int id);
 	Territory* GetTerritory(int id);
-	bool HasArmiesToPlace();
-	void PlayerStatus();
+	Cube* HasArmiesToPlace();
+	Disk* HasCitiesToPlace();
+	void PrintPlayerStatus();
+	void UpdateTerritory(Territory* terr);
+	bool Find(Territory* terr);
 	void InitializePlayer();
 
 	//Accessors
@@ -56,7 +59,7 @@ public:
 	int getCoins() const { return coins; };
 	int getArmiesLeft() const { return armiesLeft; };
 	void SetCoins(int amt) { coins = amt; };
-	int GetPos() { return pos; };
+	int GetPosition() { return position; };
 	void setCoins(int amt) { coins = amt; };
 	void setPosition(int pos) { position = pos; };
 
@@ -70,7 +73,6 @@ private:
 	int coins = STARTING_COINS;
 	int armiesLeft = STARTING_ARMIES;
 	int STARTING_REGION_ID = 0;
-	int pos;
 	int position; // the position of the player at the table
 };
 int testPlayer();

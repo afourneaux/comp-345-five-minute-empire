@@ -2,6 +2,7 @@
 #include "Player.h"
 #include "Cards.h"
 #include "Map.h"
+#include <vector>
 
 // Constants
 const int NUM_OF_PLAYERS = 3;
@@ -12,14 +13,12 @@ const int GAME_TURNS_4_PLAYERS = 8;
 const int STARTING_COINS_2_PLAYERS = 12;
 const int STARTING_COINS_3_PLAYERS = 11;
 const int STARTING_COINS_4_PLAYERS = 9;
-vector <Player*> players;
-Map* map;
 
 // Declare custom classes to be used
 struct Player;
 class Deck;
-class Map;
 class Hand;
+class Map;
 
 class Game {
 public:
@@ -28,6 +27,8 @@ public:
 	void GetWinner();					// Calculate the victorious player and congratulate them
 	void PlayerTurn(Player* player);	// Perform the current player's turn
 	~Game();							// Destructor
+	static vector <Player*> players;
+	static Map* map;
 private:
 	Deck* deck;
 	Hand* hand;

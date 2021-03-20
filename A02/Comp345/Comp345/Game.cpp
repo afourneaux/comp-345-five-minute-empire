@@ -4,15 +4,19 @@
 // TODO: Currently, Setup is all hardcoded information. Replace this with
 //       proper setup including user input and map loading
 
+vector <Player*> Game::players; 
+Map* Game::map; 
+
 // Get number of players, perform bidding, distribute tokens, generate deck
 void Game::Setup() {
 	deck = new Deck(3);
 	hand = new Hand(deck);
 	playerCount = 3;
 	for (int i = 0; i < playerCount; i++) {
-		players.push_back(new Player());
-		players.at(i)->setPosition(i);
-		players.at(i)->SetLastName("defaultPlayer" + to_string(i + 1));
+		Player *p = new Player();
+		p->setPosition(i);
+		p->SetLastName("defaultPlayer" + to_string(i + 1));
+		players.push_back(p);
 	}
 	int* arr = new int[4];
 	arr[0] = 0;
@@ -26,8 +30,7 @@ void Game::Setup() {
 	map->AddEdge(1, 3);
 	map->AddEdge(1, 2);
 	map->AddEdge(2, 3);
-	delete arr;
-
+	delete[] arr;
 	if (playerCount == 2) {
 		gameTurns = GAME_TURNS_2_PLAYERS;
 	}
@@ -51,9 +54,10 @@ void Game::MainLoop() {
 		cout << "XXXXXXXXXXXX" << endl;
 		// Run through each player's turn
 		// TODO: Sort by bid
-		for (int currentPlayer = 0; currentPlayer < playerCount; currentPlayer++) {
-			PlayerTurn(players.at(currentPlayer));
-		}
+			for (int currentPlayer = 0; currentPlayer < playerCount; currentPlayer++) {
+				PlayerTurn(players.at(currentPlayer));
+			}
+			cout << "-------------  ROUND " << turn + 1 << "  -------------" << endl;
 	}
 }
 
@@ -109,17 +113,20 @@ void Game::PlayerTurn(Player* player) {
 	// Pay for the card
 	player->PayCoin(hand->GetCostAtIndex(desiredCardIndex));
 	Card* card = hand->Exchange(desiredCardIndex);
-
 	cout << *card;
+	player->DoAction(card);
+	player->PrintPlayerStatus();
 	// TODO: Add the card to the player object and perform its actions
 	// Player.PerformActionOfCard(card) or some equivalent
 	delete card;	// TODO: Delete as part of the player destructor
-}
+}  
 
 // Destructor
 Game::~Game() {
 	delete deck;
 	delete hand;
-	//delete players;
-	delete map;
+	for (int i = 0; i < playerCount; i++) {
+		delete players[i];
+	}
+	delete Game::map;
 }
