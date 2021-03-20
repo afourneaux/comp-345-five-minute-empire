@@ -2,7 +2,7 @@
 #include <iostream>
 #include "MapLoader.h"
 
-extern Game* MasterGame;
+Game* MasterGame;
 
 // Get number of players, perform bidding, distribute tokens, generate deck
 void Game::Setup() {
@@ -49,6 +49,7 @@ void Game::Setup() {
 		cout << "Enter the name of Player " << i + 1 << ": ";
 		cin >> playerName;
 		player->SetLastName(playerName);
+		player->setPosition(i);
 		players.push_back(player);
 	}
 	cout << endl << "Players for this game are: " << endl;
@@ -79,7 +80,7 @@ void Game::Setup() {
 	//------------------------------------------//
 	MapLoader* mapObject = new MapLoader(mapInput);
 	mapObject->readFile();
-	mapObject->buildMap(mapObject->regions, mapObject->regionsSize, mapObject->players, mapObject->continents);
+	map = mapObject->buildMap(mapObject->regions, mapObject->regionsSize, mapObject->players, mapObject->continents);
 
 	cout << "\nX X X X X X X X X X X X X X X X X X X" << endl;
 	cout << "       INFORMATION ABOUT DECK" << endl;
