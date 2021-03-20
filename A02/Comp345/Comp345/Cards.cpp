@@ -7,12 +7,12 @@
  *******/
 
 
- // constructor
+// constructor
 Deck::Deck(int num_player) {
 	deckIndex = 0;
-	CalcSize(num_player);
+	CalcSize( num_player);
 	Generate();
-
+	
 	setShuffel(Shuffel);
 
 }
@@ -55,14 +55,14 @@ int Deck::getSize()
 // Create the deck and populate it with hardcoded card data
 void Deck::Generate()
 {
-	//fix
+//fix
 
 	int index = -1;
 
 
 	cards = new Card[size];
 
-	index++;
+	 index++;
 	// index 0
 	cards[index].name = "Dire Dragon";
 	cards[index].image = "card_dire_dragon.png";
@@ -189,7 +189,7 @@ void Deck::Generate()
 	cards[index].abilities[0].countSetOnce = false;
 	cards[index].actions[0].action = eAction_BuildCity;
 
-
+	
 	index++;
 	// index 9
 	cards[index].name = "Noble Hills";
@@ -279,7 +279,7 @@ void Deck::Generate()
 		cards[index].actions[1].actionValue = 1;
 
 
-
+		
 		index++;
 		// index 26
 		cards[index].name = "Mountain Treasury";
@@ -337,7 +337,7 @@ void Deck::Generate()
 		cards[index].actions[1].action = eAction_BuildCity;
 
 	}
-
+	
 }
 
 // Retrieve the top card and remove it from the deck
@@ -353,13 +353,13 @@ Card* Deck::Draw()
 }
 
 //shuffelling the data member, Shuffel[], that contains index of the cards
-void Deck::setShuffel(int arrShuffel[])
+void Deck::setShuffel(int arrShuffel[] )
 {
 
 	//srand(time(NULL));
 
-	int* arr = new int[size];
-	for (int a = 0; a < size; a++)
+	 int* arr = new int[size];
+	for (int a = 0; a < size ; a++)
 	{
 		arr[a] = a;
 	}
@@ -387,7 +387,7 @@ Deck& Deck::operator= (const Deck& deck) {
 	return *this;
 }
 
-//Stream insertion operator 
+ //Stream insertion operator 
 ostream& operator<<(ostream& out, const Deck& deck) {
 	out << "Original deck size: " << deck.size << endl;
 	out << "Total cards dealt: " << deck.deckIndex << endl;
@@ -404,7 +404,7 @@ ostream& operator<<(ostream& out, const Deck& deck) {
   HAND
  *******/
 
- // Default constructor
+// Default constructor
 Hand::Hand(Deck* newDeck) {
 	deck = newDeck;
 	cards = new Card[HAND_SIZE];
@@ -493,7 +493,7 @@ Hand& Hand::operator= (const Hand& hand) {
   CARD
  *******/
 
- // Default constructor
+// Default constructor
 Card::Card() {
 	abilityCount = 0;
 	actionCount = 0;
@@ -600,7 +600,7 @@ ostream& operator<<(ostream& out, const Card& card) {
   ACTION
  *******/
 
- // Assignment operator
+// Assignment operator
 Action& Action::operator= (const Action& newAction) {
 	// Check for self-assignment
 	if (this == &newAction) {
@@ -657,7 +657,7 @@ ostream& operator<<(ostream& out, const Action& action) {
   ABILITY
  *******/
 
- // Assignment operator
+// Assignment operator
 Ability& Ability::operator= (const Ability& newAbility) {
 	// Check for self-assignment
 	if (this == &newAbility) {

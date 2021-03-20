@@ -20,17 +20,22 @@ int AskForBid(Player* player)
 	char bid[5];
 	char input;
 	int counter = 0;
-	cout << player->GetLastName() << ", please input a two-digit bid (example: input 03 instead of 3)";
+	cout << player->GetLastName() << ", please input a two-digit bid (example: input 03 instead of 3)" << endl;
+	cout << "You Currently have "<< player->getCoins()<<" Coins to Bid";
 	// Loop until a valid value is input
 	while (true)
 	{
 		// Get the next key without displaying it
 		input = _getch();
 		bid[counter] = input;
-		// 2 digit format checking 
-		if (counter > 2 && counter != 13)
+		
+		counter++;
+
+		// 2 digit format checking
+		if (counter > 2 && bid[counter-1] != 13)
 		{
 			cout << endl;
+
 			cout << "Invalid format. please input a two-digit bid (example: input \"03\" instead of \"3\")" << endl;
 			cout << endl;
 			cout << "Try Again" << endl;
@@ -41,7 +46,9 @@ int AskForBid(Player* player)
 			out = AskForBid(player);
 			break;
 		}
-		counter++;
+		
+
+		
 		// When the Enter key is detected
 		if (input == 13)
 		{
@@ -90,14 +97,14 @@ int AskForBid(Player* player)
 }
 
 // Compare each player's bid and determine a winner
-void CheckBidWinner(Player* players)
+int CheckBidWinner(Player* players , int const numPlayer)
 {
 	cout << endl;
 	cout << "  __________________________________________________________" << endl;
 	cout << endl;
 	int winnerIndex = 0;
 	int winnerBid = -1;
-	for (int i = 0; i < 3; i++)
+	for (int i = 0; i < numPlayer; i++)
 	{
 		// Print everyone's name and their bid value
 		cout << "             *================================*" << endl;
@@ -138,7 +145,7 @@ void CheckBidWinner(Player* players)
 	cout << "		********************************" << endl;
 	cout << endl;
 	cout << endl;
-
+	return winnerIndex;
 }
 
 BiddingFacility::BiddingFacility() {

@@ -9,7 +9,7 @@ Map* Game::map;
 
 // Get number of players, perform bidding, distribute tokens, generate deck
 void Game::Setup() {
-	deck = new Deck(3);
+	deck = new Deck(2);
 	hand = new Hand(deck);
 	playerCount = 3;
 	for (int i = 0; i < playerCount; i++) {

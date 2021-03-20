@@ -5,7 +5,7 @@
   DECK
  *******/
 
-// Default constructor
+ // Default constructor
 Deck::Deck() {
 	deckIndex = 0;
 	Generate();
@@ -237,7 +237,7 @@ ostream& operator<<(ostream& out, const Deck& deck) {
   HAND
  *******/
 
-// Default constructor
+ // Default constructor
 Hand::Hand(Deck* newDeck) {
 	deck = newDeck;
 	cards = new Card[HAND_SIZE];
@@ -328,7 +328,7 @@ Hand& Hand::operator= (const Hand& hand) {
   CARD
  *******/
 
-// Default constructor
+ // Default constructor
 Card::Card() {
 	abilityCount = 0;
 	actionCount = 0;
@@ -435,7 +435,7 @@ ostream& operator<<(ostream& out, const Card& card) {
   ACTION
  *******/
 
-// Assignment operator
+ // Assignment operator
 Action& Action::operator= (const Action& newAction) {
 	// Check for self-assignment
 	if (this == &newAction) {
@@ -492,7 +492,7 @@ ostream& operator<<(ostream& out, const Action& action) {
   ABILITY
  *******/
 
-// Assignment operator
+ // Assignment operator
 Ability& Ability::operator= (const Ability& newAbility) {
 	// Check for self-assignment
 	if (this == &newAbility) {

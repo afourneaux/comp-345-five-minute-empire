@@ -6,6 +6,7 @@
 #include "Game.h"
 
 int main() {
+	//testPlayer();
 	Game* game = new Game();
 	game->Setup();
 	game->MainLoop();

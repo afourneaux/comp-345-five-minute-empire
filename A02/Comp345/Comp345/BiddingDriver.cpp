@@ -12,26 +12,27 @@
 
 int TestBiddingFacility()
 {
+	int playerNumber = 2;
 	string lastName = "";
 	//Instantiating Test Players
-	Player* table = new Player[3];
+	Player* table = new Player[playerNumber];
 
 	//Getting last name of players
-	for (int i = 0; i < 3; i++) {
+	for (int i = 0; i < playerNumber; i++) {
 		cout << "Enter the name of Player " << i + 1 << ": ";
 		cin >> lastName;
 		table[i].SetLastName(lastName);
 	}
 	cout << endl << "Players for this game are: " << endl;
-	for (int j = 0; j < 3; j++) {
+	for (int j = 0; j < playerNumber; j++) {
 		cout << j + 1 << ". " << table[j].GetLastName() << endl;
 	}
 	cout << endl;
 
-	for (int i = 0; i < 3; i++)
+	for (int i = 0; i < playerNumber; i++)
 		table[i].GetBf()->SetBid(AskForBid(&table[i]));
 
-	CheckBidWinner(table);
+	CheckBidWinner(table , playerNumber);
 
 	cout << "Testing Bidding Facility Stream insertion" << endl;
 	BiddingFacility* bf = table[0].GetBf();

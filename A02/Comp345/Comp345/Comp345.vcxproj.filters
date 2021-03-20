@@ -37,6 +37,7 @@
       <Filter>Source Files</Filter>
     </ClCompile>
     <ClCompile Include="SetupDriver.cpp">
+    <ClCompile Include="StartupDriver.cpp">
       <Filter>Source Files</Filter>
     </ClCompile>
   </ItemGroup>
