@@ -35,3 +35,5 @@ private:
 	int coinBank;
 	int gameTurns;
 };
+
+int StartupDriver();

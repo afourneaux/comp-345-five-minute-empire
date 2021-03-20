@@ -1,22 +1,28 @@
 #include "Cards.h"
 #include <iostream>
+#include <algorithm>
 
 /*******
   DECK
  *******/
 
-// Default constructor
-Deck::Deck() {
+
+ // constructor
+Deck::Deck(int num_player) {
 	deckIndex = 0;
+	CalcSize(num_player);
 	Generate();
+
+	setShuffel(Shuffel);
+
 }
 
 // Copy constructor
 Deck::Deck(const Deck* deck) {
 	deckIndex = deck->deckIndex;
-	cards = new Card[DECK_SIZE];
+	cards = new Card[size];
 
-	for (int i = 0; i < DECK_SIZE; i++) {
+	for (int i = 0; i < size; i++) {
 		cards[i] = deck->cards[i];
 	}
 }
@@ -25,13 +31,39 @@ Deck::~Deck() {
 	delete[] cards;
 }
 
+void Deck::CalcSize(int num_player)
+{
+	size = 25;
+	if (num_player == 4)
+	{
+		size = 31;
+
+	}
+	if (num_player == 3)
+	{
+		size = 29;
+
+	}
+
+}
+
+int Deck::getSize()
+{
+	return size;
+}
+
 // Create the deck and populate it with hardcoded card data
 void Deck::Generate()
 {
-	cards = new Card[DECK_SIZE];
+	//fix
 
-	int index = 0;
+	int index = -1;
 
+
+	cards = new Card[size];
+
+	index++;
+	// index 0
 	cards[index].name = "Dire Dragon";
 	cards[index].image = "card_dire_dragon.png";
 	cards[index].actionChoice = eChoice_And;
@@ -46,7 +78,7 @@ void Deck::Generate()
 	cards[index].actions[1].actionValue = 1;
 
 	index++;
-
+	// index 1
 	cards[index].name = "Dire Eye";
 	cards[index].image = "card_dire_eye.png";
 	cards[index].actionCount = 1;
@@ -58,7 +90,7 @@ void Deck::Generate()
 	cards[index].actions[0].actionValue = 4;
 
 	index++;
-
+	// index 2
 	cards[index].name = "Dire Goblin";
 	cards[index].image = "card_dire_goblin.png";
 	cards[index].actionCount = 1;
@@ -71,7 +103,7 @@ void Deck::Generate()
 	cards[index].actions[0].actionValue = 5;
 
 	index++;
-
+	// index 3
 	cards[index].name = "Dire Ogre";
 	cards[index].image = "card_dire_ogre.png";
 	cards[index].actionCount = 1;
@@ -85,7 +117,7 @@ void Deck::Generate()
 	cards[index].actions[0].actionValue = 2;
 
 	index++;
-
+	// index 4
 	cards[index].name = "Lake";
 	cards[index].image = "card_lake.png";
 	cards[index].actionCount = 2;
@@ -104,7 +136,7 @@ void Deck::Generate()
 	cards[index].actions[1].actionValue = 3;
 
 	index++;
-
+	// index 5
 	cards[index].name = "Forest Elf";
 	cards[index].image = "card_forest_elf.png";
 	cards[index].actionCount = 2;
@@ -119,7 +151,7 @@ void Deck::Generate()
 	cards[index].actions[1].actionValue = 2;
 
 	index++;
-
+	// index 6
 	cards[index].name = "Forest Gnome";
 	cards[index].image = "card_forest_gnome.png";
 	cards[index].actionCount = 1;
@@ -132,7 +164,7 @@ void Deck::Generate()
 	cards[index].actions[0].actionValue = 2;
 
 	index++;
-
+	// index 7
 	cards[index].name = "Forest Tree Town";
 	cards[index].image = "card_forest_tree_town.png";
 	cards[index].actionCount = 1;
@@ -143,7 +175,7 @@ void Deck::Generate()
 	cards[index].actions[0].action = eAction_BuildCity;
 
 	index++;
-
+	// index 8
 	cards[index].name = "Graveyard";
 	cards[index].image = "card_graveyard.png";
 	cards[index].actionCount = 1;
@@ -157,50 +189,185 @@ void Deck::Generate()
 	cards[index].abilities[0].countSetOnce = false;
 	cards[index].actions[0].action = eAction_BuildCity;
 
-	index++;
-
-	cards[index].name = "Mountain Dwarf";
-	cards[index].image = "card_mountain_dwarf.png";
-	cards[index].actionChoice = eChoice_And;
-	cards[index].actionCount = 2;
-	cards[index].abilityCount = 1;
-	cards[index].abilities = new Ability[1];
-	cards[index].actions = new Action[2];
-	cards[index].abilities[0].type = eAbility_VpPerCardName;
-	cards[index].abilities[0].value = 3;
-	cards[index].abilities[0].setTarget = 2;
-	cards[index].abilities[0].setName = "Mountain";
-	cards[index].abilities[0].countSetOnce = true;
-	cards[index].actions[0].action = eAction_PlaceArmies;
-	cards[index].actions[0].actionValue = 2;
-	cards[index].actions[1].action = eAction_DestroyArmies;
-	cards[index].actions[1].actionValue = 1;
 
 	index++;
+	// index 9
+	cards[index].name = "Noble Hills";
 
-	cards[index].name = "Mountain Treasury";
-	cards[index].image = "card_mountain_treasury.png";
-	cards[index].actionCount = 1;
-	cards[index].abilityCount = 2;
-	cards[index].abilities = new Ability[2];
-	cards[index].actions = new Action[1];
-	cards[index].abilities[0].type = eAbility_Elixir;
-	cards[index].abilities[0].value = 1;
-	cards[index].abilities[1].type = eAbility_Coins;
-	cards[index].abilities[1].value = 2;
-	cards[index].actions[0].action = eAction_MoveArmies;
-	cards[index].actions[0].actionValue = 3;
+	index++;
+	// index 10
+	cards[index].name = "Noble Knight";
+
+	index++;
+	// index 11
+	cards[index].name = "Noble Unicorn";
+
+	index++;
+	// index 12
+	cards[index].name = "Night Hydra";
+
+	index++;
+	// index 13
+	cards[index].name = "Night Village";
+
+	index++;
+	// index 14
+	cards[index].name = "Forest Pixie";
+
+	index++;
+	// index 15
+	cards[index].name = "Stronghold";
+
+
+	index++;
+	// index 16
+	cards[index].name = "Ancient Phoenix";
+
+	index++;
+	// index 17
+	cards[index].name = "Ancient Tree Spirit";
+
+	index++;
+	// index 18
+	cards[index].name = "Ancient Woods";
+
+	index++;
+	// index 19
+	cards[index].name = "Ancient Sage";
+
+
+	index++;
+	// index 20
+	cards[index].name = "Cursed Banshee";
+
+	index++;
+	// index 21
+	cards[index].name = "Cursed Gargoyles";
+
+	index++;
+	// index 22
+	cards[index].name = "Cursed King";
+
+	index++;
+	// index 23
+	cards[index].name = "Cursed Mausolum";
+
+	index++;
+	// index 24
+	cards[index].name = "Cursed Tower";
+
+	if (size > 25)
+	{
+
+		index++;
+		// index 25
+		cards[index].name = "Mountain Dwarf";
+		cards[index].image = "card_mountain_dwarf.png";
+		cards[index].actionChoice = eChoice_And;
+		cards[index].actionCount = 2;
+		cards[index].abilityCount = 1;
+		cards[index].abilities = new Ability[1];
+		cards[index].actions = new Action[2];
+		cards[index].abilities[0].type = eAbility_VpPerCardName;
+		cards[index].abilities[0].value = 3;
+		cards[index].abilities[0].setTarget = 2;
+		cards[index].abilities[0].setName = "Mountain";
+		cards[index].abilities[0].countSetOnce = true;
+		cards[index].actions[0].action = eAction_PlaceArmies;
+		cards[index].actions[0].actionValue = 2;
+		cards[index].actions[1].action = eAction_DestroyArmies;
+		cards[index].actions[1].actionValue = 1;
+
+
+
+		index++;
+		// index 26
+		cards[index].name = "Mountain Treasury";
+		cards[index].image = "card_mountain_treasury.png";
+		cards[index].actionCount = 1;
+		cards[index].abilityCount = 2;
+		cards[index].abilities = new Ability[2];
+		cards[index].actions = new Action[1];
+		cards[index].abilities[0].type = eAbility_Elixir;
+		cards[index].abilities[0].value = 1;
+		cards[index].abilities[1].type = eAbility_Coins;
+		cards[index].abilities[1].value = 2;
+		cards[index].actions[0].action = eAction_MoveArmies;
+		cards[index].actions[0].actionValue = 3;
+
+		index++;
+		// index 27
+		cards[index].name = "Arcane Sphinx";
+
+		index++;
+		// index 28
+		cards[index].name = "Arcane Temple";
+	}
+	if (size > 29)
+	{
+		index++;
+		// index 29
+		cards[index].name = "Castle";
+		//cards[index].image = "";
+		cards[index].actionCount = 1;
+		cards[index].abilityCount = 1;
+		cards[index].abilities = new Ability[1];
+		cards[index].actions = new Action[2];
+		cards[index].abilities[0].type = eAbility_Elixir;
+		cards[index].abilities[0].value = 1;
+
+		cards[index].actions[0].action = eAction_MoveArmies;
+		cards[index].actions[0].actionValue = 3;
+		cards[index].actions[1].action = eAction_BuildCity;
+
+
+		index++;
+		// index 30 ************
+		cards[index].name = "Castle2";
+		//cards[index].image = "";
+		cards[index].actionCount = 1;
+		cards[index].abilityCount = 1;
+		cards[index].abilities = new Ability[1];
+		cards[index].actions = new Action[2];
+		cards[index].abilities[0].type = eAbility_Elixir;
+		cards[index].abilities[0].value = 1;
+
+		cards[index].actions[0].action = eAction_MoveArmies;
+		cards[index].actions[0].actionValue = 3;
+		cards[index].actions[1].action = eAction_BuildCity;
+
+	}
+
 }
 
 // Retrieve the top card and remove it from the deck
 Card* Deck::Draw()
 {
 	// If the deck is empty, return a null pointer
-	if (deckIndex == DECK_SIZE) {
+	if (deckIndex == size) {
 		cout << "ERROR: Deck::Draw attempting to draw a card from an empty deck" << endl;
 		return nullptr;
 	}
-	return &cards[deckIndex++];
+	//Reading the index of cards from Shuffel[] by going through its indexes
+	return &cards[Shuffel[(deckIndex++)]];
+}
+
+//shuffelling the data member, Shuffel[], that contains index of the cards
+void Deck::setShuffel(int arrShuffel[])
+{
+
+	//srand(time(NULL));
+
+	int* arr = new int[size];
+	for (int a = 0; a < size; a++)
+	{
+		arr[a] = a;
+	}
+	random_shuffle(arr, arr + size);
+	Shuffel = arr;
+
+
+
 }
 
 // Assignment operator
@@ -211,22 +378,22 @@ Deck& Deck::operator= (const Deck& deck) {
 	}
 
 	deckIndex = deck.deckIndex;
-	cards = new Card[DECK_SIZE];
+	cards = new Card[size];
 
-	for (int i = 0; i < DECK_SIZE; i++) {
+	for (int i = 0; i < size; i++) {
 		cards[i] = new Card(deck.cards[i]);
 	}
 
 	return *this;
 }
 
-// Stream insertion operator
+//Stream insertion operator 
 ostream& operator<<(ostream& out, const Deck& deck) {
-	out << "Original deck size: " << DECK_SIZE << endl;
+	out << "Original deck size: " << deck.size << endl;
 	out << "Total cards dealt: " << deck.deckIndex << endl;
-	out << "Cards remaining in the deck: " << DECK_SIZE - deck.deckIndex << endl;
+	out << "Cards remaining in the deck: " << deck.size - deck.deckIndex << endl;
 	out << "Card descriptions:" << endl;
-	for (int i = deck.deckIndex; i < DECK_SIZE; i++) {
+	for (int i = deck.deckIndex; i < deck.size; i++) {
 		out << deck.cards[i];
 		out << endl;
 	}
@@ -237,7 +404,7 @@ ostream& operator<<(ostream& out, const Deck& deck) {
   HAND
  *******/
 
-// Default constructor
+ // Default constructor
 Hand::Hand(Deck* newDeck) {
 	deck = newDeck;
 	cards = new Card[HAND_SIZE];
@@ -326,7 +493,7 @@ Hand& Hand::operator= (const Hand& hand) {
   CARD
  *******/
 
-// Default constructor
+ // Default constructor
 Card::Card() {
 	abilityCount = 0;
 	actionCount = 0;
@@ -433,7 +600,7 @@ ostream& operator<<(ostream& out, const Card& card) {
   ACTION
  *******/
 
-// Assignment operator
+ // Assignment operator
 Action& Action::operator= (const Action& newAction) {
 	// Check for self-assignment
 	if (this == &newAction) {
@@ -490,7 +657,7 @@ ostream& operator<<(ostream& out, const Action& action) {
   ABILITY
  *******/
 
-// Assignment operator
+ // Assignment operator
 Ability& Ability::operator= (const Ability& newAbility) {
 	// Check for self-assignment
 	if (this == &newAbility) {

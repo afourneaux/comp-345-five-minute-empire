@@ -4,7 +4,7 @@
 
 using namespace std;
 
-const int DECK_SIZE = 11;	// The total number of implemented cards in the deck
+//static int DECK_SIZE = 25;	// The total number of implemented cards in the deck
 const int HAND_SIZE = 6;	// The number of face-up cards in the hand
 
 struct Player;
@@ -71,16 +71,21 @@ struct Card {
 
 class Deck {
 public:
-	Deck();						// Default constructor
+	Deck(int num_player);						// Default constructor
 	Deck(const Deck* deck);		// Copy constructor
 	~Deck();					// Destructor
 	Card* Draw();				// Return and remove the first card from the deck
 	Deck& operator= (const Deck& deck);								// Assignment operator
 	friend ostream& operator<< (ostream& out, const Deck& deck);	// Stream insertion operator
+	void setShuffel(int arrShuffel[]);		//Shuffel function that must be used in constructor
+	void CalcSize(int num_player);
+	int getSize();
 private:
+	int size;					// size of the deck
 	void Generate();			// Populate the deck with hard-coded cards
 	Card* cards;				// The contents of the deck
 	int deckIndex;				// The current index representing the top of the deck
+	int* Shuffel;			// Array containing the index of the cards In Generate()
 };
 
 class Hand {
