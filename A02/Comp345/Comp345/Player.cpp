@@ -306,28 +306,17 @@ int Player::AndOrAction() {
 //**********
 bool Player::DoAction(Card* card) {
 	bool hasActed = false;
-	int action = 0;
 	int possibleActions = 0;
-	hand.push_back(card); // puts drawn card in the hand of player
-	switch (AndOrAction()) { // if OR -> AndOrAction() returns 0 or 1 depending on user inputs which is the action choosen. If AndOrAction() returns -1 is because we have an AND action
-	case 0:// OR Card - Option 0 chosen
-		action = 0; 
-		possibleActions = 1;
-		break;
-	case 1: // OR Card - Option 1 chosen
-		action = 1;
-		possibleActions = 2;
-		break;
-	case -1: // AND Card - Performs both actions
-		action = 0;
+	hand.push_back(card);						// puts drawn card in the hand of player
+	int choice = AndOrAction();					// Finds out choice of user
+	possibleActions = choice +1;
+	if (card->actionChoice == eChoice_And) {	// AND Card overwrites values
+		choice = 0;
 		possibleActions = card->actionCount;
-		break;
-	default:
-		cout << "Invalid input when trying to do the action." << endl;
 	}
-for (action = 0; action < possibleActions; action++) {
-		for (int i = 0; i < card->actions[action].actionValue; i++) {
-			switch (card->actions[action].action) {
+	for (; choice < possibleActions; choice++) {
+		for (int i = 0; i < card->actions[choice].actionValue; i++) {
+			switch (card->actions[choice].action) {
 			case eAction_BuildCity: BuildCity();
 				break;
 			case eAction_DestroyArmies: DestroyArmy();
