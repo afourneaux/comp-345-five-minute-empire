@@ -2,6 +2,7 @@
 #include "Game.h"
 using namespace std;
 
+extern Game* MasterGame;
 
 Player::Player()
 {
@@ -258,13 +259,13 @@ bool Player::DestroyArmy() {//Checks if friendly & enemy in same location -> Ret
 		battlefieldTerr = GetTerritory(battlefieldTerrId);
 		if (HasArmyAtLocation(battlefieldTerrId) == nullptr) continue;
 		if (battlefieldTerr == nullptr) continue;
-		if (enemy < 0 || enemy >= NUM_OF_PLAYERS) continue;
+		if (enemy < 0 || enemy >= MasterGame->players.size()) continue;
 		if (battlefieldTerr->army_count[enemy] > 0 && battlefieldTerr->army_count[position] > 0) {
-			for (int i = 0; i < Game::players[enemy]->getCubes().size(); i++) {
-				if (Game::players[enemy]->getCubes()[i]->location == battlefieldTerr) {
-					Game::players[enemy]->getCubes()[i]->location = nullptr;
-					Game::players[enemy]->getCubes()[i]->isPlaced = false;
-					cout << Game::players[0]->lastName << " - Army destroyed and now has " << endl;
+			for (int i = 0; i < MasterGame->players[enemy]->getCubes().size(); i++) {
+				if (MasterGame->players[enemy]->getCubes()[i]->location == battlefieldTerr) {
+					MasterGame->players[enemy]->getCubes()[i]->location = nullptr;
+					MasterGame->players[enemy]->getCubes()[i]->isPlaced = false;
+					cout << MasterGame->players[0]->lastName << " - Army destroyed and now has " << endl;
 					UpdateTerritory(battlefieldTerr); // Updating Player
 					battlefieldTerr->removeArmy(enemy); // Updating Map
 					isDestoyed = true;
@@ -305,16 +306,16 @@ int Player::AndOrAction() {
 int Player::ComputeScore() {
 
 	//Calculate the scores for controlled continents + territories
-	int mapScore = Game::map->ComputeMapScore(position);
+	int mapScore = MasterGame->map->ComputeMapScore(position);
 	int score = 0;
-	int player_count = Game::players.size();
+	int player_count = MasterGame->players.size();
 
-	int* elixir_count = new int[Game::players.size()];
+	int* elixir_count = new int[MasterGame->players.size()];
 	for (int i = 0; i < player_count; i++) elixir_count[i] = 0;
 
 	//Loop through each player
 	for (int player_index = 0; player_index < player_count; player_index++) {
-		Player* player = Game::players[player_index];
+		Player* player = MasterGame->players[player_index];
 		vector<Card*> hand = player->getHand();
 		//Loop through each card player owns
 		for (int card_index = 0; card_index < hand.size(); card_index++) {
@@ -450,7 +451,7 @@ Disk* Player::HasCityAtLocation(int id) {
 	return nullptr;
 }
 Territory* Player::GetTerritory(int id) {
-	return Game::map->GetTerritory(id);
+	return MasterGame->map->GetTerritory(id);
 }
 //**********
 //HasArmiesToPlace

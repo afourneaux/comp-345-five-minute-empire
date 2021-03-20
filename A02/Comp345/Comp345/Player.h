@@ -31,10 +31,10 @@ public:
 	Player& operator= (const Player& player);
 	friend std::ostream& operator<<(std::ostream& out, const Player &player);
 	bool PayCoin(int amt);
-	bool PlaceNewArmies();//Loops through all armies and if not placed -> Assigns it a territory
-	bool MoveArmies();//Loops through all armies in a territory -> Assigns it a new territory (calculation for movement imissing)
-	bool MoveOverLand(); //Loops through all armies in a territory -> Assigns it a new territory (calculation for movement imissing)
-	bool BuildCity(); // if (player has a city to build and has an army at the destination) -> Build city and return true.
+	bool PlaceNewArmies();	//Loops through all armies and if not placed -> Assigns it a territory
+	bool MoveArmies();		//Loops through all armies in a territory -> Assigns it a new territory (calculation for movement imissing)
+	bool MoveOverLand();	//Loops through all armies in a territory -> Assigns it a new territory (calculation for movement imissing)
+	bool BuildCity();		// if (player has a city to build and has an army at the destination) -> Build city and return true.
 	bool DestroyArmy();
 	int AndOrAction();
 	bool DoAction(Card* card);

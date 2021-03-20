@@ -11,6 +11,7 @@
 #include <conio.h>
 
 using namespace std;
+extern Game* MasterGame;
 
 // Query the user for their bid, but do not display their input in the window
 int AskForBid(Player* player)
@@ -170,4 +171,28 @@ std::ostream& operator<<(std::ostream& out, const BiddingFacility& bf)
 {
 	out << "Bidding Facility: bid value " << bf.bid << endl;
 	return out;
+}
+
+int BiddingFacility::DoBidding(Player* players, int playerCount)
+{
+	// set up the Bidding
+	cout << endl << "Players for this game are: " << endl;
+	for (int j = 0; j < playerCount; j++) {
+		cout << j + 1 << ". " << players[j].GetLastName() << endl;
+	}
+	cout << endl;
+	cout << endl << "__________________________________________________________________________________";
+	cout << "\n Each Player has " << players[0].getCoins() << " coins \n Players have to place their bid. The winner will pay their bid amount and start the game and have to pay" << endl;
+	for (int i = 0; i < playerCount; i++)
+	{
+		cout << "___________________________________________________\n";
+		players[i].GetBf()->SetBid(AskForBid(&players[i]));
+		cout << "Your bid has been submitted" << endl << endl;
+	}
+	int Player_Starter;
+	//Winner Index
+	Player_Starter = CheckBidWinner(players, playerCount);
+	MasterGame->bank += players[Player_Starter].GetBf()->GetBid();
+	cout << "\nBank : " << MasterGame->bank << endl;
+	return Player_Starter;
 }

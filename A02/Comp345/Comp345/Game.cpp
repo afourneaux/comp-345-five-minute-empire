@@ -2,8 +2,7 @@
 #include <iostream>
 #include "MapLoader.h"
 
-Map* Game::map;
-vector <Player*> Game::players;
+extern Game* MasterGame;
 
 // Get number of players, perform bidding, distribute tokens, generate deck
 void Game::Setup() {
@@ -131,7 +130,7 @@ void Game::MainLoop() {
 
 // TODO: Make use of the Player::ComputeScore() function to determine the winner
 void Game::GetWinner() {
-	int player_count = Game::players.size();
+	int player_count = MasterGame->GetPlayerCount();
 
 	//Compute the final scores for each player
 	int* scores = new int[player_count];
@@ -243,7 +242,11 @@ void Game::PlayerTurn(Player* player) {
 	// TODO: Add the card to the player object and perform its actions
 	// Player.PerformActionOfCard(card) or some equivalent
 	delete card;	// TODO: Delete as part of the player destructor
-}  
+}
+
+int Game::GetPlayerCount() {
+	return players.size();
+}
 
 // Destructor
 Game::~Game() {

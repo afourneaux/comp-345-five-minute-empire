@@ -7,7 +7,7 @@
 static int Bank = 100;
 
 
-int doBidding(Player* players_In_Game , int numPlayer )
+int DoBidding(Player* players_In_Game , int numPlayer )
 {
 
 	for (int i = 0; i < numPlayer; i++) {
@@ -15,7 +15,6 @@ int doBidding(Player* players_In_Game , int numPlayer )
 		Bank -= 14;
 		cout << "Player " << players_In_Game[i].GetLastName() << " has Joined" << endl;
 		cout << "\n Bank : " << Bank << endl << endl << endl;
-
 	}
 
 	// set up the Bidding
@@ -138,7 +137,7 @@ int StartupMain() {
 	cout << "\nThere are " << Bank << " Coins in The Bank For This Game \n";
 
 
-	int starter_index = doBidding(players_In_Game, numOfPlayers);
+	int starter_index = DoBidding(players_In_Game, numOfPlayers);
 	cout << endl;
 	cout << "Bidding is done Press Enter ro creat a sample map with 4 territors start the player set up to place armies";
 	cin.ignore(INT_MAX, '\n');

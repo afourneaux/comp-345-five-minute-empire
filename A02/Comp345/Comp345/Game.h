@@ -4,6 +4,8 @@
 #include "Map.h"
 #include <vector>
 
+using namespace std;
+
 // Constants
 const int NUM_OF_PLAYERS = 3;
 const int GAME_TURNS_2_PLAYERS = 11;
@@ -23,8 +25,10 @@ public:
 	void GetWinner();					// Calculate the victorious player and congratulate them
 	void PlayerTurn(Player* player);	// Perform the current player's turn
 	~Game();							// Destructor
-	static vector <Player*> players;
-	static Map* map;
+	vector<Player*> players;
+	Map* map;
+	int bank;
+	int GetPlayerCount();
 private:
 	Deck* deck;
 	Hand* hand;
@@ -33,4 +37,5 @@ private:
 	int gameTurns;
 };
 
+extern Game* MasterGame;
 int StartupDriver();
