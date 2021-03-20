@@ -4,8 +4,8 @@
 
 using namespace std;
 
-//static int DECK_SIZE = 25;	// The total number of implemented cards in the deck
 const int HAND_SIZE = 6;	// The number of face-up cards in the hand
+const int ELIXIR_BONUS = 2;	// Bonus score awarded for having the most elixirs
 
 struct Player;
 
@@ -71,7 +71,7 @@ struct Card {
 
 class Deck {
 public:
-	Deck(int num_player);						// Default constructor
+	Deck(int num_player);		// Default constructor
 	Deck(const Deck* deck);		// Copy constructor
 	~Deck();					// Destructor
 	Card* Draw();				// Return and remove the first card from the deck
@@ -81,11 +81,11 @@ public:
 	void CalcSize(int num_player);
 	int getSize();
 private:
-	int size;					// size of the deck
+	int size;					// Size of the deck
 	void Generate();			// Populate the deck with hard-coded cards
 	Card* cards;				// The contents of the deck
 	int deckIndex;				// The current index representing the top of the deck
-	int* Shuffel;			// Array containing the index of the cards In Generate()
+	int* Shuffel;				// Array containing the index of the cards In Generate()
 };
 
 class Hand {
@@ -99,8 +99,6 @@ public:
 	Hand& operator= (const Hand& hand);								// Assignment operator
 	friend ostream& operator<< (ostream& out, const Hand& hand);	// Stream insertion operator
 private:
-	Card* cards;										// The content of the hand
+	Card* cards;										// The contents of the hand
 	Deck* deck;											// The associated deck from which to draw cards from
 };
-
-int TestCards();										// The driver to display test information

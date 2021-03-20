@@ -51,7 +51,7 @@ int StartupDriver() {
 	for (int i = 0; i < numOfPlayers; i++) {
 		cout << "Enter the name of Player " << i + 1 << ": ";
 		cin >> playerName;
-		table[i].setLastName(playerName);
+		table[i].SetLastName(playerName);
 	}
 	cout << endl << "Players for this game are: " << endl;
 	for (int j = 0; j < numOfPlayers; j++) {

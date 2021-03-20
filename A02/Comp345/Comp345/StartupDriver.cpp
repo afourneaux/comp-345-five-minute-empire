@@ -1,4 +1,5 @@
 #include <iostream>
+#include <time.h>
 #include "Player.h"
 #include "Cards.h"
 #include "Map.h"
@@ -10,7 +11,7 @@ int doBidding(Player* players_In_Game , int numPlayer )
 {
 
 	for (int i = 0; i < numPlayer; i++) {
-		players_In_Game[i].setLastName("defaultPlayer" + to_string(i + 1));
+		players_In_Game[i].SetLastName("defaultPlayer" + to_string(i + 1));
 		Bank -= 14;
 		cout << "Player " << players_In_Game[i].GetLastName() << " has Joined" << endl;
 		cout << "\n Bank : " << Bank << endl << endl << endl;
@@ -49,19 +50,19 @@ void initial_Player_setup(const int starterIndex ,Player* players_In_Game, int n
 		int a = (index + i) % numAcctualPayer;
 		cout << endl << players_In_Game[a].GetLastName() << " placed 4 arrmies on the origin" << endl;
 			Territory * testLocation = map->GetTerritory(0);
-			players_In_Game[a].PlaceNewArmies(testLocation);
-			players_In_Game[a].PlaceNewArmies(testLocation);
-			players_In_Game[a].PlaceNewArmies(testLocation);
-			players_In_Game[a].PlaceNewArmies(testLocation);
+			players_In_Game[a].PlaceNewArmies();
+			players_In_Game[a].PlaceNewArmies();
+			players_In_Game[a].PlaceNewArmies();
+			players_In_Game[a].PlaceNewArmies();
 	}
 	if (Neutral_Player != NULL)
 	{
 		cout << endl << Neutral_Player[0].GetLastName() << " placed 4 arrmies on the origin" << endl;
 		Territory* testLocation = map->GetTerritory(0);
-		Neutral_Player[0].PlaceNewArmies(testLocation);
-		Neutral_Player[0].PlaceNewArmies(testLocation);
-		Neutral_Player[0].PlaceNewArmies(testLocation);
-		Neutral_Player[0].PlaceNewArmies(testLocation);
+		Neutral_Player[0].PlaceNewArmies();
+		Neutral_Player[0].PlaceNewArmies();
+		Neutral_Player[0].PlaceNewArmies();
+		Neutral_Player[0].PlaceNewArmies();
 
 	}
 
@@ -84,14 +85,14 @@ void initial_Player_setup(const int starterIndex ,Player* players_In_Game, int n
 				cin >> armyLocarion;
 			} while (armyLocarion<0 || armyLocarion >= numTerritory);
 			Territory* testLocation = map->GetTerritory(armyLocarion);
-			players_In_Game[a].PlaceNewArmies(testLocation);
+			players_In_Game[a].PlaceNewArmies();
 
 			if (Neutral_Player != NULL && i== (numAcctualPayer-1))
 			{
 				int location = rand() % numTerritory;
 				cout << endl << "*_________________________\n";
 				Territory* testLocation = map->GetTerritory(location);
-				Neutral_Player[0].PlaceNewArmies(testLocation);
+				Neutral_Player[0].PlaceNewArmies();
 			}
 
 
@@ -131,7 +132,7 @@ int StartupMain() {
 	if (numOfPlayers ==2)
 	{
 		Neutral_Player = new Player();
-		Neutral_Player[0].setLastName("Neutral_Player");
+		Neutral_Player[0].SetLastName("Neutral_Player");
 
 	}
 	cout << "\nThere are " << Bank << " Coins in The Bank For This Game \n";

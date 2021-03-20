@@ -3,6 +3,10 @@
 #include <iostream>
 using namespace std;
 
+Map::Map() {
+
+}
+
 //Initializes all vertices/nodes (ie territories) 
 //territories array parameter: array indexes correspond to territory indexes, the values at each index correspond to the continent ID (territories[0]==1 -> territory 0 belongs to continent 1)
 //Continent IDs are indexed from 0
