@@ -10,10 +10,6 @@ const int GAME_TURNS_2_PLAYERS = 11;
 const int GAME_TURNS_3_PLAYERS = 10;
 const int GAME_TURNS_4_PLAYERS = 8;
 
-const int STARTING_COINS_2_PLAYERS = 12;
-const int STARTING_COINS_3_PLAYERS = 11;
-const int STARTING_COINS_4_PLAYERS = 9;
-
 // Declare custom classes to be used
 struct Player;
 class Deck;

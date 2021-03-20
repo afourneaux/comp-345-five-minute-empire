@@ -1,6 +1,7 @@
 #include "Game.h"
 #include <iostream>
 
+
 // TODO: Currently, Setup is all hardcoded information. Replace this with
 //       proper setup including user input and map loading
 
@@ -63,7 +64,63 @@ void Game::MainLoop() {
 
 // TODO: Make use of the Player::ComputeScore() function to determine the winner
 void Game::GetWinner() {
-	cout << "The real winner here is you." << endl;
+	int player_count = Game::players.size();
+
+	//Compute the final scores for each player
+	int* scores = new int[player_count];
+	for (int i = 0; i < player_count; i++) {
+		scores[i] = Game::players[i]->ComputeScore();
+	}
+
+	int winner_index = -1;
+	int max_score = -1;
+	string tiebreaker = "";
+	bool tie_after_tiebreakers = false;
+	cout << "Calculating winner and processing tiebreakers: " << endl;
+	for (int i = 0; i < player_count; i++) {
+		if (scores[i] > max_score) {
+			winner_index = i;
+			max_score = scores[i];
+			tie_after_tiebreakers = false;
+		}
+		//In the event that two players are tied, proceed to tiebreakers:
+		else if (scores[i] == max_score) {
+			cout << "Players " << winner_index << " and " << i << " are tied. Proceeding to tiebreakers..." << endl;
+			//Tiebreaker 1: player with the most coins
+			tiebreaker = "have the most coins.";
+			if (Game::players[i]->getCoins() > Game::players[winner_index]->getCoins())
+				winner_index = i;
+			else if (Game::players[i]->getCoins() == Game::players[winner_index]->getCoins()) {
+				//Tiebreaker 2: player with the most armies
+				tiebreaker = "have the most armies on the board.";
+				if (Game::players[i]->getArmiesLeft() < Game::players[winner_index]->getArmiesLeft())
+					winner_index = i;
+				else if (Game::players[i]->getArmiesLeft() == Game::players[winner_index]->getArmiesLeft()) {
+					//Tiebreaker 3: player with the most territories
+					tiebreaker = "control the most territories.";
+					if(Game::map->getNumberControlledTerritories(i) > Game::map->getNumberControlledTerritories(winner_index))
+						winner_index = i;
+					else if (Game::map->getNumberControlledTerritories(i) == Game::map->getNumberControlledTerritories(winner_index)) {
+						tie_after_tiebreakers = true;
+					}
+				}
+			}
+			//Print the result of the tiebreaker
+			if (tie_after_tiebreakers) {
+				cout << "Players " << winner_index << " and " << i << " are still tied after tiebreakers." << endl;
+			}
+			else {
+				cout << "Player " << winner_index << " wins the tiebreaker because they " << tiebreaker << endl;
+			}
+		}
+	}
+	if (tie_after_tiebreakers) {
+		cout << "The final score is a tie!" << endl;
+	}
+	else {
+		cout << "And the winner is... Player " << winner_index << "!" << endl;
+	}
+
 }
 
 void Game::PlayerTurn(Player* player) {
