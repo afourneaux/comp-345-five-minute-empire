@@ -46,7 +46,7 @@ Player::Player(const Player* player) {
 }
 // Assignment operator
 Player& Player::operator= (const Player& player) {
-		//Copying armies
+	//Copying armies
 	for (int i = 0; i < player.getCubes().size(); i++) {
 		cubes[i]->isPlaced = player.getCubes()[i]->isPlaced;
 		cubes[i]->location = player.getCubes()[i]->location;
@@ -73,7 +73,7 @@ Player& Player::operator= (const Player& player) {
 }
 
 // Stream insertion operator
-ostream& operator<<(ostream& out, const Player &player) {
+ostream& operator<<(ostream& out, const Player& player) {
 	out << "--- " << player.GetLastName() << " ---" << endl;
 	out << "Coins: " << player.getCoins() << endl;
 	//Army locations
@@ -156,15 +156,15 @@ bool Player::MoveArmies() {
 	while (!hasMoved) {
 		cout << lastName << " - Where would you like to move an army FROM (territory ID)? (-1 to skip action)" << endl;
 		cin >> src;
-		if (src == -1) 
+		if (src == -1)
 			return false;
 		Territory* source = GetTerritory(src);
 		cout << lastName << " - Where would you like to move an army TO (territory ID)? (-1 to skip action)" << endl;
 		cin >> dest;
 		Territory* destination = GetTerritory(dest);
 		Cube* army = HasArmyAtLocation(src);
-		if (army!= nullptr && source->CheckAdjacency(destination)) {
-			army->location = destination; 
+		if (army != nullptr && source->CheckAdjacency(destination)) {
+			army->location = destination;
 			UpdateTerritory(destination); // Updating Player
 			source->removeArmy(position); // Updating Map
 			destination->addArmy(position); // Updating Map
@@ -183,12 +183,12 @@ bool Player::MoveOverLand() {
 	while (!hasMoved) {
 		cout << lastName << " - Where would you like to move an army FROM (territory ID)? (-1 to skip action)" << endl;
 		cin >> src;
-		if (src == -1) 
+		if (src == -1)
 			return false;
 		Territory* source = GetTerritory(src);
 		cout << lastName << " - Where would you like to move an army TO (territory ID)? (-1 to skip action)" << endl;
 		cin >> dest;
-		if (dest == -1) 
+		if (dest == -1)
 			return false;
 		Territory* destination = GetTerritory(dest);
 		Cube* army = HasArmyAtLocation(src);
@@ -207,23 +207,25 @@ bool Player::MoveOverLand() {
 //**********
 bool Player::BuildCity() {
 	bool isBuilt = false;
-	bool hasCity = false;
 	bool hasArmy = false;
-	Disk* city = nullptr;
+	Disk* city = HasCitiesToPlace();
 	int id;
+
+	if (city == nullptr) {
+		cout << lastName << " - You don't have any cities left to place." << endl;
+		return false;
+	}
+
 	while (!isBuilt) {
 		cout << lastName << " - Where would you like to build a city (territory ID)? (-1 to skip action) ";
 		cin >> id;
-		if ( id == -1) 
+		if (id == -1)
 			return false;
 		Territory* city_terr = GetTerritory(id);
 		if (city_terr == nullptr) continue;
-		if (HasCitiesToPlace()) 
-			hasCity = true;
 		if (HasArmyAtLocation(id) != nullptr || id == STARTING_REGION_ID)
 			hasArmy = true;
-		if (hasArmy && hasCity) { // Check if above conditions are met
-			city = HasCitiesToPlace();
+		if (hasArmy) { // Check if above conditions are met
 			city->location = city_terr;
 			city->isBuilt = true;
 			isBuilt = true;
@@ -262,7 +264,7 @@ bool Player::DestroyArmy() {//Checks if friendly & enemy in same location -> Ret
 				if (Game::players[enemy]->getCubes()[i]->location == battlefieldTerr) {
 					Game::players[enemy]->getCubes()[i]->location = nullptr;
 					Game::players[enemy]->getCubes()[i]->isPlaced = false;
-					cout << Game::players[0]->lastName << " - Army destroyed and now has "  << endl;
+					cout << Game::players[0]->lastName << " - Army destroyed and now has " << endl;
 					UpdateTerritory(battlefieldTerr); // Updating Player
 					battlefieldTerr->removeArmy(enemy); // Updating Map
 					isDestoyed = true;
@@ -273,18 +275,20 @@ bool Player::DestroyArmy() {//Checks if friendly & enemy in same location -> Ret
 	}
 	return isDestoyed;
 }
+
+// if OR -> Returns 0 or 1 depending on user inputs which is the action choosen. If AND -> Returns -1 is because we have an AND action
 int Player::AndOrAction() {
 	Card* currentCard = hand.back(); //Last drawn card
 	int choice = -1;
 	string and_or;
 	if (currentCard->actionChoice == eChoice_And) // For nice output
-		and_or = "AND"; 
+		and_or = "AND";
 	if (currentCard->actionChoice == eChoice_Or) // For nice output
 		and_or = "OR";
 	cout << lastName << " - The card you have chosen allows you to " << currentCard->actions[0] << " " << and_or << " " << currentCard->actions[1] << endl;
 	if (currentCard->actionChoice == eChoice_Or) {
 		cout << lastName << " - Since you have the OR card, please choose: " << endl;
-		for (int i = 0; i < currentCard->actionCount; i++) 
+		for (int i = 0; i < currentCard->actionCount; i++)
 			cout << "Press " << i << ":" << currentCard->actions[i] << endl;
 		while (true) {
 			cin >> choice;
@@ -341,7 +345,7 @@ int Player::ComputeScore() {
 						score += (coins / ability->setTarget) * ability->value;
 					}
 				}
-				
+
 			}
 		}
 	}
@@ -380,23 +384,23 @@ bool Player::DoAction(Card* card) {
 	int action = 0;
 	int possibleActions = 0;
 	hand.push_back(card); // puts drawn card in the hand of player
-	switch (AndOrAction()) { // if OR -> AndOrAction() returns 0 or 1 depending on user inputs which is the action choosen. If AndOrAction() returns -1 is because we have an AND action
-	case 0:// OR Card - Option 0 chosen
-		action = 0; 
-		possibleActions = 1;
+	switch (AndOrAction()) { // if OR -> AndOrAction() returns 0 or 1 depending on user inputs which is the action chosen. If AndOrAction() returns -1 is because we have an AND action
+	case 0:		// OR Card - Option 0 chosen
+		action = 0;
+		possibleActions = action + 1;
 		break;
-	case 1: // OR Card - Option 1 chosen
+	case 1:		// OR Card - Option 1 chosen
 		action = 1;
-		possibleActions = 2;
+		possibleActions = action + 1;
 		break;
-	case -1: // AND Card - Performs both actions
+	case -1:	// AND Card - Performs both actions
 		action = 0;
 		possibleActions = card->actionCount;
 		break;
 	default:
 		cout << "Invalid input when trying to do the action." << endl;
 	}
-for (action = 0; action < possibleActions; action++) {
+	for (; action < possibleActions; action++) {
 		for (int i = 0; i < card->actions[action].actionValue; i++) {
 			switch (card->actions[action].action) {
 			case eAction_BuildCity: BuildCity();
@@ -422,8 +426,8 @@ void Player::PrintPlayerStatus() {
 	vector <Territory*> territories = GetTerritories();
 	Territory* terr = nullptr;
 	cout << lastName << " - Start Statistics:" << endl;
-	for (int i=0; i<territories.size(); i++) {
-		 terr = territories[i];
+	for (int i = 0; i < territories.size(); i++) {
+		terr = territories[i];
 		cout << "Territory Id " << terr->territoryID << " has currently " << terr->army_count[position] << " unit(s) of army and " << terr->city_count[position] << " unit(s) of city" << endl;
 	}
 	cout << lastName << " - End Statistics." << endl;
@@ -432,9 +436,9 @@ void Player::PrintPlayerStatus() {
 //HasArmyAtLocation
 //**********
 Cube* Player::HasArmyAtLocation(int id) {
-		for (int i = 0; i< cubes.size(); i++)
-			if (cubes[i]->location != nullptr && cubes[i]->location->territoryID == id)
-				return cubes[i];
+	for (int i = 0; i < cubes.size(); i++)
+		if (cubes[i]->location != nullptr && cubes[i]->location->territoryID == id)
+			return cubes[i];
 	return nullptr;
 }
 //**********

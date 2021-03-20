@@ -10,7 +10,6 @@ void Game::Setup() {
 	//------------------------------------------//
 	//------------- MAP VARIABLES --------------//
 	//------------------------------------------//
-	int numOfPlayers = 2;						// Number of players (2, 3, 4)
 	char mapVersion = 'a';						// Map version (a, b)
 	bool invalid = true;						// true for invalid, false for valid
 	string mapInput;							// Stores the name of the map to be ran
@@ -31,9 +30,9 @@ void Game::Setup() {
 	do {
 		cout << "\n(Number of players must be between 2 and 4)" << endl;
 		cout << "Input number of players and press [ENTER]: ";
-		cin >> numOfPlayers;
-		if (numOfPlayers >= 2) {
-			if (numOfPlayers <= 4) {
+		cin >> playerCount;
+		if (playerCount >= 2) {
+			if (playerCount <= 4) {
 				invalid = false;
 			}
 		}
@@ -46,7 +45,7 @@ void Game::Setup() {
 	//------------------------------------------//
 	Player* player;
 	// Getting player names
-	for (int i = 0; i < numOfPlayers; i++) {
+	for (int i = 0; i < playerCount; i++) {
 		player = new Player();
 		cout << "Enter the name of Player " << i + 1 << ": ";
 		cin >> playerName;
@@ -54,7 +53,7 @@ void Game::Setup() {
 		players.push_back(player);
 	}
 	cout << endl << "Players for this game are: " << endl;
-	for (int j = 0; j < numOfPlayers; j++) {
+	for (int j = 0; j < playerCount; j++) {
 		cout << j + 1 << ". " << players[j]->GetLastName() << endl;
 	}
 
@@ -74,7 +73,7 @@ void Game::Setup() {
 
 	cout << endl;
 
-	mapInput = "Map" + to_string(numOfPlayers) + mapVersion + ".txt";
+	mapInput = "Map" + to_string(playerCount) + mapVersion + ".txt";
 
 	//------------------------------------------//
 	//-------------- CREATE MAP ----------------//
@@ -90,7 +89,7 @@ void Game::Setup() {
 	//------------------------------------------//
 	//---------- CREATE DECK & HAND ------------//
 	//------------------------------------------//
-	deck = new Deck(numOfPlayers);
+	deck = new Deck(playerCount);
 	hand = new Hand(deck);
 
 	cout << "Deck size: " << deck->getSize() << endl; // Display number of cards created
@@ -99,32 +98,9 @@ void Game::Setup() {
 	cout << "      INFORMATION ABOUT PLAYERS" << endl;
 	cout << "X X X X X X X X X X X X X X X X X X X\n" << endl;
 
-	for (int i = 0; i < numOfPlayers; i++) {
-		cout << players[i];
-	}
-	/*
-	deck = new Deck(2);
-	hand = new Hand(deck);
-	playerCount = 3;
 	for (int i = 0; i < playerCount; i++) {
-		Player *p = new Player();
-		p->setPosition(i);
-		p->SetLastName("defaultPlayer" + to_string(i + 1));
-		players.push_back(p);
+		cout << *players[i];
 	}
-	int* arr = new int[4];
-	arr[0] = 0;
-	arr[1] = 1;
-	arr[2] = 1;
-	arr[3] = 0;
-	map = new Map(arr, 4, playerCount, 2);
-	map->AddEdge(0, 1);
-	map->AddEdge(0, 2);
-	map->AddEdge(0, 3);
-	map->AddEdge(1, 3);
-	map->AddEdge(1, 2);
-	map->AddEdge(2, 3);
-	delete[] arr;
 	if (playerCount == 2) {
 		gameTurns = GAME_TURNS_2_PLAYERS;
 	}
@@ -134,13 +110,11 @@ void Game::Setup() {
 	if (playerCount == 4) {
 		gameTurns = GAME_TURNS_4_PLAYERS;
 	}
-
-	// DEBUG:
-	gameTurns = 1;*/
 }
 
 void Game::MainLoop() {
 	cout << "Press Enter to start!";
+	cin.ignore(INT_MAX, '\n');
 	cin.ignore(INT_MAX, '\n');
 	for (int turn = 0; turn < gameTurns; turn++) {
 		cout << "XXXXXXXXXXXX" << endl;
@@ -148,10 +122,10 @@ void Game::MainLoop() {
 		cout << "XXXXXXXXXXXX" << endl;
 		// Run through each player's turn
 		// TODO: Sort by bid
-			for (int currentPlayer = 0; currentPlayer < playerCount; currentPlayer++) {
-				PlayerTurn(players.at(currentPlayer));
-			}
-			cout << "-------------  ROUND " << turn + 1 << "  -------------" << endl;
+		for (int currentPlayer = 0; currentPlayer < playerCount; currentPlayer++) {
+			PlayerTurn(players.at(currentPlayer));
+		}
+		cout << "-------------  ROUND " << turn + 1 << "  -------------" << endl;
 	}
 }
 

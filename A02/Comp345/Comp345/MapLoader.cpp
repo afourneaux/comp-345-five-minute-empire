@@ -85,7 +85,7 @@ void MapLoader::readFile()
 	//--------------------------------------//
 
 	for (i = 0; i < regionsSize; i++) {
-		if (continents < regions[i]) {		// if # of continents < region's continent label
+		if (continents <= regions[i]) {		// if # of continents < region's continent label
 			continents = regions[i] + 1;	// # of continents = continent # + 1 (+1 because it's enumerated by index)
 		}
 	}
