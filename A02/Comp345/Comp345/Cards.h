@@ -7,6 +7,10 @@ using namespace std;
 const int HAND_SIZE = 6;	// The number of face-up cards in the hand
 const int ELIXIR_BONUS = 2;	// Bonus score awarded for having the most elixirs
 
+const int DECK_SIZE_2_PLAYER = 27;
+const int DECK_SIZE_3_PLAYER = 32;
+const int DECK_SIZE_4_PLAYER = 34;
+
 struct Player;
 
 // The different possible actions granted by a card
@@ -78,11 +82,10 @@ public:
 	Deck& operator= (const Deck& deck);								// Assignment operator
 	friend ostream& operator<< (ostream& out, const Deck& deck);	// Stream insertion operator
 	void setShuffel(int arrShuffel[]);		//Shuffel function that must be used in constructor
-	void CalcSize(int num_player);
 	int getSize();
 private:
 	int size;					// Size of the deck
-	void Generate();			// Populate the deck with hard-coded cards
+	void Generate(int num_player);// Populate the deck with hard-coded cards
 	Card* cards;				// The contents of the deck
 	int deckIndex;				// The current index representing the top of the deck
 	int* Shuffel;				// Array containing the index of the cards In Generate()

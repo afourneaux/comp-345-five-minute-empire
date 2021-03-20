@@ -10,8 +10,22 @@
 // constructor
 Deck::Deck(int num_player) {
 	deckIndex = 0;
-	CalcSize( num_player);
-	Generate();
+
+	switch (num_player) {
+	case 2:
+		size = DECK_SIZE_2_PLAYER;
+		break;
+	case 3:
+		size = DECK_SIZE_3_PLAYER;
+		break;
+	case 4:
+		size = DECK_SIZE_4_PLAYER;
+		break;
+	default:
+		cout << "Invalid number of players in deck construction: " << num_player << endl;
+		return;
+	}
+	Generate(num_player);
 	
 	setShuffel(Shuffel);
 
@@ -31,39 +45,17 @@ Deck::~Deck() {
 	delete[] cards;
 }
 
-void Deck::CalcSize(int num_player)
-{
-	size = 25;
-	if (num_player == 4)
-	{
-		size = 31;
-
-	}
-	if (num_player == 3)
-	{
-		size = 29;
-
-	}
-
-}
-
 int Deck::getSize()
 {
 	return size;
 }
 
 // Create the deck and populate it with hardcoded card data
-void Deck::Generate()
+void Deck::Generate(int num_player)
 {
-//fix
-
-	int index = -1;
-
-
+	int index = 0;
 	cards = new Card[size];
 
-	 index++;
-	// index 0
 	cards[index].name = "Dire Dragon";
 	cards[index].image = "card_dire_dragon.png";
 	cards[index].actionChoice = eChoice_And;
@@ -76,9 +68,8 @@ void Deck::Generate()
 	cards[index].actions[0].actionValue = 3;
 	cards[index].actions[1].action = eAction_DestroyArmies;
 	cards[index].actions[1].actionValue = 1;
-
 	index++;
-	// index 1
+
 	cards[index].name = "Dire Eye";
 	cards[index].image = "card_dire_eye.png";
 	cards[index].actionCount = 1;
@@ -88,9 +79,8 @@ void Deck::Generate()
 	cards[index].abilities[0].type = eAbility_Flying;
 	cards[index].actions[0].action = eAction_PlaceArmies;
 	cards[index].actions[0].actionValue = 4;
-
 	index++;
-	// index 2
+
 	cards[index].name = "Dire Goblin";
 	cards[index].image = "card_dire_goblin.png";
 	cards[index].actionCount = 1;
@@ -101,9 +91,8 @@ void Deck::Generate()
 	cards[index].abilities[0].value = 1;
 	cards[index].actions[0].action = eAction_MoveArmies;
 	cards[index].actions[0].actionValue = 5;
-
 	index++;
-	// index 3
+
 	cards[index].name = "Dire Ogre";
 	cards[index].image = "card_dire_ogre.png";
 	cards[index].actionCount = 1;
@@ -115,9 +104,8 @@ void Deck::Generate()
 	cards[index].abilities[0].setTarget = 3;
 	cards[index].actions[0].action = eAction_MoveArmies;
 	cards[index].actions[0].actionValue = 2;
-
 	index++;
-	// index 4
+
 	cards[index].name = "Lake";
 	cards[index].image = "card_lake.png";
 	cards[index].actionCount = 2;
@@ -134,9 +122,8 @@ void Deck::Generate()
 	cards[index].actions[0].actionValue = 2;
 	cards[index].actions[1].action = eAction_MoveArmies;
 	cards[index].actions[1].actionValue = 3;
-
 	index++;
-	// index 5
+
 	cards[index].name = "Forest Elf";
 	cards[index].image = "card_forest_elf.png";
 	cards[index].actionCount = 2;
@@ -149,9 +136,8 @@ void Deck::Generate()
 	cards[index].actions[0].actionValue = 3;
 	cards[index].actions[1].action = eAction_MoveArmies;
 	cards[index].actions[1].actionValue = 2;
-
 	index++;
-	// index 6
+
 	cards[index].name = "Forest Gnome";
 	cards[index].image = "card_forest_gnome.png";
 	cards[index].actionCount = 1;
@@ -162,9 +148,8 @@ void Deck::Generate()
 	cards[index].abilities[0].value = 3;
 	cards[index].actions[0].action = eAction_MoveArmies;
 	cards[index].actions[0].actionValue = 2;
-
 	index++;
-	// index 7
+
 	cards[index].name = "Forest Tree Town";
 	cards[index].image = "card_forest_tree_town.png";
 	cards[index].actionCount = 1;
@@ -173,9 +158,9 @@ void Deck::Generate()
 	cards[index].actions = new Action[1];
 	cards[index].abilities[0].type = eAbility_PlusOneMove;
 	cards[index].actions[0].action = eAction_BuildCity;
-
+	cards[index].actions[0].actionValue = 1;
 	index++;
-	// index 8
+
 	cards[index].name = "Graveyard";
 	cards[index].image = "card_graveyard.png";
 	cards[index].actionCount = 1;
@@ -188,79 +173,65 @@ void Deck::Generate()
 	cards[index].abilities[0].setName = "Cursed";
 	cards[index].abilities[0].countSetOnce = false;
 	cards[index].actions[0].action = eAction_BuildCity;
-
-	
+	cards[index].actions[0].actionValue = 1;
 	index++;
-	// index 9
+
 	cards[index].name = "Noble Hills";
-
 	index++;
-	// index 10
+
 	cards[index].name = "Noble Knight";
-
 	index++;
-	// index 11
+
 	cards[index].name = "Noble Unicorn";
-
 	index++;
-	// index 12
+
 	cards[index].name = "Night Hydra";
-
 	index++;
-	// index 13
+
 	cards[index].name = "Night Village";
-
 	index++;
-	// index 14
+
 	cards[index].name = "Forest Pixie";
-
 	index++;
-	// index 15
+
 	cards[index].name = "Stronghold";
-
-
 	index++;
-	// index 16
+
 	cards[index].name = "Ancient Phoenix";
-
 	index++;
-	// index 17
+
 	cards[index].name = "Ancient Tree Spirit";
-
 	index++;
-	// index 18
+
 	cards[index].name = "Ancient Woods";
-
 	index++;
-	// index 19
+
 	cards[index].name = "Ancient Sage";
-
-
 	index++;
-	// index 20
+
 	cards[index].name = "Cursed Banshee";
-
 	index++;
-	// index 21
+
 	cards[index].name = "Cursed Gargoyles";
-
 	index++;
-	// index 22
+
 	cards[index].name = "Cursed King";
-
 	index++;
-	// index 23
+
 	cards[index].name = "Cursed Mausolum";
-
 	index++;
-	// index 24
+
 	cards[index].name = "Cursed Tower";
+	index++;
 
-	if (size > 25)
+	cards[index].name = "Dire Giant";
+	index++;
+
+	cards[index].name = "Night Wizard";
+	index++;
+
+	if (num_player >= 3)
 	{
-
-		index++;
-		// index 25
 		cards[index].name = "Mountain Dwarf";
 		cards[index].image = "card_mountain_dwarf.png";
 		cards[index].actionChoice = eChoice_And;
@@ -277,11 +248,8 @@ void Deck::Generate()
 		cards[index].actions[0].actionValue = 2;
 		cards[index].actions[1].action = eAction_DestroyArmies;
 		cards[index].actions[1].actionValue = 1;
-
-
-		
 		index++;
-		// index 26
+
 		cards[index].name = "Mountain Treasury";
 		cards[index].image = "card_mountain_treasury.png";
 		cards[index].actionCount = 1;
@@ -294,50 +262,52 @@ void Deck::Generate()
 		cards[index].abilities[1].value = 2;
 		cards[index].actions[0].action = eAction_MoveArmies;
 		cards[index].actions[0].actionValue = 3;
-
 		index++;
-		// index 27
+
 		cards[index].name = "Arcane Sphinx";
-
 		index++;
-		// index 28
+
 		cards[index].name = "Arcane Temple";
+		index++;
+
+		cards[index].name = "Arcane Manticore";
+		index++;
 	}
-	if (size > 29)
+
+	if (num_player >= 4)
 	{
-		index++;
-		// index 29
 		cards[index].name = "Castle";
-		//cards[index].image = "";
+		cards[index].image = "card_castle.png";
 		cards[index].actionCount = 1;
 		cards[index].abilityCount = 1;
 		cards[index].abilities = new Ability[1];
 		cards[index].actions = new Action[2];
 		cards[index].abilities[0].type = eAbility_Elixir;
 		cards[index].abilities[0].value = 1;
-
 		cards[index].actions[0].action = eAction_MoveArmies;
 		cards[index].actions[0].actionValue = 3;
 		cards[index].actions[1].action = eAction_BuildCity;
-
-
+		cards[index].actions[1].actionValue = 1;
 		index++;
-		// index 30 ************
-		cards[index].name = "Castle2";
-		//cards[index].image = "";
+
+		cards[index].name = "Castle";
+		cards[index].image = "card_castle.png";
 		cards[index].actionCount = 1;
 		cards[index].abilityCount = 1;
 		cards[index].abilities = new Ability[1];
 		cards[index].actions = new Action[2];
 		cards[index].abilities[0].type = eAbility_Elixir;
 		cards[index].abilities[0].value = 1;
-
 		cards[index].actions[0].action = eAction_MoveArmies;
 		cards[index].actions[0].actionValue = 3;
 		cards[index].actions[1].action = eAction_BuildCity;
-
+		cards[index].actions[1].actionValue = 1;
+		index++;
 	}
-	
+
+	if (size != index) {
+		cout << "WARNING: Actual deck size does not match the expected value. Expected: " << size << " Actual: " << index << endl;
+	}
 }
 
 // Retrieve the top card and remove it from the deck
@@ -345,7 +315,6 @@ Card* Deck::Draw()
 {
 	// If the deck is empty, return a null pointer
 	if (deckIndex == size) {
-		cout << "ERROR: Deck::Draw attempting to draw a card from an empty deck" << endl;
 		return nullptr;
 	}
 	//Reading the index of cards from Shuffel[] by going through its indexes
@@ -433,6 +402,10 @@ Hand::~Hand() {
 Card* Hand::Exchange(const int index)
 {
 	int cost = GetCostAtIndex(index);
+	if (&cards[index] == nullptr) {
+		cout << "ERROR: Trying to exchange with an empty card slot" << endl;
+		return nullptr;
+	}
 	Card* card = new Card(&cards[index]);
 	// Shift each card down one on the track
 	for (int i = index; i < HAND_SIZE - 1; i++) {
@@ -467,6 +440,9 @@ int Hand::GetCostAtIndex(const int index) const
 // Stream insertion operator
 ostream& operator<<(ostream& out, const Hand& hand) {
 	for (int i = 0; i < HAND_SIZE; i++) {
+		if (hand.GetCardAtIndex(i) == nullptr) {
+			continue;
+		}
 		out << "SLOT " << i << endl;
 		out << "Card cost: " << hand.GetCostAtIndex(i) << endl;
 		out << *hand.GetCardAtIndex(i) << endl;

@@ -98,7 +98,7 @@ int AskForBid(Player* player)
 }
 
 // Compare each player's bid and determine a winner
-int CheckBidWinner(Player* players , int const numPlayer)
+int CheckBidWinner(vector<Player*> players , int const numPlayer)
 {
 	cout << endl;
 	cout << "  __________________________________________________________" << endl;
@@ -109,23 +109,23 @@ int CheckBidWinner(Player* players , int const numPlayer)
 	{
 		// Print everyone's name and their bid value
 		cout << "             *================================*" << endl;
-		cout << "		" << players[i].GetLastName() << " : " << endl;
-		cout << "		Bid :   " << players[i].GetBf()->GetBid() << endl;
+		cout << "		" << players[i]->GetLastName() << " : " << endl;
+		cout << "		Bid :   " << players[i]->GetBf()->GetBid() << endl;
 		cout << "             ===============================" << endl << endl;
 
 		// Find the highest bid
-		if (players[i].GetBf()->GetBid() > winnerBid)
+		if (players[i]->GetBf()->GetBid() > winnerBid)
 		{
 			winnerIndex = i;
-			winnerBid = players[i].GetBf()->GetBid();
+			winnerBid = players[i]->GetBf()->GetBid();
 		}
 		// Break ties by last name
-		if (players[i].GetBf()->GetBid() == winnerBid)
+		if (players[i]->GetBf()->GetBid() == winnerBid)
 		{
-			if (players[i].GetLastName().compare(players[winnerIndex].GetLastName()) < 0)
+			if (players[i]->GetLastName().compare(players[winnerIndex]->GetLastName()) < 0)
 			{
 				winnerIndex = i;
-				winnerBid = players[i].GetBf()->GetBid();
+				winnerBid = players[i]->GetBf()->GetBid();
 			}
 		}
 	}
@@ -135,11 +135,11 @@ int CheckBidWinner(Player* players , int const numPlayer)
 	cout << "		        ****************" << endl;
 	cout << "		            ********" << endl;
 	cout << endl;
-	cout << "		         " << players[winnerIndex].GetLastName() << " won the bid " << endl;
-	cout << "		            Bid :   " << players[winnerIndex].GetBf()->GetBid() << endl;
+	cout << "		         " << players[winnerIndex]->GetLastName() << " won the bid " << endl;
+	cout << "		            Bid :   " << players[winnerIndex]->GetBf()->GetBid() << endl;
 	cout << endl;
-	int winningBid = players[winnerIndex].GetBf()->GetBid();
-	players[winnerIndex].PayCoin(winningBid);
+	int winningBid = players[winnerIndex]->GetBf()->GetBid();
+	players[winnerIndex]->PayCoin(winningBid);
 	cout << endl;
 	cout << "		            ********" << endl;
 	cout << "		        ****************" << endl;
@@ -173,26 +173,26 @@ std::ostream& operator<<(std::ostream& out, const BiddingFacility& bf)
 	return out;
 }
 
-int BiddingFacility::DoBidding(Player* players, int playerCount)
+int BiddingFacility::DoBidding(vector<Player*> players, int playerCount)
 {
 	// set up the Bidding
 	cout << endl << "Players for this game are: " << endl;
 	for (int j = 0; j < playerCount; j++) {
-		cout << j + 1 << ". " << players[j].GetLastName() << endl;
+		cout << j + 1 << ". " << players[j]->GetLastName() << endl;
 	}
 	cout << endl;
 	cout << endl << "__________________________________________________________________________________";
-	cout << "\n Each Player has " << players[0].getCoins() << " coins \n Players have to place their bid. The winner will pay their bid amount and start the game and have to pay" << endl;
+	cout << "\n Each Player has " << players[0]->getCoins() << " coins \n Players have to place their bid. The winner will pay their bid amount and start the game and have to pay" << endl;
 	for (int i = 0; i < playerCount; i++)
 	{
 		cout << "___________________________________________________\n";
-		players[i].GetBf()->SetBid(AskForBid(&players[i]));
+		players[i]->GetBf()->SetBid(AskForBid(players.at(i)));
 		cout << "Your bid has been submitted" << endl << endl;
 	}
 	int Player_Starter;
 	//Winner Index
 	Player_Starter = CheckBidWinner(players, playerCount);
-	MasterGame->bank += players[Player_Starter].GetBf()->GetBid();
+	MasterGame->bank += players[Player_Starter]->GetBf()->GetBid();
 	cout << "\nBank : " << MasterGame->bank << endl;
 	return Player_Starter;
 }

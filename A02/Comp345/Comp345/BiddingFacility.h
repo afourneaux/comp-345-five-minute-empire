@@ -16,7 +16,7 @@ using namespace std;
 struct Player;
 class Game;
 
-class BiddingFacility{
+class BiddingFacility {
 public:
 	int GetBid() { return bid; };
 	void SetBid(int bidding) { bid = bidding; };
@@ -24,12 +24,12 @@ public:
 	BiddingFacility(BiddingFacility* bf);
 	BiddingFacility& operator= (const BiddingFacility& bf);				// Assignment operator
 	friend std::ostream& operator<< (std::ostream& out, const BiddingFacility& bf); // Stream insertion operator
-	static int DoBidding(Player* players, int playerCount);
+	static int DoBidding(vector<Player*> players, int playerCount);
 private:
 	int bid;
 };
 
-int AskForBid (Player *player);
-int CheckBidWinner(Player* table , int const numPlayer);
+int AskForBid(Player* player);
+int CheckBidWinner(vector<Player*> table, int const numPlayer);
 
 

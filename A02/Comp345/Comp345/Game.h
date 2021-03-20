@@ -7,8 +7,7 @@
 using namespace std;
 
 // Constants
-const int NUM_OF_PLAYERS = 3;
-const int GAME_TURNS_2_PLAYERS = 11;
+const int GAME_TURNS_2_PLAYERS = 13;
 const int GAME_TURNS_3_PLAYERS = 10;
 const int GAME_TURNS_4_PLAYERS = 8;
 

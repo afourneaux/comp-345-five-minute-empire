@@ -116,16 +116,18 @@ void Game::MainLoop() {
 	cout << "Press Enter to start!";
 	cin.ignore(INT_MAX, '\n');
 	cin.ignore(INT_MAX, '\n');
+
+	int startingPlayer = BiddingFacility::DoBidding(players, playerCount);
+
 	for (int turn = 0; turn < gameTurns; turn++) {
 		cout << "XXXXXXXXXXXX" << endl;
-		cout << "BEGIN TURN " << turn + 1 << endl;
+		cout << "BEGIN ROUND " << turn + 1 << endl;
 		cout << "XXXXXXXXXXXX" << endl;
 		// Run through each player's turn
 		// TODO: Sort by bid
-		for (int currentPlayer = 0; currentPlayer < playerCount; currentPlayer++) {
-			PlayerTurn(players.at(currentPlayer));
+		for (int currentPlayer = startingPlayer; currentPlayer < playerCount + startingPlayer; currentPlayer++) {
+			PlayerTurn(players.at(currentPlayer % playerCount));
 		}
-		cout << "-------------  ROUND " << turn + 1 << "  -------------" << endl;
 	}
 }
 
@@ -207,6 +209,9 @@ void Game::PlayerTurn(Player* player) {
 	cout << "Please select a card to draw:" << endl;
 	for (int handIndex = 0; handIndex < HAND_SIZE; handIndex++) {
 		Card* cardAtIndex = hand->GetCardAtIndex(handIndex);
+		if (cardAtIndex == nullptr) {
+			continue;
+		}
 		cout << handIndex << ". \"" << cardAtIndex->name << "\" (" << hand->GetCostAtIndex(handIndex) << " coins)" << endl;
 	}
 
@@ -229,7 +234,12 @@ void Game::PlayerTurn(Player* player) {
 				cout << "You cannot afford this card. You have " << player->getCoins() << " coins." << endl;
 			}
 			else {
-				validCardIndex = true;
+				if (hand->GetCardAtIndex(desiredCardIndex) == nullptr) {
+					cout << "No card exists in space " << desiredCardIndex << endl;
+				}
+				else {
+					validCardIndex = true;
+				}
 			}
 		}
 	}

@@ -265,10 +265,10 @@ bool Player::DestroyArmy() {//Checks if friendly & enemy in same location -> Ret
 				if (MasterGame->players[enemy]->getCubes()[i]->location == battlefieldTerr) {
 					MasterGame->players[enemy]->getCubes()[i]->location = nullptr;
 					MasterGame->players[enemy]->getCubes()[i]->isPlaced = false;
-					cout << MasterGame->players[0]->lastName << " - Army destroyed and now has " << endl;
 					UpdateTerritory(battlefieldTerr); // Updating Player
 					battlefieldTerr->removeArmy(enemy); // Updating Map
 					isDestoyed = true;
+					cout << MasterGame->players[enemy]->lastName << " - Army destroyed and now has " << battlefieldTerr->army_count[enemy] << endl;
 					break;
 				}
 			}
