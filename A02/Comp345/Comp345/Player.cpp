@@ -323,15 +323,19 @@ int Player::ComputeScore() {
 			for (int ability_index = 0; ability_index < hand[card_index]->abilityCount; ability_index++) {
 				Ability* ability = &hand[card_index]->abilities[ability_index];
 				//count the number of elixirs each player owns
-				if (ability->type == eAbility_Elixir)
-					elixir_count[player_index]++;
+				if (ability->type == eAbility_Elixir) {
+					if (player == this) cout << "Card " << hand[card_index]->name << " has " << ability->value << " Elixirs" << endl;
+					elixir_count[player_index] += ability->value;
+				}
 				//If the player iteration matches the calling player, compute scores from other points-giving cards
 				if (player == this) {
 					//If the card grants VP per cardName, count the number of cards with that name
 					if (ability->type == eAbility_VpPerCardName) {
+						cout << "Card " << hand[card_index]->name << " grants VP for " << ability->setName << " Cards" << endl;
 						int count = 0;
 						for (int i = 0; i < hand.size(); i++) {
 							if (hand[i]->name.find(ability->setName) != string::npos) {
+								cout << "Found " << ability->setName << " Card: " << hand[i]->name << endl;;
 								count++;
 							}
 						}
@@ -343,6 +347,8 @@ int Player::ComputeScore() {
 						}
 					}
 					else if (ability->type == eAbility_VpPerCoins) {
+						cout << "Card " << hand[card_index]->name << " grants 1 VP per " << ability->setTarget << " Coins" << endl;
+						cout << "Bonus from coins: " << (coins / ability->setTarget) * ability->value << endl;
 						score += (coins / ability->setTarget) * ability->value;
 					}
 				}
@@ -366,7 +372,7 @@ int Player::ComputeScore() {
 	}
 
 	int final_score = score + mapScore;
-	cout << "FINAL SCORE FOR PLAYER " << MasterGame->players[position]->GetLastName() << ": " << final_score << endl;
+	cout << "FINAL SCORE FOR PLAYER " << MasterGame->players[position]->GetLastName() << ": " << final_score << endl << endl;
 
 	delete[] elixir_count;
 	return final_score;

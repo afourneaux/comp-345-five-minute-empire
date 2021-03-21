@@ -27,12 +27,21 @@ void TestScoreCalculation() {
 		MasterGame->players[i % 2]->AddCardToHand(card);
 		cout<< "Card in hand" << *MasterGame->players[i % 2]->getHand().back() << endl;
 	}
-	cout << "Printing player 0 hand contents: " << endl;
-	for (int i = 0; i < MasterGame->players[0]->getHand().size(); i++) {
-		cout << *MasterGame->players[0]->getHand().at(i);
+	
+	for (int j = 0; j < 2; j++) {
+		cout << "Printing player " << j << " hand contents: " << endl;
+		for (int i = 0; i < MasterGame->players[j]->getHand().size(); i++) {
+			cout << *MasterGame->players[j]->getHand().at(i);
+		}
 	}
+
+	cout << "Printing map: " << endl;
+	cout << *MasterGame->map;
+	
 
 	//test the score computation
 	MasterGame->GetWinner();
+	delete MasterGame;
+	MasterGame = nullptr;
 
 }
