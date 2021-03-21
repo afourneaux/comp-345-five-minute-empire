@@ -1,8 +1,9 @@
 #include "Game.h"
 
 
-
+// Slightly contrived demo function that demonstrates final score calculation without requiring an entire game to be played
 void TestScoreCalculation() {
+	//initial game Setup
 	MasterGame = new Game();
 	MasterGame->Setup();
 	//populate map with some armies/cities
@@ -26,6 +27,8 @@ void TestScoreCalculation() {
 		MasterGame->players[i % 2]->AddCardToHand(card);
 	}
 	
+
+	// Print the "final" game state: player hand contents and map
 	for (int j = 0; j < 2; j++) {
 		cout << "Printing player " << j << " hand contents: " << endl;
 		for (int i = 0; i < MasterGame->players[j]->getHand().size(); i++) {
@@ -33,12 +36,11 @@ void TestScoreCalculation() {
 		}
 		cout << endl << endl;
 	}
-
 	cout << "Printing map: " << endl;
 	cout << *MasterGame->map << endl;
 	
 
-	//test the score computation
+	//do the score computation
 	MasterGame->GetWinner();
 	delete MasterGame;
 	MasterGame = nullptr;
