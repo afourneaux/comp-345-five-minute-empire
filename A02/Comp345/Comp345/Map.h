@@ -11,7 +11,7 @@ struct Territory {
 	std::vector<int> army_count;				// army_count and city_count are arrays indexed by player index (eg if player 0 has 5 armies in the territory, army_count[0]==5)
 	std::vector<int> city_count;
 	int controlling_player = -1;
-	string controlling_player_name = "None";
+	std::string controlling_player_name = "None";
 	int max_count = 0;
 	void addArmy(int player_index);
 	void addCity(int player_index);

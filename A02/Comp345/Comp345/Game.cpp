@@ -268,3 +268,7 @@ Game::~Game() {
 	}
 	delete Game::map;
 }
+
+Hand* Game::GetHand() {
+	return hand;
+}
