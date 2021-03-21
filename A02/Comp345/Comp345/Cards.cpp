@@ -7,336 +7,331 @@
  *******/
 
 
-// constructor
+ // constructor
 Deck::Deck(int num_player) {
-	deckIndex = 0;
-
-	switch (num_player) {
-	case 2:
-		size = DECK_SIZE_2_PLAYER;
-		break;
-	case 3:
-		size = DECK_SIZE_3_PLAYER;
-		break;
-	case 4:
-		size = DECK_SIZE_4_PLAYER;
-		break;
-	default:
-		cout << "Invalid number of players in deck construction: " << num_player << endl;
-		return;
-	}
 	Generate(num_player);
-	
-	setShuffel(Shuffel);
-
+	Shuffle();
 }
 
 // Copy constructor
 Deck::Deck(const Deck* deck) {
-	deckIndex = deck->deckIndex;
-	cards = new Card[size];
-
-	for (int i = 0; i < size; i++) {
-		cards[i] = deck->cards[i];
+	for (int i = 0; i < deck->GetSize(); i++) {
+		cards.push_back(new Card(deck->cards.at(i)));
 	}
 }
 
 Deck::~Deck() {
-	delete[] cards;
+	while (cards.empty() == false) {
+		cards.pop_back();
+	}
 }
 
-int Deck::getSize()
+int Deck::GetSize() const
 {
-	return size;
+	return cards.size();
 }
 
 // Create the deck and populate it with hardcoded card data
 void Deck::Generate(int num_player)
 {
-	int index = 0;
-	cards = new Card[size];
+	Card* card = new Card();
+	card->name = "Dire Dragon";
+	card->image = "card_dire_dragon.png";
+	card->actionChoice = eChoice_And;
+	card->actionCount = 2;
+	card->abilityCount = 1;
+	card->abilities = new Ability[1];
+	card->actions = new Action[2];
+	card->abilities[0].type = eAbility_Flying;
+	card->actions[0].action = eAction_PlaceArmies;
+	card->actions[0].actionValue = 3;
+	card->actions[1].action = eAction_DestroyArmies;
+	card->actions[1].actionValue = 1;
+	cards.push_back(card);
 
-	cards[index].name = "Dire Dragon";
-	cards[index].image = "card_dire_dragon.png";
-	cards[index].actionChoice = eChoice_And;
-	cards[index].actionCount = 2;
-	cards[index].abilityCount = 1;
-	cards[index].abilities = new Ability[1];
-	cards[index].actions = new Action[2];
-	cards[index].abilities[0].type = eAbility_Flying;
-	cards[index].actions[0].action = eAction_PlaceArmies;
-	cards[index].actions[0].actionValue = 3;
-	cards[index].actions[1].action = eAction_DestroyArmies;
-	cards[index].actions[1].actionValue = 1;
-	index++;
+	card = new Card();
+	card->name = "Dire Eye";
+	card->image = "card_dire_eye.png";
+	card->actionCount = 1;
+	card->abilityCount = 1;
+	card->abilities = new Ability[1];
+	card->actions = new Action[1];
+	card->abilities[0].type = eAbility_Flying;
+	card->actions[0].action = eAction_PlaceArmies;
+	card->actions[0].actionValue = 4;
+	cards.push_back(card);
 
-	cards[index].name = "Dire Eye";
-	cards[index].image = "card_dire_eye.png";
-	cards[index].actionCount = 1;
-	cards[index].abilityCount = 1;
-	cards[index].abilities = new Ability[1];
-	cards[index].actions = new Action[1];
-	cards[index].abilities[0].type = eAbility_Flying;
-	cards[index].actions[0].action = eAction_PlaceArmies;
-	cards[index].actions[0].actionValue = 4;
-	index++;
+	card = new Card();
+	card->name = "Dire Goblin";
+	card->image = "card_dire_goblin.png";
+	card->actionCount = 1;
+	card->abilityCount = 1;
+	card->abilities = new Ability[1];
+	card->actions = new Action[1];
+	card->abilities[0].type = eAbility_Elixir;
+	card->abilities[0].value = 1;
+	card->actions[0].action = eAction_MoveArmies;
+	card->actions[0].actionValue = 5;
+	cards.push_back(card);
 
-	cards[index].name = "Dire Goblin";
-	cards[index].image = "card_dire_goblin.png";
-	cards[index].actionCount = 1;
-	cards[index].abilityCount = 1;
-	cards[index].abilities = new Ability[1];
-	cards[index].actions = new Action[1];
-	cards[index].abilities[0].type = eAbility_Elixir;
-	cards[index].abilities[0].value = 1;
-	cards[index].actions[0].action = eAction_MoveArmies;
-	cards[index].actions[0].actionValue = 5;
-	index++;
+	card = new Card();
+	card->name = "Dire Ogre";
+	card->image = "card_dire_ogre.png";
+	card->actionCount = 1;
+	card->abilityCount = 1;
+	card->abilities = new Ability[1];
+	card->actions = new Action[1];
+	card->abilities[0].type = eAbility_VpPerCoins;
+	card->abilities[0].value = 1;
+	card->abilities[0].setTarget = 3;
+	card->actions[0].action = eAction_MoveArmies;
+	card->actions[0].actionValue = 2;
+	cards.push_back(card);
 
-	cards[index].name = "Dire Ogre";
-	cards[index].image = "card_dire_ogre.png";
-	cards[index].actionCount = 1;
-	cards[index].abilityCount = 1;
-	cards[index].abilities = new Ability[1];
-	cards[index].actions = new Action[1];
-	cards[index].abilities[0].type = eAbility_VpPerCoins;
-	cards[index].abilities[0].value = 1;
-	cards[index].abilities[0].setTarget = 3;
-	cards[index].actions[0].action = eAction_MoveArmies;
-	cards[index].actions[0].actionValue = 2;
-	index++;
+	card = new Card();
+	card->name = "Lake";
+	card->image = "card_lake.png";
+	card->actionCount = 2;
+	card->actionChoice = eChoice_Or;
+	card->abilityCount = 1;
+	card->abilities = new Ability[1];
+	card->actions = new Action[2];
+	card->abilities[0].type = eAbility_VpPerCardName;
+	card->abilities[0].value = 1;
+	card->abilities[0].setTarget = 1;
+	card->abilities[0].setName = "Forest";
+	card->abilities[0].countSetOnce = false;
+	card->actions[0].action = eAction_PlaceArmies;
+	card->actions[0].actionValue = 2;
+	card->actions[1].action = eAction_MoveArmies;
+	card->actions[1].actionValue = 3;
+	cards.push_back(card);
 
-	cards[index].name = "Lake";
-	cards[index].image = "card_lake.png";
-	cards[index].actionCount = 2;
-	cards[index].actionChoice = eChoice_Or;
-	cards[index].abilityCount = 1;
-	cards[index].abilities = new Ability[1];
-	cards[index].actions = new Action[2];
-	cards[index].abilities[0].type = eAbility_VpPerCardName;
-	cards[index].abilities[0].value = 1;
-	cards[index].abilities[0].setTarget = 1;
-	cards[index].abilities[0].setName = "Forest";
-	cards[index].abilities[0].countSetOnce = false;
-	cards[index].actions[0].action = eAction_PlaceArmies;
-	cards[index].actions[0].actionValue = 2;
-	cards[index].actions[1].action = eAction_MoveArmies;
-	cards[index].actions[1].actionValue = 3;
-	index++;
+	card = new Card();
+	card->name = "Forest Elf";
+	card->image = "card_forest_elf.png";
+	card->actionCount = 2;
+	card->actionChoice = eChoice_Or;
+	card->abilityCount = 1;
+	card->abilities = new Ability[1];
+	card->actions = new Action[2];
+	card->abilities[0].type = eAbility_PlusOneArmy;
+	card->actions[0].action = eAction_PlaceArmies;
+	card->actions[0].actionValue = 3;
+	card->actions[1].action = eAction_MoveArmies;
+	card->actions[1].actionValue = 2;
+	cards.push_back(card);
 
-	cards[index].name = "Forest Elf";
-	cards[index].image = "card_forest_elf.png";
-	cards[index].actionCount = 2;
-	cards[index].actionChoice = eChoice_Or;
-	cards[index].abilityCount = 1;
-	cards[index].abilities = new Ability[1];
-	cards[index].actions = new Action[2];
-	cards[index].abilities[0].type = eAbility_PlusOneArmy;
-	cards[index].actions[0].action = eAction_PlaceArmies;
-	cards[index].actions[0].actionValue = 3;
-	cards[index].actions[1].action = eAction_MoveArmies;
-	cards[index].actions[1].actionValue = 2;
-	index++;
+	card = new Card();
+	card->name = "Forest Gnome";
+	card->image = "card_forest_gnome.png";
+	card->actionCount = 1;
+	card->abilityCount = 1;
+	card->abilities = new Ability[1];
+	card->actions = new Action[1];
+	card->abilities[0].type = eAbility_Elixir;
+	card->abilities[0].value = 3;
+	card->actions[0].action = eAction_MoveArmies;
+	card->actions[0].actionValue = 2;
+	cards.push_back(card);
 
-	cards[index].name = "Forest Gnome";
-	cards[index].image = "card_forest_gnome.png";
-	cards[index].actionCount = 1;
-	cards[index].abilityCount = 1;
-	cards[index].abilities = new Ability[1];
-	cards[index].actions = new Action[1];
-	cards[index].abilities[0].type = eAbility_Elixir;
-	cards[index].abilities[0].value = 3;
-	cards[index].actions[0].action = eAction_MoveArmies;
-	cards[index].actions[0].actionValue = 2;
-	index++;
+	card = new Card();
+	card->name = "Forest Tree Town";
+	card->image = "card_forest_tree_town.png";
+	card->actionCount = 1;
+	card->abilityCount = 1;
+	card->abilities = new Ability[1];
+	card->actions = new Action[1];
+	card->abilities[0].type = eAbility_PlusOneMove;
+	card->actions[0].action = eAction_BuildCity;
+	card->actions[0].actionValue = 1;
+	cards.push_back(card);
 
-	cards[index].name = "Forest Tree Town";
-	cards[index].image = "card_forest_tree_town.png";
-	cards[index].actionCount = 1;
-	cards[index].abilityCount = 1;
-	cards[index].abilities = new Ability[1];
-	cards[index].actions = new Action[1];
-	cards[index].abilities[0].type = eAbility_PlusOneMove;
-	cards[index].actions[0].action = eAction_BuildCity;
-	cards[index].actions[0].actionValue = 1;
-	index++;
+	card = new Card();
+	card->name = "Graveyard";
+	card->image = "card_graveyard.png";
+	card->actionCount = 1;
+	card->abilityCount = 1;
+	card->abilities = new Ability[1];
+	card->actions = new Action[1];
+	card->abilities[0].type = eAbility_VpPerCardName;
+	card->abilities[0].value = 1;
+	card->abilities[0].setTarget = 1;
+	card->abilities[0].setName = "Cursed";
+	card->abilities[0].countSetOnce = false;
+	card->actions[0].action = eAction_BuildCity;
+	card->actions[0].actionValue = 1;
+	cards.push_back(card);
 
-	cards[index].name = "Graveyard";
-	cards[index].image = "card_graveyard.png";
-	cards[index].actionCount = 1;
-	cards[index].abilityCount = 1;
-	cards[index].abilities = new Ability[1];
-	cards[index].actions = new Action[1];
-	cards[index].abilities[0].type = eAbility_VpPerCardName;
-	cards[index].abilities[0].value = 1;
-	cards[index].abilities[0].setTarget = 1;
-	cards[index].abilities[0].setName = "Cursed";
-	cards[index].abilities[0].countSetOnce = false;
-	cards[index].actions[0].action = eAction_BuildCity;
-	cards[index].actions[0].actionValue = 1;
-	index++;
+	card = new Card();
+	card->name = "Noble Hills";
+	cards.push_back(card);
 
-	cards[index].name = "Noble Hills";
-	index++;
+	card = new Card();
+	card->name = "Noble Knight";
+	cards.push_back(card);
 
-	cards[index].name = "Noble Knight";
-	index++;
+	card = new Card();
+	card->name = "Noble Unicorn";
+	cards.push_back(card);
 
-	cards[index].name = "Noble Unicorn";
-	index++;
+	card = new Card();
+	card->name = "Night Hydra";
+	cards.push_back(card);
 
-	cards[index].name = "Night Hydra";
-	index++;
+	card = new Card();
+	card->name = "Night Village";
+	cards.push_back(card);
 
-	cards[index].name = "Night Village";
-	index++;
+	card = new Card();
+	card->name = "Forest Pixie";
+	cards.push_back(card);
 
-	cards[index].name = "Forest Pixie";
-	index++;
+	card = new Card();
+	card->name = "Stronghold";
+	cards.push_back(card);
 
-	cards[index].name = "Stronghold";
-	index++;
+	card = new Card();
+	card->name = "Ancient Phoenix";
+	cards.push_back(card);
 
-	cards[index].name = "Ancient Phoenix";
-	index++;
+	card = new Card();
+	card->name = "Ancient Tree Spirit";
+	cards.push_back(card);
 
-	cards[index].name = "Ancient Tree Spirit";
-	index++;
+	card = new Card();
+	card->name = "Ancient Woods";
+	cards.push_back(card);
 
-	cards[index].name = "Ancient Woods";
-	index++;
+	card = new Card();
+	card->name = "Ancient Sage";
+	cards.push_back(card);
 
-	cards[index].name = "Ancient Sage";
-	index++;
+	card = new Card();
+	card->name = "Cursed Banshee";
+	cards.push_back(card);
 
-	cards[index].name = "Cursed Banshee";
-	index++;
+	card = new Card();
+	card->name = "Cursed Gargoyles";
+	cards.push_back(card);
 
-	cards[index].name = "Cursed Gargoyles";
-	index++;
+	card = new Card();
+	card->name = "Cursed King";
+	cards.push_back(card);
 
-	cards[index].name = "Cursed King";
-	index++;
+	card = new Card();
+	card->name = "Cursed Mausolum";
+	cards.push_back(card);
 
-	cards[index].name = "Cursed Mausolum";
-	index++;
+	card = new Card();
+	card->name = "Cursed Tower";
+	cards.push_back(card);
 
-	cards[index].name = "Cursed Tower";
-	index++;
+	card = new Card();
+	card->name = "Dire Giant";
+	cards.push_back(card);
 
-	cards[index].name = "Dire Giant";
-	index++;
-
-	cards[index].name = "Night Wizard";
-	index++;
+	card = new Card();
+	card->name = "Night Wizard";
+	cards.push_back(card);
 
 	if (num_player >= 3)
 	{
-		cards[index].name = "Mountain Dwarf";
-		cards[index].image = "card_mountain_dwarf.png";
-		cards[index].actionChoice = eChoice_And;
-		cards[index].actionCount = 2;
-		cards[index].abilityCount = 1;
-		cards[index].abilities = new Ability[1];
-		cards[index].actions = new Action[2];
-		cards[index].abilities[0].type = eAbility_VpPerCardName;
-		cards[index].abilities[0].value = 3;
-		cards[index].abilities[0].setTarget = 2;
-		cards[index].abilities[0].setName = "Mountain";
-		cards[index].abilities[0].countSetOnce = true;
-		cards[index].actions[0].action = eAction_PlaceArmies;
-		cards[index].actions[0].actionValue = 2;
-		cards[index].actions[1].action = eAction_DestroyArmies;
-		cards[index].actions[1].actionValue = 1;
-		index++;
+		card = new Card();
+		card->name = "Mountain Dwarf";
+		card->image = "card_mountain_dwarf.png";
+		card->actionChoice = eChoice_And;
+		card->actionCount = 2;
+		card->abilityCount = 1;
+		card->abilities = new Ability[1];
+		card->actions = new Action[2];
+		card->abilities[0].type = eAbility_VpPerCardName;
+		card->abilities[0].value = 3;
+		card->abilities[0].setTarget = 2;
+		card->abilities[0].setName = "Mountain";
+		card->abilities[0].countSetOnce = true;
+		card->actions[0].action = eAction_PlaceArmies;
+		card->actions[0].actionValue = 2;
+		card->actions[1].action = eAction_DestroyArmies;
+		card->actions[1].actionValue = 1;
+		cards.push_back(card);
 
-		cards[index].name = "Mountain Treasury";
-		cards[index].image = "card_mountain_treasury.png";
-		cards[index].actionCount = 1;
-		cards[index].abilityCount = 2;
-		cards[index].abilities = new Ability[2];
-		cards[index].actions = new Action[1];
-		cards[index].abilities[0].type = eAbility_Elixir;
-		cards[index].abilities[0].value = 1;
-		cards[index].abilities[1].type = eAbility_Coins;
-		cards[index].abilities[1].value = 2;
-		cards[index].actions[0].action = eAction_MoveArmies;
-		cards[index].actions[0].actionValue = 3;
-		index++;
+		card = new Card();
+		card->name = "Mountain Treasury";
+		card->image = "card_mountain_treasury.png";
+		card->actionCount = 1;
+		card->abilityCount = 2;
+		card->abilities = new Ability[2];
+		card->actions = new Action[1];
+		card->abilities[0].type = eAbility_Elixir;
+		card->abilities[0].value = 1;
+		card->abilities[1].type = eAbility_Coins;
+		card->abilities[1].value = 2;
+		card->actions[0].action = eAction_MoveArmies;
+		card->actions[0].actionValue = 3;
+		cards.push_back(card);
 
-		cards[index].name = "Arcane Sphinx";
-		index++;
+		card = new Card();
+		card->name = "Arcane Sphinx";
+		cards.push_back(card);
 
-		cards[index].name = "Arcane Temple";
-		index++;
+		card = new Card();
+		card->name = "Arcane Temple";
+		cards.push_back(card);
 
-		cards[index].name = "Arcane Manticore";
-		index++;
+		card = new Card();
+		card->name = "Arcane Manticore";
+		cards.push_back(card);
 	}
 
 	if (num_player >= 4)
 	{
-		cards[index].name = "Castle";
-		cards[index].image = "card_castle.png";
-		cards[index].actionCount = 1;
-		cards[index].abilityCount = 1;
-		cards[index].abilities = new Ability[1];
-		cards[index].actions = new Action[2];
-		cards[index].abilities[0].type = eAbility_Elixir;
-		cards[index].abilities[0].value = 1;
-		cards[index].actions[0].action = eAction_MoveArmies;
-		cards[index].actions[0].actionValue = 3;
-		cards[index].actions[1].action = eAction_BuildCity;
-		cards[index].actions[1].actionValue = 1;
-		index++;
+		card = new Card();
+		card->name = "Castle";
+		card->image = "card_castle.png";
+		card->actionCount = 1;
+		card->abilityCount = 1;
+		card->abilities = new Ability[1];
+		card->actions = new Action[2];
+		card->abilities[0].type = eAbility_Elixir;
+		card->abilities[0].value = 1;
+		card->actions[0].action = eAction_MoveArmies;
+		card->actions[0].actionValue = 3;
+		card->actions[1].action = eAction_BuildCity;
+		card->actions[1].actionValue = 1;
+		cards.push_back(card);
 
-		cards[index].name = "Castle";
-		cards[index].image = "card_castle.png";
-		cards[index].actionCount = 1;
-		cards[index].abilityCount = 1;
-		cards[index].abilities = new Ability[1];
-		cards[index].actions = new Action[2];
-		cards[index].abilities[0].type = eAbility_Elixir;
-		cards[index].abilities[0].value = 1;
-		cards[index].actions[0].action = eAction_MoveArmies;
-		cards[index].actions[0].actionValue = 3;
-		cards[index].actions[1].action = eAction_BuildCity;
-		cards[index].actions[1].actionValue = 1;
-		index++;
-	}
-
-	if (size != index) {
-		cout << "WARNING: Actual deck size does not match the expected value. Expected: " << size << " Actual: " << index << endl;
+		card = new Card();
+		card->name = "Castle";
+		card->image = "card_castle.png";
+		card->actionCount = 1;
+		card->abilityCount = 1;
+		card->abilities = new Ability[1];
+		card->actions = new Action[2];
+		card->abilities[0].type = eAbility_Elixir;
+		card->abilities[0].value = 1;
+		card->actions[0].action = eAction_MoveArmies;
+		card->actions[0].actionValue = 3;
+		card->actions[1].action = eAction_BuildCity;
+		card->actions[1].actionValue = 1;
+		cards.push_back(card);
 	}
 }
 
 // Retrieve the top card and remove it from the deck
 Card* Deck::Draw()
 {
-	// If the deck is empty, return a null pointer
-	if (deckIndex == size) {
+	if (cards.empty()) {
 		return nullptr;
 	}
-	//Reading the index of cards from Shuffel[] by going through its indexes
-	return &cards[Shuffel[(deckIndex++)]];
+	Card* draw = cards.back();
+	cards.pop_back();
+	return draw;
 }
 
-//shuffelling the data member, Shuffel[], that contains index of the cards
-void Deck::setShuffel(int arrShuffel[] )
+void Deck::Shuffle()
 {
-
-	//srand(time(NULL));
-
-	 int* arr = new int[size];
-	for (int a = 0; a < size ; a++)
-	{
-		arr[a] = a;
-	}
-	random_shuffle(arr, arr + size);
-	Shuffel = arr;
-
-
-
+	random_shuffle(cards.begin(), cards.end());
 }
 
 // Assignment operator
@@ -346,25 +341,19 @@ Deck& Deck::operator= (const Deck& deck) {
 		return *this;
 	}
 
-	deckIndex = deck.deckIndex;
-	cards = new Card[size];
-
-	for (int i = 0; i < size; i++) {
-		cards[i] = new Card(deck.cards[i]);
+	for (int i = 0; i < deck.GetSize(); i++) {
+		cards.push_back(new Card(deck.cards.at(i)));
 	}
 
 	return *this;
 }
 
- //Stream insertion operator 
+//Stream insertion operator 
 ostream& operator<<(ostream& out, const Deck& deck) {
-	out << "Original deck size: " << deck.size << endl;
-	out << "Total cards dealt: " << deck.deckIndex << endl;
-	out << "Cards remaining in the deck: " << deck.size - deck.deckIndex << endl;
+	out << "Cards remaining in the deck: " << deck.GetSize() << endl;
 	out << "Card descriptions:" << endl;
-	for (int i = deck.deckIndex; i < deck.size; i++) {
-		out << deck.cards[i];
-		out << endl;
+	for (int i = 0; i < deck.GetSize(); i++) {
+		out << deck.cards.at(i) << endl;
 	}
 	return out;
 }
@@ -373,7 +362,7 @@ ostream& operator<<(ostream& out, const Deck& deck) {
   HAND
  *******/
 
-// Default constructor
+ // Default constructor
 Hand::Hand(Deck* newDeck) {
 	deck = newDeck;
 	cards = new Card[HAND_SIZE];
@@ -469,7 +458,7 @@ Hand& Hand::operator= (const Hand& hand) {
   CARD
  *******/
 
-// Default constructor
+ // Default constructor
 Card::Card() {
 	abilityCount = 0;
 	actionCount = 0;
@@ -576,7 +565,7 @@ ostream& operator<<(ostream& out, const Card& card) {
   ACTION
  *******/
 
-// Assignment operator
+ // Assignment operator
 Action& Action::operator= (const Action& newAction) {
 	// Check for self-assignment
 	if (this == &newAction) {
@@ -633,7 +622,7 @@ ostream& operator<<(ostream& out, const Action& action) {
   ABILITY
  *******/
 
-// Assignment operator
+ // Assignment operator
 Ability& Ability::operator= (const Ability& newAbility) {
 	// Check for self-assignment
 	if (this == &newAbility) {
