@@ -133,12 +133,12 @@ void Game::MainLoop() {
 
 // TODO: Make use of the Player::ComputeScore() function to determine the winner
 void Game::GetWinner() {
-	int player_count = MasterGame->GetPlayerCount();
+	int player_count = GetPlayerCount();
 
 	//Compute the final scores for each player
 	int* scores = new int[player_count];
 	for (int i = 0; i < player_count; i++) {
-		scores[i] = Game::players[i]->ComputeScore();
+		scores[i] = players[i]->ComputeScore();
 	}
 
 	int winner_index = -1;
@@ -157,29 +157,29 @@ void Game::GetWinner() {
 			cout << "Players " << winner_index << " and " << i << " are tied. Proceeding to tiebreakers..." << endl;
 			//Tiebreaker 1: player with the most coins
 			tiebreaker = "have the most coins.";
-			if (Game::players[i]->getCoins() > Game::players[winner_index]->getCoins())
+			if (players[i]->getCoins() > players[winner_index]->getCoins())
 				winner_index = i;
-			else if (Game::players[i]->getCoins() == Game::players[winner_index]->getCoins()) {
+			else if (players[i]->getCoins() == players[winner_index]->getCoins()) {
 				//Tiebreaker 2: player with the most armies
 				tiebreaker = "have the most armies on the board.";
-				if (Game::players[i]->getArmiesLeft() < Game::players[winner_index]->getArmiesLeft())
+				if (players[i]->getArmiesLeft() < players[winner_index]->getArmiesLeft())
 					winner_index = i;
-				else if (Game::players[i]->getArmiesLeft() == Game::players[winner_index]->getArmiesLeft()) {
+				else if (players[i]->getArmiesLeft() == players[winner_index]->getArmiesLeft()) {
 					//Tiebreaker 3: player with the most territories
 					tiebreaker = "control the most territories.";
-					if(Game::map->getNumberControlledTerritories(i) > Game::map->getNumberControlledTerritories(winner_index))
+					if(map->getNumberControlledTerritories(i) > map->getNumberControlledTerritories(winner_index))
 						winner_index = i;
-					else if (Game::map->getNumberControlledTerritories(i) == Game::map->getNumberControlledTerritories(winner_index)) {
+					else if (map->getNumberControlledTerritories(i) == map->getNumberControlledTerritories(winner_index)) {
 						tie_after_tiebreakers = true;
 					}
 				}
 			}
 			//Print the result of the tiebreaker
 			if (tie_after_tiebreakers) {
-				cout << "Players " << winner_index << " and " << i << " are still tied after tiebreakers." << endl;
+				cout << "Players " << players[winner_index]->GetLastName() << " and " << players[i]->GetLastName() << " are still tied after tiebreakers." << endl;
 			}
 			else {
-				cout << "Player " << winner_index << " wins the tiebreaker because they " << tiebreaker << endl;
+				cout << "Player " << players[winner_index]->GetLastName() << " wins the tiebreaker because they " << tiebreaker << endl;
 			}
 		}
 	}
@@ -187,7 +187,7 @@ void Game::GetWinner() {
 		cout << "The final score is a tie!" << endl;
 	}
 	else {
-		cout << "And the winner is... Player " << winner_index << "!" << endl;
+		cout << "And the winner is... Player " << players[winner_index]->GetLastName() << "!" << endl;
 	}
 
 }
