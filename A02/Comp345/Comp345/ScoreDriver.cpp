@@ -23,9 +23,7 @@ void TestScoreCalculation() {
 	//populate players with some cards
 	for (int i = 0; i < 18; i++) {
 		Card* card = MasterGame->GetHand()->Exchange(0);
-		cout << "Exchanged card: " << *card << endl;
 		MasterGame->players[i % 2]->AddCardToHand(card);
-		cout<< "Card in hand" << *MasterGame->players[i % 2]->getHand().back() << endl;
 	}
 	
 	for (int j = 0; j < 2; j++) {
@@ -33,10 +31,11 @@ void TestScoreCalculation() {
 		for (int i = 0; i < MasterGame->players[j]->getHand().size(); i++) {
 			cout << *MasterGame->players[j]->getHand().at(i);
 		}
+		cout << endl << endl;
 	}
 
 	cout << "Printing map: " << endl;
-	cout << *MasterGame->map;
+	cout << *MasterGame->map << endl;
 	
 
 	//test the score computation

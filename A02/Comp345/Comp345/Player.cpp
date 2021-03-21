@@ -355,6 +355,7 @@ int Player::ComputeScore() {
 			}
 		}
 	}
+	cout << lastName << " has " << elixir_count[position] << " Elixirs." << endl;
 	int elixir_winner = -1;
 	int elixir_max = -1;
 	for (int i = 0; i < player_count; i++) {
@@ -367,12 +368,12 @@ int Player::ComputeScore() {
 		}
 	}
 	if (elixir_winner == position) {
-		cout << "Player " << MasterGame->players[position]->GetLastName() << " has the most elixirs, gets " << ELIXIR_BONUS << " bonus points." << endl;
+		cout << "Player " << lastName << " has the most elixirs, gets " << ELIXIR_BONUS << " bonus points." << endl;
 		score += ELIXIR_BONUS;
 	}
 
 	int final_score = score + mapScore;
-	cout << "FINAL SCORE FOR PLAYER " << MasterGame->players[position]->GetLastName() << ": " << final_score << endl << endl;
+	cout << endl << "FINAL SCORE FOR PLAYER " << lastName << ": " << final_score << endl << endl;
 
 	delete[] elixir_count;
 	return final_score;
