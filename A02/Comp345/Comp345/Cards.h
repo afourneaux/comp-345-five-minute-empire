@@ -7,10 +7,6 @@ using namespace std;
 const int HAND_SIZE = 6;	// The number of face-up cards in the hand
 const int ELIXIR_BONUS = 2;	// Bonus score awarded for having the most elixirs
 
-const int DECK_SIZE_2_PLAYER = 27;
-const int DECK_SIZE_3_PLAYER = 32;
-const int DECK_SIZE_4_PLAYER = 34;
-
 struct Player;
 
 // The different possible actions granted by a card
@@ -38,7 +34,8 @@ enum CardAbility {
 	eAbility_Elixir,
 	eAbility_Coins,
 	eAbility_VpPerCardName,
-	eAbility_VpPerCoins
+	eAbility_VpPerCoins,
+	eAbility_Immune
 };
 
 struct Action {
@@ -75,18 +72,17 @@ struct Card {
 
 class Deck {
 public:
-	Deck(int num_player);		// Default constructor
-	Deck(const Deck* deck);		// Copy constructor
-	~Deck();					// Destructor
-	Card* Draw();				// Return and remove the first card from the deck
+	Deck(int num_player);			// Default constructor
+	Deck(const Deck* deck);			// Copy constructor
+	~Deck();						// Destructor
+	Card* Draw();					// Return and remove the first card from the deck
 	Deck& operator= (const Deck& deck);								// Assignment operator
 	friend ostream& operator<< (ostream& out, const Deck& deck);	// Stream insertion operator
-	void Shuffle();
-	int GetSize() const;
+	int GetSize() const;			// Get the number of cards remaining in the deck
 private:
-	//int size;					// Size of the deck
-	void Generate(int playerCount);// Populate the deck with hard-coded cards
-	vector<Card*> cards;		// The contents of the deck
+	void Generate(int playerCount);	// Populate the deck with hard-coded cards
+	void Shuffle();					// Reorder the cards into a random order
+	vector<Card*> cards;			// The contents of the deck
 };
 
 class Hand {

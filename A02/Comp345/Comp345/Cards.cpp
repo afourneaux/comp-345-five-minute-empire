@@ -7,7 +7,7 @@
   DECK
  *******/
 
- // constructor
+ // Constructor
 Deck::Deck(int num_player) {
 	Generate(num_player);
 	Shuffle();
@@ -20,12 +20,14 @@ Deck::Deck(const Deck* deck) {
 	}
 }
 
+// Destructor
 Deck::~Deck() {
 	while (cards.empty() == false) {
 		cards.pop_back();
 	}
 }
 
+// Get the number of cards remaining in the deck
 int Deck::GetSize() const
 {
 	return cards.size();
@@ -687,6 +689,9 @@ ostream& operator<<(ostream& out, const Ability& ability) {
 		else {
 			out << ability.setTarget << " coins";
 		}
+		break;
+	case eAbility_Immune:
+		out << "Immune to Attack";
 		break;
 	case eAbility_None:
 		out << "No Ability";
