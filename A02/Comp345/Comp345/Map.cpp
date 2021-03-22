@@ -294,12 +294,40 @@ Territory* Map::GetTerritory(int territory_index) {
 	return &territories[territory_index];
 }
 
+vector<int> Map::GetPotentialStartingTerritories() {
+	vector<int> potential_starters;
+	for (int territory_index = 0; territory_index < territory_count; territory_index++) {
+		int water_connections = CountWaterConnections(territory_index);
+		//Reject if territory does not have a water connection to another continent
+		if (water_connections == 0) {
+			continue;
+		}
+		//If there is one connection, accept if an adjacent territory (on same continent) has a water connection, otherwise reject
+		else if (water_connections == 1) {
+			int count = 0;
+			Edge* temp = territories[territory_index].head;
+			while (temp != nullptr) {
+				if (temp->destination_territory->continentID == territories[territory_index].continentID and CountWaterConnections(temp->destination_territory->territoryID) > 0) {
+					potential_starters.push_back(territory_index);
+					break;
+				}
+				temp = temp->next;
+			}
+			continue;
+		}
+		// Accept if territory has 2 or more water connections
+		else {
+			potential_starters.push_back(territory_index);
+		}
+	}
+
+	return potential_starters;
+}
 
 Territory* Map::SetStartingTerritory(int territory_index) {
 	int water_connections = CountWaterConnections(territory_index);
 	//Reject if territory does not have a water connection to another continent
 	if (water_connections == 0) {
-		cout << "ERROR: invalid starting territory " << territory_index << ", the starting territory must have at least one connection to another continent";
 		return nullptr;
 	}
 	//If there is one connection, accept if an adjacent territory (on same continent) has a water connection, otherwise reject
