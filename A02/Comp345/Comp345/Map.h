@@ -54,6 +54,7 @@ public:
 	~Map();											// Destructor
 	void AddEdge(int origin, int destination);		// Adds a bi-directional edge from territories[origin] to territories[destination]
 	int CheckAdjacency(int origin, int destination);// Checks if two territories are adjacent. Returns the movement cost if they are connected, otherwise -1
+	std::vector<int> GetLegalArmyPlacements(int playerIndex);
 	Territory* GetTerritory(int territory_index);	// Returns a pointer to the territory at the specified index
 	std::vector<int> GetPotentialStartingTerritories();
 	Territory* SetStartingTerritory(int territory_index);	// Sets the starting territory for army placement

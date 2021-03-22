@@ -285,6 +285,15 @@ int Map::CheckAdjacency(int origin, int destination) {
 	return -1;
 }
 
+vector<int> Map::GetLegalArmyPlacements(int playerIndex) {
+	vector<int> potentialTerritories;
+	for (int i = 0; i < territory_count; i++) {
+		if (i == starting_territory_index) potentialTerritories.push_back(i);
+		else if (territories[i].city_count[playerIndex]>0) potentialTerritories.push_back(i);
+	}
+	return potentialTerritories;
+}
+
 
 Territory* Map::GetTerritory(int territory_index) {
 	if (territory_index < 0 || territory_index >= territory_count) {

@@ -115,6 +115,12 @@ bool Player::PlaceNewArmies() {
 	bool hasPlaced = false;
 	int dest;
 	Territory* destination;
+	//print legal options for army placement
+	vector<int> legalMoves = MasterGame->map->GetLegalArmyPlacements(position);
+	cout << "You can currently place armies in the following territories: ";
+	for (int i = 0; i < legalMoves.size(); i++) cout << legalMoves[i] << " ";
+	cout << endl;
+
 	while (!hasPlaced) {
 		if (!HasArmiesToPlace()) return hasPlaced;
 		cout << lastName << " - Where would you like to place a new army (territory ID)? (-1 to skip action) ";
@@ -420,7 +426,9 @@ bool Player::DoAction(Card* card) {
 				break;
 			case eAction_MoveArmies: MoveArmies();
 				break;
-			case eAction_PlaceArmies: PlaceNewArmies();
+			case eAction_PlaceArmies: 
+				
+				PlaceNewArmies();
 				break;
 			default:
 				cout << "Found an invalid action for card name:" << card->name;
