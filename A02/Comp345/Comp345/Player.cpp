@@ -239,6 +239,7 @@ bool Player::BuildCity() {
 		return false;
 	}
 
+	PrintPlayerStatus();
 	while (!isBuilt) {
 		cout << lastName << " - Where would you like to build a city (territory ID)? (-1 to skip action) ";
 		cin >> id;
