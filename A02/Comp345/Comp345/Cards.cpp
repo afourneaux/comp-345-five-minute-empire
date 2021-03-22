@@ -1,11 +1,11 @@
 #include "Cards.h"
 #include <iostream>
 #include <algorithm>
+#include <random>
 
 /*******
   DECK
  *******/
-
 
  // constructor
 Deck::Deck(int num_player) {
@@ -329,9 +329,10 @@ Card* Deck::Draw()
 	return draw;
 }
 
+// Reorder the Cards vector in a random order
 void Deck::Shuffle()
 {
-	random_shuffle(cards.begin(), cards.end());
+	shuffle(cards.begin(), cards.end(), default_random_engine{ random_device{}() });
 }
 
 // Assignment operator
