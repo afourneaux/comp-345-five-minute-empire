@@ -258,12 +258,12 @@ int Game::GetPlayerCount() {
 
 // Destructor
 Game::~Game() {
-	delete deck;
 	delete hand;
-	for (int i = 0; i < playerCount; i++) {
-		delete players[i];
+	delete deck;
+	while (players.empty() == false) {
+		players.pop_back();
 	}
-	delete Game::map;
+	delete map;
 }
 
 Hand* Game::GetHand() {

@@ -603,7 +603,6 @@ Hand::Hand(const Hand* hand) {
 }
 
 Hand::~Hand() {
-	delete[] cards;
 	deck = nullptr;
 }
 
