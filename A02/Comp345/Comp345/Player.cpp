@@ -131,11 +131,11 @@ bool Player::PlaceNewArmies() {
 		}
 		if (GetTerritory(dest) == nullptr)
 			continue;
-		if (dest == STARTING_REGION_ID)
-			destination = GetTerritory(STARTING_REGION_ID);
+		if (dest == MasterGame->map->starting_territory_index)
+			destination = GetTerritory(MasterGame->map->starting_territory_index);
 		else
 			destination = GetTerritory(dest);
-		if (dest == STARTING_REGION_ID || destination->city_count[position] > 0) { // Checking if destination has a city of player or is starting region
+		if (dest == MasterGame->map->starting_territory_index || destination->city_count[position] > 0) { // Checking if destination has a city of player or is starting region
 			for (int i = 0; i < cubes.size(); i++) { // check if have available armies and places it if it does
 				if (!cubes[i]->isPlaced) {
 					cubes[i]->isPlaced = true;
@@ -247,7 +247,7 @@ bool Player::BuildCity() {
 			return false;
 		Territory* city_terr = GetTerritory(id);
 		if (city_terr == nullptr) continue;
-		if (HasArmyAtLocation(id) != nullptr || id == STARTING_REGION_ID)
+		if (HasArmyAtLocation(id) != nullptr || id == MasterGame->map->starting_territory_index)
 			hasArmy = true;
 		if (hasArmy) { // Check if above conditions are met
 			city->location = city_terr;

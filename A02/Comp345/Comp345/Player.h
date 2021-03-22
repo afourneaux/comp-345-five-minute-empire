@@ -64,7 +64,6 @@ public:
 	int GetPosition() { return position; };
 	void setCoins(int amt) { coins = amt; };
 	void setPosition(int pos) { position = pos; };
-	static int STARTING_REGION_ID;
 private:
 	string lastName;
 	vector<Territory*> territories;

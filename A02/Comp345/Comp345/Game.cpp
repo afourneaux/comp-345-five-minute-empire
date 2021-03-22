@@ -3,7 +3,6 @@
 #include "MapLoader.h"
 
 Game* MasterGame;
-int Player::STARTING_REGION_ID;
 
 // Get number of players, perform bidding, distribute tokens, generate deck
 void Game::Setup() {
@@ -93,8 +92,6 @@ void Game::Setup() {
 		cin >> starter;
 		map->SetStartingTerritory(starter);
 	} while (map->starting_territory_index < 0);
-
-	Player::STARTING_REGION_ID = starter;
 
 	cout << "\nX X X X X X X X X X X X X X X X X X X" << endl;
 	cout << "       INFORMATION ABOUT DECK" << endl;
