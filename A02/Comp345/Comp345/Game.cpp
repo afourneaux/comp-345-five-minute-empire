@@ -124,14 +124,13 @@ void Game::MainLoop() {
 		cout << "BEGIN ROUND " << turn + 1 << endl;
 		cout << "XXXXXXXXXXXX" << endl;
 		// Run through each player's turn
-		// TODO: Sort by bid
 		for (int currentPlayer = startingPlayer; currentPlayer < playerCount + startingPlayer; currentPlayer++) {
 			PlayerTurn(players.at(currentPlayer % playerCount));
 		}
 	}
 }
 
-// TODO: Make use of the Player::ComputeScore() function to determine the winner
+// Determine and output the winner of the game
 void Game::GetWinner() {
 	int player_count = GetPlayerCount();
 
@@ -250,8 +249,6 @@ void Game::PlayerTurn(Player* player) {
 	cout << *card;
 	player->DoAction(card);
 	player->PrintPlayerStatus();
-	// TODO: Add the card to the player object and perform its actions
-	// Player.PerformActionOfCard(card) or some equivalent
 	delete card;	// TODO: Delete as part of the player destructor
 }
 

@@ -35,6 +35,7 @@ enum CardAbility {
 	eAbility_Coins,
 	eAbility_VpPerCardName,
 	eAbility_VpPerCoins,
+	eAbility_VpPerFlying,
 	eAbility_Immune
 };
 

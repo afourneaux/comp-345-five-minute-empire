@@ -690,6 +690,12 @@ ostream& operator<<(ostream& out, const Ability& ability) {
 			out << ability.setTarget << " coins";
 		}
 		break;
+	case eAbility_VpPerFlying:
+		out << "+" << ability.value << "VP per ";
+		if (ability.setTarget > 1) {
+			out << ability.setTarget << " ";
+		}
+		out << "flying";
 	case eAbility_Immune:
 		out << "Immune to Attack";
 		break;
