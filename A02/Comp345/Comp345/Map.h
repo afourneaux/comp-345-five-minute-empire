@@ -18,6 +18,7 @@ struct Territory {
 	void removeArmy(int player_index);
 	void UpdateControl();
 	int CheckAdjacency(Territory* destination);	// Checks if the current territory and destination are adjacent. Returns the movement cost if they are connected, otherwise -1
+	std::vector<int> GetAdjacent();
 };
 
 struct Edge {

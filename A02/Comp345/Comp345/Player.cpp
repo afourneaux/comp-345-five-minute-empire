@@ -160,12 +160,20 @@ bool Player::MoveArmies() {
 	bool hasMoved = false;
 	int src, dest;
 	bool exit = false;
+	PrintPlayerStatus();
 	while (!hasMoved) {
 		cout << lastName << " - Where would you like to move an army FROM (territory ID)? (-1 to skip action)" << endl;
 		cin >> src;
 		if (src == -1)
 			return false;
 		Territory* source = GetTerritory(src);
+
+		//print the legal move options
+		vector<int> potentialMoves = source->GetAdjacent();
+		cout << "You can move this army to the following territories: ";
+		for (int i = 0; i < potentialMoves.size(); i++) cout << potentialMoves[i] << " ";
+		cout << endl;
+
 		cout << lastName << " - Where would you like to move an army TO (territory ID)? (-1 to skip action)" << endl;
 		cin >> dest;
 		Territory* destination = GetTerritory(dest);
@@ -187,12 +195,20 @@ bool Player::MoveArmies() {
 bool Player::MoveOverLand() {
 	bool hasMoved = false;
 	int src, dest;
+	PrintPlayerStatus();
 	while (!hasMoved) {
 		cout << lastName << " - Where would you like to move an army FROM (territory ID)? (-1 to skip action)" << endl;
 		cin >> src;
 		if (src == -1)
 			return false;
 		Territory* source = GetTerritory(src);
+
+		//print the legal move options
+		vector<int> potentialMoves = source->GetAdjacent();
+		cout << "You can move this army to the following territories: ";
+		for (int i = 0; i < potentialMoves.size(); i++) cout << potentialMoves[i] << " ";
+		cout << endl;
+
 		cout << lastName << " - Where would you like to move an army TO (territory ID)? (-1 to skip action)" << endl;
 		cin >> dest;
 		if (dest == -1)

@@ -551,6 +551,16 @@ int Territory::CheckAdjacency(Territory* destination) {
 	return -1;
 }
 
+std::vector<int> Territory::GetAdjacent() {
+	vector<int> adjacentTerritories;
+	Edge* temp = this->head;
+	while (temp != nullptr) {
+		adjacentTerritories.push_back(temp->destination_territory->territoryID);
+		temp = temp->next;
+	}
+	return adjacentTerritories;
+}
+
 void Territory::UpdateControl() {
 	int current_max = -1;
 	if (controlling_player != -1) {
