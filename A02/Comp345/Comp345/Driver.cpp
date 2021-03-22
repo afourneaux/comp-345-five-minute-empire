@@ -5,12 +5,14 @@
 #include <iostream>
 #include "Game.h"
 
+extern Game* MasterGame;
+
 int main() {
-	Game* game = new Game();
-	game->Setup();
-	game->MainLoop();
-	game->GetWinner();
-	delete game;
+	MasterGame = new Game();
+	MasterGame->Setup();
+	MasterGame->MainLoop();
+	MasterGame->GetWinner();
+	delete MasterGame;
 
 	//Check for memory leaks at the end of execution
 	_CrtDumpMemoryLeaks();

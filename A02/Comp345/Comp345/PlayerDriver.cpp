@@ -2,7 +2,7 @@
 #include "Game.h"
 using namespace std;
 
-
+const int NUM_OF_PLAYERS = 3;
 
 int testPlayer()
 {

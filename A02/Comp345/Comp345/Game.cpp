@@ -1,36 +1,106 @@
 #include "Game.h"
 #include <iostream>
+#include "MapLoader.h"
 
-// TODO: Currently, Setup is all hardcoded information. Replace this with
-//       proper setup including user input and map loading
-
-vector <Player*> Game::players; 
-Map* Game::map; 
+Game* MasterGame;
 
 // Get number of players, perform bidding, distribute tokens, generate deck
 void Game::Setup() {
-	deck = new Deck();
-	hand = new Hand(deck);
-	playerCount = 3;
+	//------------------------------------------//
+	//------------- MAP VARIABLES --------------//
+	//------------------------------------------//
+	char mapVersion = 'a';						// Map version (a, b)
+	bool invalid = true;						// true for invalid, false for valid
+	string mapInput;							// Stores the name of the map to be ran
+
+	//----------- ------------------------------//
+	//------------ PLAYER VARIABLES ------------//
+	//------------------------------------------//
+	string playerName = "";						// Container for a player's name
+
+	cout << endl;
+	cout << "#----------------------------------#" << endl;
+	cout << "#            MAIN MENU             #" << endl;
+	cout << "#----------------------------------#" << endl;
+
+	//----------- ------------------------------//
+	//-------- DECIDE NUMBER OF PLAYERS --------//
+	//------------------------------------------//
+	do {
+		cout << "\n(Number of players must be between 2 and 4)" << endl;
+		cout << "Input number of players and press [ENTER]: ";
+		cin >> playerCount;
+		if (playerCount >= 2) {
+			if (playerCount <= 4) {
+				invalid = false;
+			}
+		}
+	} while (invalid);
+
+	cout << endl;
+
+	//------------------------------------------//
+	//------------ CREATE PLAYERS --------------//
+	//------------------------------------------//
+	Player* player;
+	// Getting player names
 	for (int i = 0; i < playerCount; i++) {
-		Player *p = new Player();
-		p->setPosition(i);
-		p->SetLastName("defaultPlayer" + to_string(i + 1));
-		players.push_back(p);
+		player = new Player();
+		cout << "Enter the name of Player " << i + 1 << ": ";
+		cin >> playerName;
+		player->SetLastName(playerName);
+		player->setPosition(i);
+		players.push_back(player);
 	}
-	int* arr = new int[4];
-	arr[0] = 0;
-	arr[1] = 1;
-	arr[2] = 1;
-	arr[3] = 0;
-	map = new Map(arr, 4, playerCount, 2);
-	map->AddEdge(0, 1);
-	map->AddEdge(0, 2);
-	map->AddEdge(0, 3);
-	map->AddEdge(1, 3);
-	map->AddEdge(1, 2);
-	map->AddEdge(2, 3);
-	delete[] arr;
+	cout << endl << "Players for this game are: " << endl;
+	for (int j = 0; j < playerCount; j++) {
+		cout << j + 1 << ". " << players[j]->GetLastName() << endl;
+	}
+
+	//------------------------------------------//
+	//---------- DECIDE MAP VERSION ------------//
+	//------------------------------------------//
+	invalid = true;								// Reset value
+
+	do {
+		cout << "\n(Map version must be either 'a' or 'b')" << endl;
+		cout << "Input map version and press [ENTER]: ";
+		cin >> mapVersion;
+		if (mapVersion == 'a' || mapVersion == 'b') {
+			invalid = false;
+		}
+	} while (invalid);
+
+	cout << endl;
+
+	mapInput = "Map" + to_string(playerCount) + mapVersion + ".txt";
+
+	//------------------------------------------//
+	//-------------- CREATE MAP ----------------//
+	//------------------------------------------//
+	MapLoader* mapObject = new MapLoader(mapInput);
+	mapObject->readFile();
+	map = mapObject->buildMap(mapObject->regions, mapObject->regionsSize, mapObject->players, mapObject->continents);
+
+	cout << "\nX X X X X X X X X X X X X X X X X X X" << endl;
+	cout << "       INFORMATION ABOUT DECK" << endl;
+	cout << "X X X X X X X X X X X X X X X X X X X\n" << endl;
+
+	//------------------------------------------//
+	//---------- CREATE DECK & HAND ------------//
+	//------------------------------------------//
+	deck = new Deck(playerCount);
+	hand = new Hand(deck);
+
+	cout << "Deck size: " << deck->getSize() << endl; // Display number of cards created
+
+	cout << "\nX X X X X X X X X X X X X X X X X X X" << endl;
+	cout << "      INFORMATION ABOUT PLAYERS" << endl;
+	cout << "X X X X X X X X X X X X X X X X X X X\n" << endl;
+
+	for (int i = 0; i < playerCount; i++) {
+		cout << *players[i];
+	}
 	if (playerCount == 2) {
 		gameTurns = GAME_TURNS_2_PLAYERS;
 	}
@@ -40,30 +110,86 @@ void Game::Setup() {
 	if (playerCount == 4) {
 		gameTurns = GAME_TURNS_4_PLAYERS;
 	}
-
-	// DEBUG:
-	gameTurns = 1;
 }
 
 void Game::MainLoop() {
 	cout << "Press Enter to start!";
 	cin.ignore(INT_MAX, '\n');
+	cin.ignore(INT_MAX, '\n');
+
+	int startingPlayer = BiddingFacility::DoBidding(players, playerCount);
+
 	for (int turn = 0; turn < gameTurns; turn++) {
 		cout << "XXXXXXXXXXXX" << endl;
-		cout << "BEGIN TURN " << turn + 1 << endl;
+		cout << "BEGIN ROUND " << turn + 1 << endl;
 		cout << "XXXXXXXXXXXX" << endl;
 		// Run through each player's turn
 		// TODO: Sort by bid
-			for (int currentPlayer = 0; currentPlayer < playerCount; currentPlayer++) {
-				PlayerTurn(players.at(currentPlayer));
-			}
-			cout << "-------------  ROUND " << turn + 1 << "  -------------" << endl;
+		for (int currentPlayer = startingPlayer; currentPlayer < playerCount + startingPlayer; currentPlayer++) {
+			PlayerTurn(players.at(currentPlayer % playerCount));
+		}
 	}
 }
 
 // TODO: Make use of the Player::ComputeScore() function to determine the winner
 void Game::GetWinner() {
-	cout << "The real winner here is you." << endl;
+	int player_count = MasterGame->GetPlayerCount();
+
+	//Compute the final scores for each player
+	int* scores = new int[player_count];
+	for (int i = 0; i < player_count; i++) {
+		scores[i] = Game::players[i]->ComputeScore();
+	}
+
+	int winner_index = -1;
+	int max_score = -1;
+	string tiebreaker = "";
+	bool tie_after_tiebreakers = false;
+	cout << "Calculating winner and processing tiebreakers: " << endl;
+	for (int i = 0; i < player_count; i++) {
+		if (scores[i] > max_score) {
+			winner_index = i;
+			max_score = scores[i];
+			tie_after_tiebreakers = false;
+		}
+		//In the event that two players are tied, proceed to tiebreakers:
+		else if (scores[i] == max_score) {
+			cout << "Players " << winner_index << " and " << i << " are tied. Proceeding to tiebreakers..." << endl;
+			//Tiebreaker 1: player with the most coins
+			tiebreaker = "have the most coins.";
+			if (Game::players[i]->getCoins() > Game::players[winner_index]->getCoins())
+				winner_index = i;
+			else if (Game::players[i]->getCoins() == Game::players[winner_index]->getCoins()) {
+				//Tiebreaker 2: player with the most armies
+				tiebreaker = "have the most armies on the board.";
+				if (Game::players[i]->getArmiesLeft() < Game::players[winner_index]->getArmiesLeft())
+					winner_index = i;
+				else if (Game::players[i]->getArmiesLeft() == Game::players[winner_index]->getArmiesLeft()) {
+					//Tiebreaker 3: player with the most territories
+					tiebreaker = "control the most territories.";
+					if(Game::map->getNumberControlledTerritories(i) > Game::map->getNumberControlledTerritories(winner_index))
+						winner_index = i;
+					else if (Game::map->getNumberControlledTerritories(i) == Game::map->getNumberControlledTerritories(winner_index)) {
+						tie_after_tiebreakers = true;
+					}
+				}
+			}
+			//Print the result of the tiebreaker
+			if (tie_after_tiebreakers) {
+				cout << "Players " << winner_index << " and " << i << " are still tied after tiebreakers." << endl;
+			}
+			else {
+				cout << "Player " << winner_index << " wins the tiebreaker because they " << tiebreaker << endl;
+			}
+		}
+	}
+	if (tie_after_tiebreakers) {
+		cout << "The final score is a tie!" << endl;
+	}
+	else {
+		cout << "And the winner is... Player " << winner_index << "!" << endl;
+	}
+
 }
 
 void Game::PlayerTurn(Player* player) {
@@ -83,6 +209,9 @@ void Game::PlayerTurn(Player* player) {
 	cout << "Please select a card to draw:" << endl;
 	for (int handIndex = 0; handIndex < HAND_SIZE; handIndex++) {
 		Card* cardAtIndex = hand->GetCardAtIndex(handIndex);
+		if (cardAtIndex == nullptr) {
+			continue;
+		}
 		cout << handIndex << ". \"" << cardAtIndex->name << "\" (" << hand->GetCostAtIndex(handIndex) << " coins)" << endl;
 	}
 
@@ -105,7 +234,12 @@ void Game::PlayerTurn(Player* player) {
 				cout << "You cannot afford this card. You have " << player->getCoins() << " coins." << endl;
 			}
 			else {
-				validCardIndex = true;
+				if (hand->GetCardAtIndex(desiredCardIndex) == nullptr) {
+					cout << "No card exists in space " << desiredCardIndex << endl;
+				}
+				else {
+					validCardIndex = true;
+				}
 			}
 		}
 	}
@@ -119,7 +253,11 @@ void Game::PlayerTurn(Player* player) {
 	// TODO: Add the card to the player object and perform its actions
 	// Player.PerformActionOfCard(card) or some equivalent
 	delete card;	// TODO: Delete as part of the player destructor
-}  
+}
+
+int Game::GetPlayerCount() {
+	return players.size();
+}
 
 // Destructor
 Game::~Game() {

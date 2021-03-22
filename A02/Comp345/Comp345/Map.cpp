@@ -1,6 +1,11 @@
 #include "Map.h"
 #include "MapLoader.h"
+#include <iostream>
 using namespace std;
+
+Map::Map() {
+
+}
 
 //Initializes all vertices/nodes (ie territories) 
 //territories array parameter: array indexes correspond to territory indexes, the values at each index correspond to the continent ID (territories[0]==1 -> territory 0 belongs to continent 1)
@@ -414,15 +419,19 @@ std::ostream& operator<< (std::ostream& out, const Map& map) {
 	return out;
 }
 
-int* Map::ComputeMapScores() {
-	int* scores = new int[player_count];
-	for (int i = 0; i < player_count; i++) scores[i] = 0;
+int Map::ComputeMapScore(int playerIndex) {
+	int score{0};
 	//Loop through territories and increment each player's score for each territory they control
+	cout << "Territories controlled by player " << playerIndex << ": ";
 	for (int i = 0; i < territory_count; i++) {
-		int controller = territories[i].controlling_player;
-		if (controller == -1) continue;
-		scores[controller]++;
+		if (territories[i].controlling_player == playerIndex) {
+			score++;
+			cout << i << " ";
+		}
 	}
+	cout << endl;
+
+	cout << "Player " << playerIndex << " score for controlled territories: " << score << endl;
 
 	//Loop through each continent
 	for (int i = 0; i < continent_count; i++) {
@@ -451,16 +460,27 @@ int* Map::ComputeMapScores() {
 				winning_player = -1;
 			}
 		}
-		if (winning_player >= 0) {
-			scores[winning_player]++;
+		if (winning_player == playerIndex) {
+			cout << "Player " << playerIndex << " controls Continent " << i << ", gets 1 bonus point." << endl;
+			score++;
 		}
-
+			
 		delete[] continent_scores;
 
 	}
 
-	return scores;
+	return score;
 
+}
+
+int Map::getNumberControlledTerritories(int playerIndex) {
+	int count{ 0 };
+	for (int i = 0; i < territory_count; i++) {
+		if (territories[i].controlling_player == playerIndex) {
+			count++;
+		}
+	}
+	return count;
 }
 
 void Territory::addArmy(int player_index) {

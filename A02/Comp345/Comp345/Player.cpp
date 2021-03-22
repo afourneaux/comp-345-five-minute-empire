@@ -1,7 +1,8 @@
-#include<iostream>
+dse#include<iostream>
 #include "Game.h"
 using namespace std;
 
+extern Game* MasterGame;
 
 Player::Player()
 {
@@ -46,7 +47,7 @@ Player::Player(const Player* player) {
 }
 // Assignment operator
 Player& Player::operator= (const Player& player) {
-		//Copying armies
+	//Copying armies
 	for (int i = 0; i < player.getCubes().size(); i++) {
 		cubes[i]->isPlaced = player.getCubes()[i]->isPlaced;
 		cubes[i]->location = player.getCubes()[i]->location;
@@ -73,7 +74,7 @@ Player& Player::operator= (const Player& player) {
 }
 
 // Stream insertion operator
-ostream& operator<<(ostream& out, const Player &player) {
+ostream& operator<<(ostream& out, const Player& player) {
 	out << "--- " << player.GetLastName() << " ---" << endl;
 	out << "Coins: " << player.getCoins() << endl;
 	//Army locations
@@ -156,15 +157,15 @@ bool Player::MoveArmies() {
 	while (!hasMoved) {
 		cout << lastName << " - Where would you like to move an army FROM (territory ID)? (-1 to skip action)" << endl;
 		cin >> src;
-		if (src == -1) 
+		if (src == -1)
 			return false;
 		Territory* source = GetTerritory(src);
 		cout << lastName << " - Where would you like to move an army TO (territory ID)? (-1 to skip action)" << endl;
 		cin >> dest;
 		Territory* destination = GetTerritory(dest);
 		Cube* army = HasArmyAtLocation(src);
-		if (army!= nullptr && source->CheckAdjacency(destination)) {
-			army->location = destination; 
+		if (army != nullptr && source->CheckAdjacency(destination)) {
+			army->location = destination;
 			UpdateTerritory(destination); // Updating Player
 			source->removeArmy(position); // Updating Map
 			destination->addArmy(position); // Updating Map
@@ -183,12 +184,12 @@ bool Player::MoveOverLand() {
 	while (!hasMoved) {
 		cout << lastName << " - Where would you like to move an army FROM (territory ID)? (-1 to skip action)" << endl;
 		cin >> src;
-		if (src == -1) 
+		if (src == -1)
 			return false;
 		Territory* source = GetTerritory(src);
 		cout << lastName << " - Where would you like to move an army TO (territory ID)? (-1 to skip action)" << endl;
 		cin >> dest;
-		if (dest == -1) 
+		if (dest == -1)
 			return false;
 		Territory* destination = GetTerritory(dest);
 		Cube* army = HasArmyAtLocation(src);
@@ -207,23 +208,25 @@ bool Player::MoveOverLand() {
 //**********
 bool Player::BuildCity() {
 	bool isBuilt = false;
-	bool hasCity = false;
 	bool hasArmy = false;
-	Disk* city = nullptr;
+	Disk* city = HasCitiesToPlace();
 	int id;
+
+	if (city == nullptr) {
+		cout << lastName << " - You don't have any cities left to place." << endl;
+		return false;
+	}
+
 	while (!isBuilt) {
 		cout << lastName << " - Where would you like to build a city (territory ID)? (-1 to skip action) ";
 		cin >> id;
-		if ( id == -1) 
+		if (id == -1)
 			return false;
 		Territory* city_terr = GetTerritory(id);
 		if (city_terr == nullptr) continue;
-		if (HasCitiesToPlace()) 
-			hasCity = true;
 		if (HasArmyAtLocation(id) != nullptr || id == STARTING_REGION_ID)
 			hasArmy = true;
-		if (hasArmy && hasCity) { // Check if above conditions are met
-			city = HasCitiesToPlace();
+		if (hasArmy) { // Check if above conditions are met
 			city->location = city_terr;
 			city->isBuilt = true;
 			isBuilt = true;
@@ -256,16 +259,16 @@ bool Player::DestroyArmy() {//Checks if friendly & enemy in same location -> Ret
 		battlefieldTerr = GetTerritory(battlefieldTerrId);
 		if (HasArmyAtLocation(battlefieldTerrId) == nullptr) continue;
 		if (battlefieldTerr == nullptr) continue;
-		if (enemy < 0 || enemy >= NUM_OF_PLAYERS) continue;
+		if (enemy < 0 || enemy >= MasterGame->players.size()) continue;
 		if (battlefieldTerr->army_count[enemy] > 0 && battlefieldTerr->army_count[position] > 0) {
-			for (int i = 0; i < Game::players[enemy]->getCubes().size(); i++) {
-				if (Game::players[enemy]->getCubes()[i]->location == battlefieldTerr) {
-					Game::players[enemy]->getCubes()[i]->location = nullptr;
-					Game::players[enemy]->getCubes()[i]->isPlaced = false;
-					cout << Game::players[0]->lastName << " - Army destroyed and now has "  << endl;
+			for (int i = 0; i < MasterGame->players[enemy]->getCubes().size(); i++) {
+				if (MasterGame->players[enemy]->getCubes()[i]->location == battlefieldTerr) {
+					MasterGame->players[enemy]->getCubes()[i]->location = nullptr;
+					MasterGame->players[enemy]->getCubes()[i]->isPlaced = false;
 					UpdateTerritory(battlefieldTerr); // Updating Player
 					battlefieldTerr->removeArmy(enemy); // Updating Map
 					isDestoyed = true;
+					cout << MasterGame->players[enemy]->lastName << " - Army destroyed and now has " << battlefieldTerr->army_count[enemy] << endl;
 					break;
 				}
 			}
@@ -273,18 +276,20 @@ bool Player::DestroyArmy() {//Checks if friendly & enemy in same location -> Ret
 	}
 	return isDestoyed;
 }
+
+// if OR -> Returns 0 or 1 depending on user inputs which is the action choosen. If AND -> Returns -1 is because we have an AND action
 int Player::AndOrAction() {
 	Card* currentCard = hand.back(); //Last drawn card
 	int choice = -1;
 	string and_or;
 	if (currentCard->actionChoice == eChoice_And) // For nice output
-		and_or = "AND"; 
+		and_or = "AND";
 	if (currentCard->actionChoice == eChoice_Or) // For nice output
 		and_or = "OR";
 	cout << lastName << " - The card you have chosen allows you to " << currentCard->actions[0] << " " << and_or << " " << currentCard->actions[1] << endl;
 	if (currentCard->actionChoice == eChoice_Or) {
 		cout << lastName << " - Since you have the OR card, please choose: " << endl;
-		for (int i = 0; i < currentCard->actionCount; i++) 
+		for (int i = 0; i < currentCard->actionCount; i++)
 			cout << "Press " << i << ":" << currentCard->actions[i] << endl;
 		while (true) {
 			cin >> choice;
@@ -297,6 +302,77 @@ int Player::AndOrAction() {
 	}
 	return choice;
 }
+
+int Player::ComputeScore() {
+
+	//Calculate the scores for controlled continents + territories
+	int mapScore = MasterGame->map->ComputeMapScore(position);
+	int score = 0;
+	int player_count = MasterGame->players.size();
+
+	int* elixir_count = new int[MasterGame->players.size()];
+	for (int i = 0; i < player_count; i++) elixir_count[i] = 0;
+
+	//Loop through each player
+	for (int player_index = 0; player_index < player_count; player_index++) {
+		Player* player = MasterGame->players[player_index];
+		vector<Card*> hand = player->getHand();
+		//Loop through each card player owns
+		for (int card_index = 0; card_index < hand.size(); card_index++) {
+			//loop through each ability on each card
+			for (int ability_index = 0; ability_index < hand[card_index]->abilityCount; ability_index++) {
+				Ability* ability = &hand[card_index]->abilities[ability_index];
+				//count the number of elixirs each player owns
+				if (ability->type == eAbility_Elixir)
+					elixir_count[player_index]++;
+				//If the player iteration matches the calling player, compute scores from other points-giving cards
+				if (player == this) {
+					//If the card grants VP per cardName, count the number of cards with that name
+					if (ability->type == eAbility_VpPerCardName) {
+						int count = 0;
+						for (int i = 0; i < hand.size(); i++) {
+							if (hand[i]->name.find(ability->setName) != string::npos) {
+								count++;
+							}
+						}
+						if (count >= ability->setTarget) {
+							if (ability->countSetOnce)
+								score += ability->value;
+							else
+								score += ability->value * count;
+						}
+					}
+					else if (ability->type == eAbility_VpPerCoins) {
+						score += (coins / ability->setTarget) * ability->value;
+					}
+				}
+
+			}
+		}
+	}
+	int elixir_winner = -1;
+	int elixir_max = -1;
+	for (int i = 0; i < player_count; i++) {
+		if (elixir_count[i] > elixir_max) {
+			elixir_winner = i;
+			elixir_max = elixir_count[i];
+		}
+		else if (elixir_count[i] == elixir_max) {
+			elixir_winner = -1;
+		}
+	}
+	if (elixir_winner == position) {
+		cout << "Player " << position << " has the most elixirs, gets " << ELIXIR_BONUS << " bonus points." << endl;
+		score += ELIXIR_BONUS;
+	}
+
+	int final_score = score + mapScore;
+	cout << "FINAL SCORE FOR PLAYER " << position << ": " << final_score << endl;
+
+	delete[] elixir_count;
+	return final_score;
+}
+
 //****************************************************************************************************************************************************************************
 //                                                                 HELPER METHODS
 //****************************************************************************************************************************************************************************
@@ -340,8 +416,8 @@ void Player::PrintPlayerStatus() {
 	vector <Territory*> territories = GetTerritories();
 	Territory* terr = nullptr;
 	cout << lastName << " - Start Statistics:" << endl;
-	for (int i=0; i<territories.size(); i++) {
-		 terr = territories[i];
+	for (int i = 0; i < territories.size(); i++) {
+		terr = territories[i];
 		cout << "Territory Id " << terr->territoryID << " has currently " << terr->army_count[position] << " unit(s) of army and " << terr->city_count[position] << " unit(s) of city" << endl;
 	}
 	cout << lastName << " - End Statistics." << endl;
@@ -350,9 +426,9 @@ void Player::PrintPlayerStatus() {
 //HasArmyAtLocation
 //**********
 Cube* Player::HasArmyAtLocation(int id) {
-		for (int i = 0; i< cubes.size(); i++)
-			if (cubes[i]->location != nullptr && cubes[i]->location->territoryID == id)
-				return cubes[i];
+	for (int i = 0; i < cubes.size(); i++)
+		if (cubes[i]->location != nullptr && cubes[i]->location->territoryID == id)
+			return cubes[i];
 	return nullptr;
 }
 //**********
@@ -364,7 +440,7 @@ Disk* Player::HasCityAtLocation(int id) {
 	return nullptr;
 }
 Territory* Player::GetTerritory(int id) {
-	return Game::map->GetTerritory(id);
+	return MasterGame->map->GetTerritory(id);
 }
 //**********
 //HasArmiesToPlace

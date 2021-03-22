@@ -145,6 +145,8 @@
     <ClCompile Include="Map.cpp" />
     <ClCompile Include="MapLoader.cpp" />
     <ClCompile Include="Player.cpp" />
+    <ClCompile Include="PlayerDriver.cpp" />
+    <ClCompile Include="SetupDriver.cpp" />
   </ItemGroup>
   <ItemGroup>
     <ClInclude Include="BiddingFacility.h" />
@@ -155,9 +157,12 @@
     <ClInclude Include="Player.h" />
   </ItemGroup>
   <ItemGroup>
-    <Text Include="Map1.txt" />
-    <Text Include="Map2.txt" />
-    <Text Include="Map3.txt" />
+    <Text Include="Map2a.txt" />
+    <Text Include="Map2b.txt" />
+    <Text Include="Map3a.txt" />
+    <Text Include="Map3b.txt" />
+    <Text Include="Map4a.txt" />
+    <Text Include="Map4b.txt" />
   </ItemGroup>
   <Import Project="$(VCTargetsPath)\Microsoft.Cpp.targets" />
   <ImportGroup Label="ExtensionTargets">
