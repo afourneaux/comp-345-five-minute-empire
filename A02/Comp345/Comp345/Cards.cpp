@@ -366,7 +366,6 @@ ostream& operator<<(ostream& out, const Deck& deck) {
  // Default constructor
 Hand::Hand(Deck* newDeck) {
 	deck = newDeck;
-	cards = new Card[HAND_SIZE];
 
 	// Deal HAND_SIZE cards into the hand from the provided deck
 	for (int i = 0; i < HAND_SIZE; i++) {
@@ -377,7 +376,6 @@ Hand::Hand(Deck* newDeck) {
 // Copy constructor
 Hand::Hand(const Hand* hand) {
 	deck = hand->deck; // Keep the assignment to the same deck
-	cards = new Card[HAND_SIZE];
 	for (int i = 0; i < HAND_SIZE; i++) {
 		cards[i] = hand->cards[i];
 	}
@@ -391,12 +389,12 @@ Hand::~Hand() {
 // Take a card from the hand and shift all other cards in the hand down one index
 Card* Hand::Exchange(const int index)
 {
-	int cost = GetCostAtIndex(index);
 	if (&cards[index] == nullptr) {
 		cout << "ERROR: Trying to exchange with an empty card slot" << endl;
 		return nullptr;
 	}
-	Card* card = new Card(&cards[index]);
+	int cost = GetCostAtIndex(index);
+	Card* card = new Card(cards[index]);
 	// Shift each card down one on the track
 	for (int i = index; i < HAND_SIZE - 1; i++) {
 		cards[i] = cards[i + 1];
@@ -412,7 +410,7 @@ Card* Hand::GetCardAtIndex(const int index) const
 		cout << "ERROR: Hand::GetCardAtIndex attempting to get card at index " << index << ". Valid values: 0 - " << HAND_SIZE << endl;
 		return nullptr;
 	}
-	return &cards[index];
+	return cards[index];
 }
 
 // Returns the coin cost to retrieve a card at a given index
@@ -447,7 +445,6 @@ Hand& Hand::operator= (const Hand& hand) {
 		return *this;
 	}
 	deck = hand.deck; // Keep the assignment to the same deck
-	cards = new Card[HAND_SIZE];
 	for (int i = 0; i < HAND_SIZE; i++) {
 		cards[i] = new Card(hand.cards[i]);
 	}

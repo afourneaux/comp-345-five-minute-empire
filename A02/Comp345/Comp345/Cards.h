@@ -100,6 +100,6 @@ public:
 	Hand& operator= (const Hand& hand);								// Assignment operator
 	friend ostream& operator<< (ostream& out, const Hand& hand);	// Stream insertion operator
 private:
-	Card* cards;										// The contents of the hand
+	Card* cards[HAND_SIZE];								// The contents of the hand
 	Deck* deck;											// The associated deck from which to draw cards from
 };
