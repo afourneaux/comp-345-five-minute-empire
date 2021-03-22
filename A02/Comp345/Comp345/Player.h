@@ -48,6 +48,7 @@ public:
 	bool Find(Territory* terr);
 	void InitializePlayer();
 	int ComputeScore();
+	void AddCardToHand(Card* card);
 
 	//Accessors
 	string GetLastName() const { return lastName; };
