@@ -30,24 +30,33 @@ public:
 	Player(const Player* player);
 	Player& operator= (const Player& player);
 	friend std::ostream& operator<<(std::ostream& out, const Player &player);
-	bool PayCoin(int amt);
-	bool PlaceNewArmies();	//Loops through all armies and if not placed -> Assigns it a territory
-	bool MoveArmies();		//Loops through all armies in a territory -> Assigns it a new territory (calculation for movement imissing)
+	void PayCoin(int amt);
+	int PlaceNewArmies();	//Loops through all armies and if not placed -> Assigns it a territory
+	int MoveArmies();		//Loops through all armies in a territory -> Assigns it a new territory (calculation for movement imissing)
 	bool MoveOverLand();	//Loops through all armies in a territory -> Assigns it a new territory (calculation for movement imissing)
-	bool BuildCity();		// if (player has a city to build and has an army at the destination) -> Build city and return true.
-	bool DestroyArmy();
+	int BuildCity();		// if (player has a city to build and has an army at the destination) -> Build city and return true.
+	int DestroyArmy();
 	int AndOrAction();
-	bool DoAction(Card* card);
-	Cube* HasArmyAtLocation(int id);
-	Disk* HasCityAtLocation(int id);
+	void DoAction(Card* card);
+	Cube* GetRandomArmy();
+	Cube* GetArmyAtLocation(int id);
+	Disk* GetCityAtLocation(int id);
+	bool HasArmyAtLocation(int id);
+	bool HasCityAtLocation(int id);
+	bool HasArmiesOnBoard();
 	Territory* GetTerritory(int id);
 	Cube* HasArmiesToPlace();
 	Disk* HasCitiesToPlace();
 	void PrintPlayerStatus();
-	void UpdateTerritory(Territory* terr);
+	void AddCity(Territory* terr);
+	void AddArmy(Territory* terr, Cube* cube);
+	void RemoveArmy(Territory* terr);
 	bool Find(Territory* terr);
+	bool HasSkipped(int input);
 	void InitializePlayer();
 	int ComputeScore();
+	void PrintPlacedCities();
+	void PrintPlacedArmies();
 
 	//Accessors
 	string GetLastName() const { return lastName; };
