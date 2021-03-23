@@ -1,7 +1,10 @@
 #include "Map.h"
 #include "MapLoader.h"
 #include <iostream>
+#include "Game.h"
 using namespace std;
+
+extern Game* MasterGame;
 
 Map::Map() {
 
@@ -412,9 +415,9 @@ std::ostream& operator<< (std::ostream& out, const Map& map) {
 		}
 		out << endl;
 		for (int j = 0; j < map.player_count; j++) {
-			out << "\tPlayer " << j << ": \tarmy count: " << map.territories[i].army_count[j] << "\tcity count: " << map.territories[i].city_count[j] << endl;
+			out << "\tPlayer " << MasterGame->players[j]->GetLastName() << ": \tarmy count: " << map.territories[i].army_count[j] << "\tcity count: " << map.territories[i].city_count[j] << endl;
 		}
-		out << "Controlling player: " << map.territories[i].controlling_player << endl;
+		out << "Controlling player: " << map.territories[i].controlling_player_name << endl;
 	}
 	return out;
 }
@@ -422,7 +425,7 @@ std::ostream& operator<< (std::ostream& out, const Map& map) {
 int Map::ComputeMapScore(int playerIndex) {
 	int score{0};
 	//Loop through territories and increment each player's score for each territory they control
-	cout << "Territories controlled by player " << playerIndex << ": ";
+	cout << "Territories controlled by player " << MasterGame->players[playerIndex]->GetLastName() << ": ";
 	for (int i = 0; i < territory_count; i++) {
 		if (territories[i].controlling_player == playerIndex) {
 			score++;
@@ -431,7 +434,7 @@ int Map::ComputeMapScore(int playerIndex) {
 	}
 	cout << endl;
 
-	cout << "Player " << playerIndex << " score for controlled territories: " << score << endl;
+	cout << "Player " << MasterGame->players[playerIndex]->GetLastName() << " score for controlled territories: " << score << endl;
 
 	//Loop through each continent
 	for (int i = 0; i < continent_count; i++) {
@@ -461,7 +464,7 @@ int Map::ComputeMapScore(int playerIndex) {
 			}
 		}
 		if (winning_player == playerIndex) {
-			cout << "Player " << playerIndex << " controls Continent " << i << ", gets 1 bonus point." << endl;
+			cout << "Player " << MasterGame->players[playerIndex]->GetLastName() << " controls Continent " << i << ", gets 1 bonus point." << endl;
 			score++;
 		}
 			
@@ -519,10 +522,13 @@ void Territory::UpdateControl() {
 	for (int i = 0; i < army_count.size(); i++) {
 		if (i == controlling_player) continue;
 		int player_control_score = army_count[i] + city_count[i];
-		if (current_max == player_control_score)
+		if (current_max == player_control_score){
 			controlling_player = -1;
+			controlling_player_name = "None";
+		}
 		else if (current_max < player_control_score) {
 			controlling_player = i;
+			controlling_player_name = MasterGame->players[i]->GetLastName();
 			current_max = player_control_score;
 		}
 	}

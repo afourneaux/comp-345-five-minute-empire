@@ -28,6 +28,7 @@ public:
 	Map* map;
 	int bank;
 	int GetPlayerCount();
+	Hand* GetHand();
 private:
 	Deck* deck;
 	Hand* hand;
@@ -38,3 +39,4 @@ private:
 
 extern Game* MasterGame;
 int StartupDriver();
+void TestScoreCalculation();

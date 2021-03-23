@@ -57,6 +57,7 @@ public:
 	int ComputeScore();
 	void PrintPlacedCities();
 	void PrintPlacedArmies();
+	void AddCardToHand(Card* card);
 
 	//Accessors
 	string GetLastName() const { return lastName; };
