@@ -523,7 +523,6 @@ int Map::getNumberControlledTerritories(int playerIndex) {
 	return count;
 }
 
-
 int Map::GetMovementCost(int origin, int destination) {
 	bool* visited = new bool[territory_count];
 	int* distance = new int[territory_count];
@@ -533,7 +532,9 @@ int Map::GetMovementCost(int origin, int destination) {
 		if (i == origin) distance[i] = 0;
 		else distance[i] = INT32_MAX;
 	}
+	// Loop until a path is found
 	while (true) {
+		//iterate over ajcency list of current node and update their distances if they are shorter than the current minimum
 		Edge* temp = territories[current_node].head;
 		while (temp != nullptr) {
 			int candidate_distance = distance[current_node] + temp->movement_cost;
@@ -542,19 +543,31 @@ int Map::GetMovementCost(int origin, int destination) {
 			}
 			temp = temp->next;
 		}
+		// Mark current node as visited
 		visited[current_node] = true;
 		if (current_node == destination) {
+			// if the current node is the destination, shortest path length is stored as distance
 			int shortest = distance[current_node];
 			delete[] visited;
 			delete[] distance;
 			return shortest;
 		}
-
-
+		//select the unvisited node with smallest distance and loop
+		int shortest_unvisited = INT32_MAX;
+		for (int i = 0; i < territory_count; i++) {
+			if (visited[i]) continue;
+			if (distance[i] <= shortest_unvisited) {
+				shortest_unvisited = distance[i];
+				current_node = i;
+			}
+		}
+		if (visited[current_node]) break;
 	}
 
+	cout << "ERROR when calculating shortest path between " << origin << " and " << destination << ". No valid path found. Check that the map is valid." << endl;
 	delete[] visited;
 	delete[] distance;
+	return -1;
 }
 
 void Territory::addArmy(int player_index) {
