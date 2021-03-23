@@ -143,10 +143,14 @@ void Game::Startup() {
 	if (playerCount == 2) {
 		cout << "Because this is a 2-player game, the players must place 10 armies of a third non-player color on the map" << endl;
 		for (int i = 0; i < NEUTRAL_ARMY_COUNT; i++) {
-			cout << players[i % 2]->GetLastName() << ", please choose a territory in which to place a neutral army: ";
-			int terr;
-			cin >> terr;
-			players[2]->PlaceNewArmiesDirectly(terr);
+			bool validPlacement;
+			do {
+				cout << players[i % 2]->GetLastName() << ", please choose a territory in which to place a neutral army: ";
+				int terr;
+				cin >> terr;
+				validPlacement = players[2]->PlaceNewArmiesDirectly(terr);
+			} while (!validPlacement);
+			
 		}
 	}
 }

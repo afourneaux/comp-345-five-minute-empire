@@ -159,7 +159,7 @@ bool Player::PlaceNewArmiesDirectly(int territoryIndex) {
 	Territory* destination;
 
 	if (GetTerritory(territoryIndex) == nullptr) {
-		cout << "Invalid Territory ID " << territoryIndex << ". Please try again.";
+		cout << "Invalid Territory ID " << territoryIndex << ". Please try again." << endl;
 		return false;
 	}
 
