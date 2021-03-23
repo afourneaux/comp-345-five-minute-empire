@@ -18,6 +18,7 @@ struct Territory {
 	void removeArmy(int player_index);
 	void UpdateControl();
 	int CheckAdjacency(Territory* destination);	// Checks if the current territory and destination are adjacent. Returns the movement cost if they are connected, otherwise -1
+	std::vector<int> GetAdjacent();
 };
 
 struct Edge {
@@ -45,7 +46,7 @@ public:
 	int territory_count;							// Number of territories in Map
 	int continent_count;							// Number of continents in Map
 	int player_count;								// Number of players in Map
-	int starting_territory_index;					// Index of starting territory for army placement
+	int starting_territory_index = -1;					// Index of starting territory for army placement
 	Territory* territories;							// Array of Territory objects - each Territory contains a linked list of Edges which are pointers to adjacent territories 
 	TerritoryList* continents;						// Array of linked lists mapping territories to continents
 	Map();											// Default constructor
@@ -54,7 +55,9 @@ public:
 	~Map();											// Destructor
 	void AddEdge(int origin, int destination);		// Adds a bi-directional edge from territories[origin] to territories[destination]
 	int CheckAdjacency(int origin, int destination);// Checks if two territories are adjacent. Returns the movement cost if they are connected, otherwise -1
+	std::vector<int> GetLegalArmyPlacements(int playerIndex);
 	Territory* GetTerritory(int territory_index);	// Returns a pointer to the territory at the specified index
+	std::vector<int> GetPotentialStartingTerritories();
 	Territory* SetStartingTerritory(int territory_index);	// Sets the starting territory for army placement
 	void PrintMapMemAddresses();					// DEBUG: prints a string representation of the map's memory addresses
 	bool Validate();								// Validates if the map is a valid game map

@@ -82,6 +82,17 @@ void Game::Setup() {
 	mapObject->readFile();
 	map = mapObject->buildMap(mapObject->regions, mapObject->regionsSize, mapObject->players, mapObject->continents);
 
+	//Set the starting territory
+	vector<int> possibleStartingTerritories = map->GetPotentialStartingTerritories();
+	int starter = 0;
+	cout << "Please select a starting region (legal options for this map: ";
+	for (int i = 0; i < possibleStartingTerritories.size(); i++) cout << possibleStartingTerritories[i] << " ";
+	cout << "): ";
+	do {
+		cin >> starter;
+		map->SetStartingTerritory(starter);
+	} while (map->starting_territory_index < 0);
+
 	cout << "\nX X X X X X X X X X X X X X X X X X X" << endl;
 	cout << "       INFORMATION ABOUT DECK" << endl;
 	cout << "X X X X X X X X X X X X X X X X X X X\n" << endl;
@@ -92,7 +103,7 @@ void Game::Setup() {
 	deck = new Deck(playerCount);
 	hand = new Hand(deck);
 
-	cout << "Deck size: " << deck->getSize() << endl; // Display number of cards created
+	cout << "Deck size: " << deck->GetSize() << endl; // Display number of cards created
 
 	cout << "\nX X X X X X X X X X X X X X X X X X X" << endl;
 	cout << "      INFORMATION ABOUT PLAYERS" << endl;
@@ -124,14 +135,13 @@ void Game::MainLoop() {
 		cout << "BEGIN ROUND " << turn + 1 << endl;
 		cout << "XXXXXXXXXXXX" << endl;
 		// Run through each player's turn
-		// TODO: Sort by bid
 		for (int currentPlayer = startingPlayer; currentPlayer < playerCount + startingPlayer; currentPlayer++) {
 			PlayerTurn(players.at(currentPlayer % playerCount));
 		}
 	}
 }
 
-// TODO: Make use of the Player::ComputeScore() function to determine the winner
+// Determine and output the winner of the game
 void Game::GetWinner() {
 	int player_count = GetPlayerCount();
 
@@ -250,8 +260,6 @@ void Game::PlayerTurn(Player* player) {
 	cout << *card;
 	player->DoAction(card);
 	player->PrintPlayerStatus();
-	// TODO: Add the card to the player object and perform its actions
-	// Player.PerformActionOfCard(card) or some equivalent
 	delete card;	// TODO: Delete as part of the player destructor
 }
 
@@ -261,12 +269,12 @@ int Game::GetPlayerCount() {
 
 // Destructor
 Game::~Game() {
-	delete deck;
 	delete hand;
-	for (int i = 0; i < playerCount; i++) {
-		delete players[i];
+	delete deck;
+	while (players.empty() == false) {
+		players.pop_back();
 	}
-	delete Game::map;
+	delete map;
 }
 
 Hand* Game::GetHand() {

@@ -33,7 +33,6 @@ private:
 	Deck* deck;
 	Hand* hand;
 	int playerCount;
-	int coinBank;
 	int gameTurns;
 };
 
