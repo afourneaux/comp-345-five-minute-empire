@@ -914,6 +914,7 @@ ostream& operator<<(ostream& out, const Ability& ability) {
 			out << ability.setTarget << " ";
 		}
 		out << "flying";
+		break;
 	case eAbility_Immune:
 		out << "Immune to Attack";
 		break;
