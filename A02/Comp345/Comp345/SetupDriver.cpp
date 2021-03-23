@@ -93,7 +93,7 @@ int StartupDriver() {
 	Deck* deck = new Deck(numOfPlayers);
 	Hand* hand = new Hand(deck);
 
-	cout << "Deck size: " << deck->getSize() << endl; // Display number of cards created
+	cout << "Deck size: " << deck->GetSize() << endl; // Display number of cards created
 
 	cout << "\nX X X X X X X X X X X X X X X X X X X" << endl;
 	cout << "      INFORMATION ABOUT PLAYERS" << endl;
