@@ -32,7 +32,7 @@ public:
 	friend std::ostream& operator<<(std::ostream& out, const Player &player);
 	void PayCoin(int amt);
 	int PlaceNewArmies();	//Loops through all armies and if not placed -> Assigns it a territory
-	int MoveArmies();		//Loops through all armies in a territory -> Assigns it a new territory (calculation for movement imissing)
+	int MoveArmies(int numOfMoves);		//Loops through all armies in a territory -> Assigns it a new territory (calculation for movement imissing)
 	bool MoveOverLand();	//Loops through all armies in a territory -> Assigns it a new territory (calculation for movement imissing)
 	int BuildCity();		// if (player has a city to build and has an army at the destination) -> Build city and return true.
 	int DestroyArmy();

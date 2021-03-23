@@ -49,7 +49,7 @@ int testPlayer()
 
 	round_table->at(0)->PlaceNewArmies();
 	round_table->at(0)->PlaceNewArmies();
-	round_table->at(0)->MoveArmies();
+	round_table->at(0)->MoveArmies(3);
 	round_table->at(0)->BuildCity();
 	round_table->at(0)->PlaceNewArmies();
 	round_table->at(1)->PlaceNewArmies();

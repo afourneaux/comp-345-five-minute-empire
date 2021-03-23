@@ -143,7 +143,7 @@ int Player::PlaceNewArmies() {
 //**********
 //MoveArmies
 //**********
-int Player::MoveArmies() {
+int Player::MoveArmies(int numOfMoves) {
 	int movementCost = 0;
 	int landOrSea;
 	int src, dest;
@@ -153,16 +153,8 @@ int Player::MoveArmies() {
 		PrintPlacedArmies();
 		return 0;
 	}
-	cout << lastName << " - Would you like to travel across land (0) or over sea (1)?";
-	cin >> landOrSea;
-	if (landOrSea < 0 || landOrSea > 1)
-		return movementCost;
-	if (landOrSea == 1) {
-		movementCost = MoveOverLand();
-		return movementCost;
-	}
 	while (true) {
-		cout << lastName << " - Where would you like to move an army FROM (territory ID)? (-1 to skip action)";
+		cout << lastName << " - Where would you like to move an army FROM (territory ID)? (-1 to skip action) ";
 		cin >> src;
 		if (HasSkipped(src)) return 0;
 		if (!HasArmyAtLocation(src)) {
@@ -174,7 +166,7 @@ int Player::MoveArmies() {
 		else
 			cout << "* Picked-up * - Army unit at territory ID " << src << ". " << endl;
 		Territory* source = GetTerritory(src);
-		cout << lastName << " - Where would you like to move an army TO (territory ID)? (-1 to skip action)";
+		cout << lastName << " - Where would you like to move an army TO (territory ID)? (-1 to skip action) ";
 		cin >> dest;
 		if (HasSkipped(dest)) return 1;
 		Territory* destination = GetTerritory(dest);
@@ -185,12 +177,7 @@ int Player::MoveArmies() {
 			continue;
 		}
 		movementCost = source->CheckAdjacency(destination);
-		if (movementCost == 3) {
-			cout << "SORRY, this is not allowed as you are trying to move over land.";
-			return 0;
-		}
-
-		else if (movementCost == 1) {
+		if (movementCost <= numOfMoves){
 			srcArmy->location = destination;
 			cout << "Moved army from location " << src << " to destination " << dest << endl;
 			source->removeArmy(position);						// Updating Map
@@ -204,8 +191,8 @@ int Player::MoveArmies() {
 			return movementCost;
 		}
 		else {
-			cout << "Movement cost is something out of this world." << endl;
-			return movementCost;
+			cout << "Movement cost is too expensive, please try again. (cost " << movementCost << ", avail " << numOfMoves << ") " << endl;
+			continue;
 		}
 	}
 }
@@ -213,61 +200,7 @@ int Player::MoveArmies() {
 //MoveOverLand
 //**********
 bool Player::MoveOverLand() {
-	int movementCost = 0;
-	int src, dest;
-	bool exit = false;
-	if (!HasArmiesOnBoard()) {
-		cout << "SORRY, cannot perform action (No armies to move)" << endl;
-		PrintPlacedArmies();
-		return 0;
-	}
-	while (true) {
-		cout << lastName << " - Where would you like to move an army FROM (territory ID)? (-1 to skip action)";
-		cin >> src;
-		if (HasSkipped(src)) return 0;
-		if (!HasArmyAtLocation(src)) {
-			cout << endl << "WARNING - You do not have any armies at territory ID: " << src << endl;
-			cout << "Here are possible armies you can move: " << endl;
-			PrintPlacedArmies();
-			continue;
-		}
-		else
-			cout << "* Picked-up * - Army unit at territory ID " << src << ". " << endl;
-		Territory* source = GetTerritory(src);
-		cout << lastName << " - Where would you like to move an army TO (territory ID)? (-1 to skip action)";
-		cin >> dest;
-		if (HasSkipped(dest)) return 1;
-		Territory* destination = GetTerritory(dest);
-		Cube* srcArmy = GetArmyAtLocation(src);
-		if (srcArmy == nullptr) {
-			cout << "You have no armies at that location" << endl;
-			PrintPlacedArmies();
-			continue;
-		}
-		movementCost = source->CheckAdjacency(destination);
-		if (movementCost < 3) {
-			cout << "SORRY, you do not have sufficient actions for this move... costs " << movementCost;
-			return 0;
-		}
-
-		else if (movementCost == 3) {
-			srcArmy->location = destination;
-			cout << "Moved army from location " << src << " to destination " << dest << endl;
-			source->removeArmy(position);						// Updating Map
-			destination->addArmy(position);						// Updating Map
-			if (!Find(destination))								// Updating Player territories
-				territories.push_back(destination);
-			for (int i = 0; i < territories.size(); i++) {		// Updating Player territories
-				if (territories[i] == source && source->army_count[position] == 0 && source->city_count[position] == 0)
-					territories.erase(territories.begin() + i);
-			}
-			return movementCost;
-		}
-		else {
-			cout << "Movement cost is something out of this world." << endl;
-			return movementCost;
-		}
-	}
+	return true;
 }
 //**********
 //BuildCity
@@ -368,7 +301,7 @@ void Player::DoAction(Card* card) {
 				cout << endl;
 				i += cost;
 				break;
-			case eAction_MoveArmies: cost = MoveArmies();
+			case eAction_MoveArmies: cost = MoveArmies(possibleActions);
 				i += cost;
 				cout << endl;
 				break;
