@@ -64,7 +64,6 @@ public:
 	int GetPosition() { return position; };
 	void setCoins(int amt) { coins = amt; };
 	void setPosition(int pos) { position = pos; };
-
 private:
 	string lastName;
 	vector<Territory*> territories;
@@ -74,7 +73,6 @@ private:
 	BiddingFacility* bf;
 	int coins = STARTING_COINS;
 	int armiesLeft = STARTING_ARMIES;
-	int STARTING_REGION_ID = 0;
 	int position; // the position of the player at the table
 };
 int testPlayer();

@@ -115,6 +115,12 @@ bool Player::PlaceNewArmies() {
 	bool hasPlaced = false;
 	int dest;
 	Territory* destination;
+	//print legal options for army placement
+	vector<int> legalMoves = MasterGame->map->GetLegalArmyPlacements(position);
+	cout << "You can currently place armies in the following territories: ";
+	for (int i = 0; i < legalMoves.size(); i++) cout << legalMoves[i] << " ";
+	cout << endl;
+
 	while (!hasPlaced) {
 		if (!HasArmiesToPlace()) return hasPlaced;
 		cout << lastName << " - Where would you like to place a new army (territory ID)? (-1 to skip action) ";
@@ -125,11 +131,11 @@ bool Player::PlaceNewArmies() {
 		}
 		if (GetTerritory(dest) == nullptr)
 			continue;
-		if (dest == STARTING_REGION_ID)
-			destination = GetTerritory(STARTING_REGION_ID);
+		if (dest == MasterGame->map->starting_territory_index)
+			destination = GetTerritory(MasterGame->map->starting_territory_index);
 		else
 			destination = GetTerritory(dest);
-		if (dest == STARTING_REGION_ID || destination->city_count[position] > 0) { // Checking if destination has a city of player or is starting region
+		if (dest == MasterGame->map->starting_territory_index || destination->city_count[position] > 0) { // Checking if destination has a city of player or is starting region
 			for (int i = 0; i < cubes.size(); i++) { // check if have available armies and places it if it does
 				if (!cubes[i]->isPlaced) {
 					cubes[i]->isPlaced = true;
@@ -154,12 +160,20 @@ bool Player::MoveArmies() {
 	bool hasMoved = false;
 	int src, dest;
 	bool exit = false;
+	PrintPlayerStatus();
 	while (!hasMoved) {
 		cout << lastName << " - Where would you like to move an army FROM (territory ID)? (-1 to skip action)" << endl;
 		cin >> src;
 		if (src == -1)
 			return false;
 		Territory* source = GetTerritory(src);
+
+		//print the legal move options
+		vector<int> potentialMoves = source->GetAdjacent();
+		cout << "You can move this army to the following territories: ";
+		for (int i = 0; i < potentialMoves.size(); i++) cout << potentialMoves[i] << " ";
+		cout << endl;
+
 		cout << lastName << " - Where would you like to move an army TO (territory ID)? (-1 to skip action)" << endl;
 		cin >> dest;
 		Territory* destination = GetTerritory(dest);
@@ -181,12 +195,20 @@ bool Player::MoveArmies() {
 bool Player::MoveOverLand() {
 	bool hasMoved = false;
 	int src, dest;
+	PrintPlayerStatus();
 	while (!hasMoved) {
 		cout << lastName << " - Where would you like to move an army FROM (territory ID)? (-1 to skip action)" << endl;
 		cin >> src;
 		if (src == -1)
 			return false;
 		Territory* source = GetTerritory(src);
+
+		//print the legal move options
+		vector<int> potentialMoves = source->GetAdjacent();
+		cout << "You can move this army to the following territories: ";
+		for (int i = 0; i < potentialMoves.size(); i++) cout << potentialMoves[i] << " ";
+		cout << endl;
+
 		cout << lastName << " - Where would you like to move an army TO (territory ID)? (-1 to skip action)" << endl;
 		cin >> dest;
 		if (dest == -1)
@@ -217,6 +239,7 @@ bool Player::BuildCity() {
 		return false;
 	}
 
+	PrintPlayerStatus();
 	while (!isBuilt) {
 		cout << lastName << " - Where would you like to build a city (territory ID)? (-1 to skip action) ";
 		cin >> id;
@@ -224,7 +247,7 @@ bool Player::BuildCity() {
 			return false;
 		Territory* city_terr = GetTerritory(id);
 		if (city_terr == nullptr) continue;
-		if (HasArmyAtLocation(id) != nullptr || id == STARTING_REGION_ID)
+		if (HasArmyAtLocation(id) != nullptr || id == MasterGame->map->starting_territory_index)
 			hasArmy = true;
 		if (hasArmy) { // Check if above conditions are met
 			city->location = city_terr;
@@ -420,7 +443,9 @@ bool Player::DoAction(Card* card) {
 				break;
 			case eAction_MoveArmies: MoveArmies();
 				break;
-			case eAction_PlaceArmies: PlaceNewArmies();
+			case eAction_PlaceArmies: 
+				
+				PlaceNewArmies();
 				break;
 			default:
 				cout << "Found an invalid action for card name:" << card->name;
