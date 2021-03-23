@@ -46,7 +46,7 @@ public:
 	int territory_count;							// Number of territories in Map
 	int continent_count;							// Number of continents in Map
 	int player_count;								// Number of players in Map
-	int starting_territory_index = -1;					// Index of starting territory for army placement
+	int starting_territory_index;					// Index of starting territory for army placement
 	Territory* territories;							// Array of Territory objects - each Territory contains a linked list of Edges which are pointers to adjacent territories 
 	TerritoryList* continents;						// Array of linked lists mapping territories to continents
 	Map();											// Default constructor

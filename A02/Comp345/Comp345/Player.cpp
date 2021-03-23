@@ -124,7 +124,7 @@ int Player::PlaceNewArmies() {
 		if (HasSkipped(dest)) return 1;
 		if (GetTerritory(dest) == nullptr) continue;
 		destination = GetTerritory(dest);
-		if (dest == STARTING_REGION_ID || destination->city_count[position] > 0) {		// Placing Army unit
+		if (dest == MasterGame->map->starting_territory_index || destination->city_count[position] > 0) {		// Placing Army unit
 			destination = GetTerritory(dest);	// Retrive terr object using terr id
 			AddArmy(destination, cube);				// Update Player & Map
 			return 1;
@@ -132,7 +132,7 @@ int Player::PlaceNewArmies() {
 		else {									// Shows available places to place armies
 			cout << endl << "WARNING - You cannot place an army at territory ID " << dest << ". " << endl;
 			cout << "Here are available territories to place your armies: " << endl;
-			cout << "-> Territory ID (Starting Region): " << STARTING_REGION_ID << endl;
+			cout << "-> Territory ID (Starting Region): " << MasterGame->map->starting_territory_index << endl;
 			for (int i = 0; i < disks.size(); i++) {
 				if (disks[i]->isBuilt)
 					cout << "-> Territory ID (City): " << disks[i]->location->territoryID << endl;
@@ -151,7 +151,7 @@ int Player::MoveArmies(int numOfMoves) {
 	if (!HasArmiesOnBoard()) {
 		cout << "SORRY, cannot perform action (No armies to move)" << endl;
 		PrintPlacedArmies();
-		return 0;
+		return 1;
 	}
 	while (true) {
 		cout << lastName << " - Where would you like to move an army FROM (territory ID)? (-1 to skip action) ";
@@ -169,6 +169,7 @@ int Player::MoveArmies(int numOfMoves) {
 		cout << lastName << " - Where would you like to move an army TO (territory ID)? (-1 to skip action) ";
 		cin >> dest;
 		if (HasSkipped(dest)) return 1;
+		if (GetTerritory(dest) == nullptr) continue;
 		Territory* destination = GetTerritory(dest);
 		Cube* srcArmy = GetArmyAtLocation(src);
 		if (srcArmy == nullptr) {
@@ -177,7 +178,7 @@ int Player::MoveArmies(int numOfMoves) {
 			continue;
 		}
 		movementCost = source->CheckAdjacency(destination);
-		if (movementCost <= numOfMoves){
+		if (movementCost <= numOfMoves && movementCost > 0){
 			srcArmy->location = destination;
 			cout << "Moved army from location " << src << " to destination " << dest << endl;
 			source->removeArmy(position);						// Updating Map
@@ -191,7 +192,7 @@ int Player::MoveArmies(int numOfMoves) {
 			return movementCost;
 		}
 		else {
-			cout << "Movement cost is too expensive, please try again. (cost " << movementCost << ", avail " << numOfMoves << ") " << endl;
+			cout << "Movement is invalid, please try again. (cost " << movementCost << ", avail " << numOfMoves << ") " << endl;
 			continue;
 		}
 	}
@@ -208,10 +209,15 @@ bool Player::MoveOverLand() {
 int Player::BuildCity() {
 	Disk* city;
 	int dest;
+	if (!HasArmiesOnBoard()) {
+		cout << "SORRY, cannot perform action (No armies to build city with)" << endl;
+		PrintPlacedArmies();
+		return 1;
+	}
 	if (!HasCitiesToPlace()) {
 		cout << "SORRY, cannot perform action (You do not have any cities to place)" << endl;
 		PrintPlacedCities();
-		return 0;
+		return 1;
 	}
 	else
 		for (int i = 0; i < disks.size(); i++)
@@ -239,6 +245,11 @@ int Player::BuildCity() {
 int Player::DestroyArmy() {//Checks if friendly & enemy in same location -> Returns if it was destroyed
 	int enemy, battlefieldTerrId;
 	Territory* battlefieldTerr = nullptr;
+	if (!HasArmiesOnBoard()) {
+		cout << "SORRY, cannot perform action (No armies to attack with)" << endl;
+		PrintPlacedArmies();
+		return 1;
+	}
 	while (true) {
 		cout << lastName << " - Where would you like to attack (territory id) (-1 to skip action)? ";
 		cin >> battlefieldTerrId;
@@ -292,6 +303,10 @@ void Player::DoAction(Card* card) {
 	}
 	for (; choice < possibleActions; choice++) {
 		for (int i = 0; i < card->actions[choice].actionValue;) {
+			cout << endl;
+			cout << "Action: " << card->actions[choice].action << endl;
+			cout << card->actions[choice].actionValue - i << " moves left" << endl;
+			cout << endl;
 			switch (card->actions[choice].action) {
 			case eAction_BuildCity: cost = BuildCity();
 				i += cost;
@@ -301,7 +316,7 @@ void Player::DoAction(Card* card) {
 				cout << endl;
 				i += cost;
 				break;
-			case eAction_MoveArmies: cost = MoveArmies(possibleActions);
+			case eAction_MoveArmies: cost = MoveArmies(card->actions[choice].actionValue-i);
 				i += cost;
 				cout << endl;
 				break;
