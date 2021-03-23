@@ -65,6 +65,7 @@ public:
 	Map& operator= (const Map& map);				// Assignment operator
 	friend std::ostream& operator<< (std::ostream& out, const Map& map); // Stream insertion operator
 	int getNumberControlledTerritories(int playerIndex);
+	int GetMovementCost(int origin, int destination);
 private:
 	const int LAND_MOVEMENT_COST = 1;
 	const int WATER_MOVEMENT_COST = 3;

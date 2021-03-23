@@ -523,6 +523,40 @@ int Map::getNumberControlledTerritories(int playerIndex) {
 	return count;
 }
 
+
+int Map::GetMovementCost(int origin, int destination) {
+	bool* visited = new bool[territory_count];
+	int* distance = new int[territory_count];
+	int current_node = origin;
+	for (int i = 0; i < territory_count; i++) {
+		visited[i] = false;
+		if (i == origin) distance[i] = 0;
+		else distance[i] = INT32_MAX;
+	}
+	while (true) {
+		Edge* temp = territories[current_node].head;
+		while (temp != nullptr) {
+			int candidate_distance = distance[current_node] + temp->movement_cost;
+			if (!visited[temp->destination_territory->territoryID] && candidate_distance < distance[temp->destination_territory->territoryID]) {
+				distance[temp->destination_territory->territoryID] = candidate_distance;
+			}
+			temp = temp->next;
+		}
+		visited[current_node] = true;
+		if (current_node == destination) {
+			int shortest = distance[current_node];
+			delete[] visited;
+			delete[] distance;
+			return shortest;
+		}
+
+
+	}
+
+	delete[] visited;
+	delete[] distance;
+}
+
 void Territory::addArmy(int player_index) {
 	army_count[player_index]++;
 	UpdateControl();
