@@ -4,11 +4,13 @@
 #include <crtdbg.h>
 #include <iostream>
 #include "Game.h"
+#include "SetupDriver.cpp"
 
 extern Game* MasterGame;
 
 int main() {
 	MasterGame = new Game();
+	SetupDriver();
 	MasterGame->Setup();
 	MasterGame->MainLoop();
 	MasterGame->GetWinner();

@@ -7,29 +7,31 @@
 using namespace std;
 
 MapLoader::MapLoader() {
-	this->players = 0;
-	this->boards = 0;
-	this->continents = 0;
-	this->regionsSize = 0;
-	this->line = "";
-	this->userFileName = "";
-	this->i = 0;
-	this->temp = 0;
+	players = 0;
+	boards = 0;
+	continents = 0;
+	regionsSize = 0;
+	line = "";
+	userFileName = "";
+	i = 0;
+	temp = 0;
+	validity = 0;
 }
 
 MapLoader::MapLoader(string filename) {
-	this->players = 0;
-	this->boards = 0;
-	this->regionsSize = 0;
-	this->line = "";
-	this->userFileName = filename;
-	this->i = 0;
-	this->origin = 0;
+	players = 0;
+	boards = 0;
+	regionsSize = 0;
+	line = "";
+	userFileName = filename;
+	i = 0;
+	origin = 0;
+	validity = 0;
 }
 
 void MapLoader::readFile()
 {
-	myFile.open(userFileName);				// Open stream file
+	myFile.open(".\\Maps\\" + userFileName);				// Open stream file
 
 	//--------------------------------------//
 	//----------Read # of players-----------//
@@ -186,8 +188,8 @@ Map* MapLoader::buildMap(int* regions, int regionsSize, int players, int contine
 	//--------------------------------------//
 	//----------Validate user map-----------//
 	//--------------------------------------//
-
-	cout << "Map validate() result: " << userMap->Validate() << endl;
+	validity = userMap->Validate();
+	cout << "Map validate() result: " << validity << endl;
 
 	//delete userMap;
 	delete[] regions;
