@@ -52,6 +52,14 @@ void Game::Setup() {
 		player->setPosition(i);
 		players.push_back(player);
 	}
+	//If 2-player game, also create a neutral player
+	if (playerCount == 2) {
+		player = new Player();
+		player->SetLastName("NeutralPlayer");
+		player->setPosition(2);
+		player->neutralPlayer = true;
+		players.push_back(player);
+	}
 	cout << endl << "Players for this game are: " << endl;
 	for (int j = 0; j < playerCount; j++) {
 		cout << j + 1 << ". " << players[j]->GetLastName() << endl;
@@ -123,6 +131,30 @@ void Game::Setup() {
 	}
 }
 
+void Game::Startup() {
+	// Add starting armies for each 'human' player to starting territory
+	cout << "Placed 4 armies on the starting territory for each active player" << endl;
+	for (int i = 0; i < playerCount; i++) {
+		for (int j = 0; j < STARTING_TERRITORY_ARMIES; j++) {
+			players[i]->PlaceNewArmiesDirectly(map->starting_territory_index);
+		}
+	}
+	// Place neutral armies if 2-player game
+	if (playerCount == 2) {
+		cout << "Because this is a 2-player game, the players must place 10 armies of a third non-player color on the map" << endl;
+		for (int i = 0; i < NEUTRAL_ARMY_COUNT; i++) {
+			bool validPlacement;
+			do {
+				cout << players[i % 2]->GetLastName() << ", please choose a territory in which to place a neutral army: ";
+				int terr;
+				cin >> terr;
+				validPlacement = players[2]->PlaceNewArmiesDirectly(terr);
+			} while (!validPlacement);
+			
+		}
+	}
+}
+
 void Game::MainLoop() {
 	cout << "Press Enter to start!";
 	cin.ignore(INT_MAX, '\n');
@@ -136,6 +168,8 @@ void Game::MainLoop() {
 		cout << "XXXXXXXXXXXX" << endl;
 		// Run through each player's turn
 		for (int currentPlayer = startingPlayer; currentPlayer < playerCount + startingPlayer; currentPlayer++) {
+			// Skip turn if player is neutral
+			if (players.at(currentPlayer % playerCount)->neutralPlayer) continue;
 			PlayerTurn(players.at(currentPlayer % playerCount));
 		}
 	}
@@ -213,6 +247,7 @@ void Game::PlayerTurn(Player* player) {
 	cin.ignore(INT_MAX, '\n');
 	cin.ignore(INT_MAX, '\n');
 
+	cout << *map << endl;;
 	cout << *hand;
 
 	cout << "You have " << player->getCoins() << " coins." << endl;
