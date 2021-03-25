@@ -339,25 +339,26 @@ int Player::ComputeScore() {
 	//Loop through each player
 	for (int player_index = 0; player_index < player_count; player_index++) {
 		Player* player = MasterGame->players[player_index];
+		vector<Card*> playerHand = player->getHand();
 		//Loop through each card player owns
-		for (int card_index = 0; card_index < hand.size(); card_index++) {
+		for (int card_index = 0; card_index < playerHand.size(); card_index++) {
 			//loop through each ability on each card
-			for (int ability_index = 0; ability_index < hand[card_index]->abilityCount; ability_index++) {
-				Ability* ability = &hand[card_index]->abilities[ability_index];
+			for (int ability_index = 0; ability_index < playerHand[card_index]->abilityCount; ability_index++) {
+				Ability* ability = &playerHand[card_index]->abilities[ability_index];
 				//count the number of elixirs each player owns
 				if (ability->type == eAbility_Elixir) {
-					if (player == this) cout << "Card " << hand[card_index]->name << " has " << ability->value << " Elixirs" << endl;
+					if (player == this) cout << "Card " << playerHand[card_index]->name << " has " << ability->value << " Elixirs" << endl;
 					elixir_count[player_index] += ability->value;
 				}
 				//If the player iteration matches the calling player, compute scores from other points-giving cards
 				if (player == this) {
 					//If the card grants VP per cardName, count the number of cards with that name
 					if (ability->type == eAbility_VpPerCardName) {
-						cout << "Card " << hand[card_index]->name << " grants VP for " << ability->setName << " Cards" << endl;
+						cout << "Card " << playerHand[card_index]->name << " grants VP for " << ability->setName << " Cards" << endl;
 						int count = 0;
-						for (int i = 0; i < hand.size(); i++) {
-							if (hand[i]->name.find(ability->setName) != string::npos) {
-								cout << "Found " << ability->setName << " Card: " << hand[i]->name << endl;;
+						for (int i = 0; i < playerHand.size(); i++) {
+							if (playerHand[i]->name.find(ability->setName) != string::npos) {
+								cout << "Found " << ability->setName << " Card: " << playerHand[i]->name << endl;;
 								count++;
 							}
 						}
@@ -369,7 +370,7 @@ int Player::ComputeScore() {
 						}
 					}
 					else if (ability->type == eAbility_VpPerCoins) {
-						cout << "Card " << hand[card_index]->name << " grants 1 VP per " << ability->setTarget << " Coins" << endl;
+						cout << "Card " << playerHand[card_index]->name << " grants 1 VP per " << ability->setTarget << " Coins" << endl;
 						cout << "Bonus from coins: " << (coins / ability->setTarget) * ability->value << endl;
 						score += (coins / ability->setTarget) * ability->value;
 					}
