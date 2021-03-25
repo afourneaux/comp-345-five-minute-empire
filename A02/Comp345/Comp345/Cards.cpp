@@ -22,8 +22,8 @@ Deck::Deck(const Deck* deck) {
 
 // Destructor
 Deck::~Deck() {
-	while (cards.empty() == false) {
-		cards.pop_back();
+	for (int i = 0; i < cards.size(); i++) {
+		delete cards[i];
 	}
 }
 
@@ -43,7 +43,7 @@ void Deck::Generate(int num_player)
 	card->actionCount = 2;
 	card->abilityCount = 1;
 	card->abilities = new Ability[card->abilityCount];
-	card->actions = new Action[card->abilityCount];
+	card->actions = new Action[card->actionCount];
 	card->abilities[0].type = eAbility_Flying;
 	card->actions[0].action = eAction_PlaceArmies;
 	card->actions[0].actionValue = 3;
@@ -57,7 +57,7 @@ void Deck::Generate(int num_player)
 	card->actionCount = 1;
 	card->abilityCount = 1;
 	card->abilities = new Ability[card->abilityCount];
-	card->actions = new Action[card->abilityCount];
+	card->actions = new Action[card->actionCount];
 	card->abilities[0].type = eAbility_Flying;
 	card->actions[0].action = eAction_PlaceArmies;
 	card->actions[0].actionValue = 4;
@@ -69,7 +69,7 @@ void Deck::Generate(int num_player)
 	card->actionCount = 1;
 	card->abilityCount = 1;
 	card->abilities = new Ability[card->abilityCount];
-	card->actions = new Action[card->abilityCount];
+	card->actions = new Action[card->actionCount];
 	card->abilities[0].type = eAbility_Elixir;
 	card->abilities[0].value = 1;
 	card->actions[0].action = eAction_MoveArmies;
@@ -82,7 +82,7 @@ void Deck::Generate(int num_player)
 	card->actionCount = 1;
 	card->abilityCount = 1;
 	card->abilities = new Ability[card->abilityCount];
-	card->actions = new Action[card->abilityCount];
+	card->actions = new Action[card->actionCount];
 	card->abilities[0].type = eAbility_VpPerCoins;
 	card->abilities[0].value = 1;
 	card->abilities[0].setTarget = 3;
@@ -97,7 +97,7 @@ void Deck::Generate(int num_player)
 	card->actionChoice = eChoice_Or;
 	card->abilityCount = 1;
 	card->abilities = new Ability[card->abilityCount];
-	card->actions = new Action[card->abilityCount];
+	card->actions = new Action[card->actionCount];
 	card->abilities[0].type = eAbility_VpPerCardName;
 	card->abilities[0].value = 1;
 	card->abilities[0].setTarget = 1;
@@ -116,7 +116,7 @@ void Deck::Generate(int num_player)
 	card->actionChoice = eChoice_Or;
 	card->abilityCount = 1;
 	card->abilities = new Ability[card->abilityCount];
-	card->actions = new Action[card->abilityCount];
+	card->actions = new Action[card->actionCount];
 	card->abilities[0].type = eAbility_PlusOneArmy;
 	card->actions[0].action = eAction_PlaceArmies;
 	card->actions[0].actionValue = 3;
@@ -130,7 +130,7 @@ void Deck::Generate(int num_player)
 	card->actionCount = 1;
 	card->abilityCount = 1;
 	card->abilities = new Ability[card->abilityCount];
-	card->actions = new Action[card->abilityCount];
+	card->actions = new Action[card->actionCount];
 	card->abilities[0].type = eAbility_Elixir;
 	card->abilities[0].value = 3;
 	card->actions[0].action = eAction_MoveArmies;
@@ -143,7 +143,7 @@ void Deck::Generate(int num_player)
 	card->actionCount = 1;
 	card->abilityCount = 1;
 	card->abilities = new Ability[card->abilityCount];
-	card->actions = new Action[card->abilityCount];
+	card->actions = new Action[card->actionCount];
 	card->abilities[0].type = eAbility_PlusOneMove;
 	card->actions[0].action = eAction_BuildCity;
 	card->actions[0].actionValue = 1;
@@ -155,7 +155,7 @@ void Deck::Generate(int num_player)
 	card->actionCount = 1;
 	card->abilityCount = 1;
 	card->abilities = new Ability[card->abilityCount];
-	card->actions = new Action[card->abilityCount];
+	card->actions = new Action[card->actionCount];
 	card->abilities[0].type = eAbility_VpPerCardName;
 	card->abilities[0].value = 1;
 	card->abilities[0].setTarget = 1;
@@ -171,7 +171,7 @@ void Deck::Generate(int num_player)
 	card->actionCount = 1;
 	card->abilityCount = 1;
 	card->abilities = new Ability[card->abilityCount];
-	card->actions = new Action[card->abilityCount];
+	card->actions = new Action[card->actionCount];
 	card->abilities[0].type = eAbility_VpPerCardName;
 	card->abilities[0].value = 4;
 	card->abilities[0].setTarget = 3;
@@ -188,7 +188,7 @@ void Deck::Generate(int num_player)
 	card->abilityCount = 1;
 	card->actionChoice = eChoice_And;
 	card->abilities = new Ability[card->abilityCount];
-	card->actions = new Action[card->abilityCount];
+	card->actions = new Action[card->actionCount];
 	card->abilities[0].type = eAbility_PlusOneMove;
 	card->actions[0].action = eAction_PlaceArmies;
 	card->actions[0].actionValue = 4;
@@ -203,7 +203,7 @@ void Deck::Generate(int num_player)
 	card->abilityCount = 1;
 	card->actionChoice = eChoice_And;
 	card->abilities = new Ability[card->abilityCount];
-	card->actions = new Action[card->abilityCount];
+	card->actions = new Action[card->actionCount];
 	card->abilities[0].type = eAbility_PlusOneMove;
 	card->actions[0].action = eAction_MoveArmies;
 	card->actions[0].actionValue = 4;
@@ -218,7 +218,7 @@ void Deck::Generate(int num_player)
 	card->abilityCount = 1;
 	card->actionChoice = eChoice_And;
 	card->abilities = new Ability[card->abilityCount];
-	card->actions = new Action[card->abilityCount];
+	card->actions = new Action[card->actionCount];
 	card->abilities[0].type = eAbility_PlusOneArmy;
 	card->actions[0].action = eAction_MoveArmies;
 	card->actions[0].actionValue = 5;
@@ -232,7 +232,7 @@ void Deck::Generate(int num_player)
 	card->actionCount = 1;
 	card->abilityCount = 1;
 	card->abilities = new Ability[card->abilityCount];
-	card->actions = new Action[card->abilityCount];
+	card->actions = new Action[card->actionCount];
 	card->abilities[0].type = eAbility_PlusOneArmy;
 	card->actions[0].action = eAction_BuildCity;
 	card->actions[0].actionValue = 1;
@@ -244,7 +244,7 @@ void Deck::Generate(int num_player)
 	card->actionCount = 1;
 	card->abilityCount = 1;
 	card->abilities = new Ability[card->abilityCount];
-	card->actions = new Action[card->abilityCount];
+	card->actions = new Action[card->actionCount];
 	card->abilities[0].type = eAbility_PlusOneArmy;
 	card->actions[0].action = eAction_MoveArmies;
 	card->actions[0].actionValue = 4;
@@ -256,7 +256,7 @@ void Deck::Generate(int num_player)
 	card->actionCount = 1;
 	card->abilityCount = 1;
 	card->abilities = new Ability[card->abilityCount];
-	card->actions = new Action[card->abilityCount];
+	card->actions = new Action[card->actionCount];
 	card->abilities[0].type = eAbility_VpPerCardName;
 	card->abilities[0].value = 1;
 	card->abilities[0].setTarget = 1;
@@ -272,7 +272,7 @@ void Deck::Generate(int num_player)
 	card->actionCount = 1;
 	card->abilityCount = 1;
 	card->abilities = new Ability[card->abilityCount];
-	card->actions = new Action[card->abilityCount];
+	card->actions = new Action[card->actionCount];
 	card->abilities[0].type = eAbility_Flying;
 	card->actions[0].action = eAction_MoveArmies;
 	card->actions[0].actionValue = 5;
@@ -284,7 +284,7 @@ void Deck::Generate(int num_player)
 	card->actionCount = 1;
 	card->abilityCount = 1;
 	card->abilities = new Ability[card->abilityCount];
-	card->actions = new Action[card->abilityCount];
+	card->actions = new Action[card->actionCount];
 	card->abilities[0].type = eAbility_Elixir;
 	card->abilities[0].value = 3;
 	card->actions[0].action = eAction_PlaceArmies;
@@ -298,7 +298,7 @@ void Deck::Generate(int num_player)
 	card->abilityCount = 1;
 	card->actionChoice = eChoice_And;
 	card->abilities = new Ability[card->abilityCount];
-	card->actions = new Action[card->abilityCount];
+	card->actions = new Action[card->actionCount];
 	card->abilities[0].type = eAbility_PlusOneArmy;
 	card->actions[0].action = eAction_BuildCity;
 	card->actions[0].actionValue = 1;
@@ -312,7 +312,7 @@ void Deck::Generate(int num_player)
 	card->actionCount = 1;
 	card->abilityCount = 1;
 	card->abilities = new Ability[card->abilityCount];
-	card->actions = new Action[card->abilityCount];
+	card->actions = new Action[card->actionCount];
 	card->abilities[0].type = eAbility_VpPerCardName;
 	card->abilities[0].value = 1;
 	card->abilities[0].setTarget = 1;
@@ -328,7 +328,7 @@ void Deck::Generate(int num_player)
 	card->actionCount = 1;
 	card->abilityCount = 1;
 	card->abilities = new Ability[card->abilityCount];
-	card->actions = new Action[card->abilityCount];
+	card->actions = new Action[card->actionCount];
 	card->abilities[0].type = eAbility_Elixir;
 	card->abilities[0].value = 2;
 	card->actions[0].action = eAction_MoveArmies;
@@ -341,7 +341,7 @@ void Deck::Generate(int num_player)
 	card->actionCount = 1;
 	card->abilityCount = 1;
 	card->abilities = new Ability[card->abilityCount];
-	card->actions = new Action[card->abilityCount];
+	card->actions = new Action[card->actionCount];
 	card->abilities[0].type = eAbility_Flying;
 	card->actions[0].action = eAction_MoveArmies;
 	card->actions[0].actionValue = 5;
@@ -354,7 +354,7 @@ void Deck::Generate(int num_player)
 	card->abilityCount = 1;
 	card->actionChoice = eChoice_Or;
 	card->abilities = new Ability[card->abilityCount];
-	card->actions = new Action[card->abilityCount];
+	card->actions = new Action[card->actionCount];
 	card->abilities[0].type = eAbility_Elixir;
 	card->abilities[0].value = 1;
 	card->actions[0].action = eAction_PlaceArmies;
@@ -369,7 +369,7 @@ void Deck::Generate(int num_player)
 	card->actionCount = 1;
 	card->abilityCount = 1;
 	card->abilities = new Ability[card->abilityCount];
-	card->actions = new Action[card->abilityCount];
+	card->actions = new Action[card->actionCount];
 	card->abilities[0].type = eAbility_PlusOneMove;
 	card->actions[0].action = eAction_BuildCity;
 	card->actions[0].actionValue = 1;
@@ -381,7 +381,7 @@ void Deck::Generate(int num_player)
 	card->actionCount = 1;
 	card->abilityCount = 1;
 	card->abilities = new Ability[card->abilityCount];
-	card->actions = new Action[card->abilityCount];
+	card->actions = new Action[card->actionCount];
 	card->abilities[0].type = eAbility_VpPerFlying;
 	card->abilities[0].value = 1;
 	card->actions[0].action = eAction_BuildCity;
@@ -395,7 +395,7 @@ void Deck::Generate(int num_player)
 	card->abilityCount = 1;
 	card->actionChoice = eChoice_And;
 	card->abilities = new Ability[card->abilityCount];
-	card->actions = new Action[card->abilityCount];
+	card->actions = new Action[card->actionCount];
 	card->abilities[0].type = eAbility_Immune;
 	card->actions[0].action = eAction_PlaceArmies;
 	card->actions[0].actionValue = 3;
@@ -410,7 +410,7 @@ void Deck::Generate(int num_player)
 	card->abilityCount = 1;
 	card->actionChoice = eChoice_And;
 	card->abilities = new Ability[card->abilityCount];
-	card->actions = new Action[card->abilityCount];
+	card->actions = new Action[card->actionCount];
 	card->abilities[0].type = eAbility_VpPerCardName;
 	card->abilities[0].value = 1;
 	card->abilities[0].setTarget = 1;
@@ -431,7 +431,7 @@ void Deck::Generate(int num_player)
 		card->actionCount = 2;
 		card->abilityCount = 1;
 		card->abilities = new Ability[card->abilityCount];
-		card->actions = new Action[card->abilityCount];
+		card->actions = new Action[card->actionCount];
 		card->abilities[0].type = eAbility_VpPerCardName;
 		card->abilities[0].value = 3;
 		card->abilities[0].setTarget = 2;
@@ -449,7 +449,7 @@ void Deck::Generate(int num_player)
 		card->actionCount = 1;
 		card->abilityCount = 2;
 		card->abilities = new Ability[card->abilityCount];
-		card->actions = new Action[card->abilityCount];
+		card->actions = new Action[card->actionCount];
 		card->abilities[0].type = eAbility_Elixir;
 		card->abilities[0].value = 1;
 		card->abilities[1].type = eAbility_Coins;
@@ -465,7 +465,7 @@ void Deck::Generate(int num_player)
 		card->abilityCount = 1;
 		card->actionChoice = eChoice_Or;
 		card->abilities = new Ability[card->abilityCount];
-		card->actions = new Action[card->abilityCount];
+		card->actions = new Action[card->actionCount];
 		card->abilities[0].type = eAbility_Flying;
 		card->actions[0].action = eAction_PlaceArmies;
 		card->actions[0].actionValue = 3;
@@ -479,7 +479,7 @@ void Deck::Generate(int num_player)
 		card->actionCount = 1;
 		card->abilityCount = 1;
 		card->abilities = new Ability[card->abilityCount];
-		card->actions = new Action[card->abilityCount];
+		card->actions = new Action[card->actionCount];
 		card->abilities[0].type = eAbility_VpPerCardName;
 		card->abilities[0].value = 1;
 		card->abilities[0].setTarget = 1;
@@ -496,7 +496,7 @@ void Deck::Generate(int num_player)
 		card->abilityCount = 1;
 		card->actionChoice = eChoice_And;
 		card->abilities = new Ability[card->abilityCount];
-		card->actions = new Action[card->abilityCount];
+		card->actions = new Action[card->actionCount];
 		card->abilities[0].type = eAbility_PlusOneMove;
 		card->actions[0].action = eAction_PlaceArmies;
 		card->actions[0].actionValue = 4;
@@ -513,7 +513,7 @@ void Deck::Generate(int num_player)
 		card->actionCount = 1;
 		card->abilityCount = 1;
 		card->abilities = new Ability[card->abilityCount];
-		card->actions = new Action[card->abilityCount];
+		card->actions = new Action[card->actionCount];
 		card->abilities[0].type = eAbility_Elixir;
 		card->abilities[0].value = 1;
 		card->actions[0].action = eAction_MoveArmies;
@@ -528,7 +528,7 @@ void Deck::Generate(int num_player)
 		card->actionCount = 1;
 		card->abilityCount = 1;
 		card->abilities = new Ability[card->abilityCount];
-		card->actions = new Action[card->abilityCount];
+		card->actions = new Action[card->actionCount];
 		card->abilities[0].type = eAbility_Elixir;
 		card->abilities[0].value = 1;
 		card->actions[0].action = eAction_MoveArmies;
@@ -603,6 +603,11 @@ Hand::Hand(const Hand* hand) {
 }
 
 Hand::~Hand() {
+	for (int i = 0; i < HAND_SIZE; i++) {
+		if (cards[i] != nullptr) {
+			delete cards[i];
+		}
+	}
 	deck = nullptr;
 }
 
@@ -614,7 +619,7 @@ Card* Hand::Exchange(const int index)
 		return nullptr;
 	}
 	int cost = GetCostAtIndex(index);
-	Card* card = new Card(cards[index]);
+	Card* card = cards[index];
 	// Shift each card down one on the track
 	for (int i = index; i < HAND_SIZE - 1; i++) {
 		cards[i] = cards[i + 1];
@@ -710,7 +715,7 @@ Card::Card(const Card* card) {
 // Destructor
 Card::~Card() {
 	if (actionCount > 0) {
-		delete[] actions;
+		delete actions;
 	}
 	if (abilityCount > 0) {
 		delete[] abilities;

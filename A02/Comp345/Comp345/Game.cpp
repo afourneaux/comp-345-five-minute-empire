@@ -121,6 +121,8 @@ void Game::Setup() {
 	if (playerCount == 4) {
 		gameTurns = GAME_TURNS_4_PLAYERS;
 	}
+
+	delete mapObject;
 }
 
 void Game::MainLoop() {
@@ -200,6 +202,7 @@ void Game::GetWinner() {
 		cout << "And the winner is... Player " << players[winner_index]->GetLastName() << "!" << endl;
 	}
 
+	delete[] scores;
 }
 
 void Game::PlayerTurn(Player* player) {
@@ -269,10 +272,10 @@ int Game::GetPlayerCount() {
 
 // Destructor
 Game::~Game() {
-	delete hand;
 	delete deck;
-	while (players.empty() == false) {
-		players.pop_back();
+	delete hand;
+	for (int i = 0; i < players.size(); i++) {
+		delete players[i];
 	}
 	delete map;
 }

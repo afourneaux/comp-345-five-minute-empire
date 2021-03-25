@@ -339,7 +339,6 @@ int Player::ComputeScore() {
 	//Loop through each player
 	for (int player_index = 0; player_index < player_count; player_index++) {
 		Player* player = MasterGame->players[player_index];
-		vector<Card*> hand = player->getHand();
 		//Loop through each card player owns
 		for (int card_index = 0; card_index < hand.size(); card_index++) {
 			//loop through each ability on each card
