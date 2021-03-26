@@ -145,21 +145,14 @@ bool Player::PlaceNewArmiesDirectly(int territoryIndex) {
 		cout << "Invalid Territory ID " << territoryIndex << ". Please try again." << endl;
 		return false;
 	}
-
 	destination = GetTerritory(territoryIndex);
-
-	for (int i = 0; i < cubes.size(); i++) { // check if have available armies and places it if it does
-		if (!cubes[i]->isPlaced) {
-			cubes[i]->isPlaced = true;
-			cubes[i]->location = destination;
-			UpdateTerritory(destination); // Updating player territories
-			destination->addArmy(position); // Updating map territories
-			return true;
-		}
+	Cube* cube = GetRandomArmy();
+	if (cube == nullptr) {
+		cout << "Error: failed to place army at Territory ID " << territoryIndex << ", no available armies found." << endl;
+		return false;
 	}
-
-	cout << "Error: failed to place army at Territory ID " << territoryIndex << ", no available armies found.";
-	return false;
+	AddArmy(destination, cube); // Updating player territories
+	return true;
 }
 
 
@@ -193,19 +186,30 @@ int Player::MoveArmies(int numOfMoves) {
 		if (GetTerritory(dest) == nullptr) continue;
 		Territory* destination = GetTerritory(dest);
 		Cube* srcArmy = GetArmyAtLocation(src);
-		movementCost = source->CheckAdjacency(destination);
+		movementCost = MasterGame->map->GetMovementCost(src, dest);
 		if (movementCost <= numOfMoves && movementCost > 0){
-			srcArmy->location = destination;
-			cout << "Moved army from location " << src << " to destination " << dest << endl;
-			source->removeArmy(position);						// Updating Map
-			destination->addArmy(position);						// Updating Map
-			if (!Find(destination))								// Updating Player territories
-				territories.push_back(destination);
-			for (int i = 0; i < territories.size(); i++) {		// Updating Player territories
-				if (territories[i] == source && source->army_count[position] == 0 && source->city_count[position] == 0)
-					territories.erase(territories.begin() + i);
+			cout << "This move will cost " << movementCost << " move(s). Do you wish to continue? (Y/N) ";
+			string ans;
+			cin >> ans;
+			if (ans == "N" || ans == "n")
+				continue;
+			else if (ans == "Y" || ans == "y") {
+				srcArmy->location = destination;
+				cout << "Moved army from location " << src << " to destination " << dest << endl;
+				source->removeArmy(position);						// Updating Map
+				destination->addArmy(position);						// Updating Map
+				if (!Find(destination))								// Updating Player territories
+					territories.push_back(destination);
+				for (int i = 0; i < territories.size(); i++) {		// Updating Player territories
+					if (territories[i] == source && source->army_count[position] == 0 && source->city_count[position] == 0)
+						territories.erase(territories.begin() + i);
+				}
+				return movementCost;
 			}
-			return movementCost;
+			else {
+				cout << "Invalid choice." << endl;
+				continue;
+			}
 		}
 		else {
 			cout << endl;
@@ -229,7 +233,7 @@ int Player::BuildCity() {
 	int dest;
 	if (!HasArmiesOnBoard()) {
 		cout << "Put some armies first, jeez!" << endl;
-		return COST_ZERO_ACTIONVALUE;
+		return COST_ONE_ACTIONVALUE;
 	}
 	if (!HasCitiesToPlace()) {
 		cout << "Are you trying to become a real estate agent o.O? I think not." << endl;
@@ -574,15 +578,7 @@ void Player::AddArmy(Territory* terr, Cube* cube) {
 		territories.push_back(terr);
 	cube->isPlaced = true;
 	cube->location = terr;
-	//for (int i = 0; i < cubes.size(); i++) {
-	//	if (!cubes[i]->isPlaced) {					// Look for available cubes
-	//		cubes[i]->isPlaced = true;
-	//		cubes[i]->location = terr;
-			cout << "* Placed * - Army unit at territory ID " << terr->territoryID << endl;
-			return;
-	/*	}
-	}*/
-	cout << lastName << " - Player::AddArmy() Bug. Should not get here. " << endl;
+	cout << "* Placed * - Army unit at territory ID " << terr->territoryID << endl;
 	return;
 }
 //**********
