@@ -16,6 +16,7 @@ void Game::Setup() {
 	setupObj->MakePlayers();
 	setupObj->DisplayMaps();
 	setupObj->MakeMap();
+
 	deck = new Deck(playerCount);
 	hand = new Hand(deck);
 
@@ -40,6 +41,17 @@ void Game::Setup() {
 }
 
 void Game::Startup() {
+	//Set the starting territory
+	vector<int> possibleStartingTerritories = map->GetPotentialStartingTerritories();
+	int starter = 0;
+	cout << "Please select a starting region (legal options for this map: ";
+	for (int i = 0; i < possibleStartingTerritories.size(); i++) cout << possibleStartingTerritories[i] << " ";
+	cout << "): ";
+	do {
+		cin >> starter;
+		map->SetStartingTerritory(starter);
+	} while (map->starting_territory_index < 0);
+
 	// Add starting armies for each 'human' player to starting territory
 	cout << "Placed 4 armies on the starting territory for each active player" << endl;
 	for (int i = 0; i < playerCount; i++) {
@@ -151,7 +163,8 @@ void Game::PlayerTurn(Player* player) {
 	//       Figure out a more elegant solution
 	cin.ignore(INT_MAX, '\n');
 	cin.ignore(INT_MAX, '\n');
-
+	
+	cout << *map;
 	cout << *hand;
 
 	cout << "You have " << player->getCoins() << " coins." << endl;
