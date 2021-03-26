@@ -82,6 +82,10 @@ private:
 	BiddingFacility* bf;
 	int coins = STARTING_COINS;
 	int armiesLeft = STARTING_ARMIES;
+	int COST_ONE_ACTIONVALUE = 1;
+	int COST_ZERO_ACTIONVALUE = 0;
+	int COST_X_ACTIONVALUE;
+	int COST_THREE_ACTIONVALUE = 3;
 	int position; // the position of the player at the table
 };
 int testPlayer();

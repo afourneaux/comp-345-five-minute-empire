@@ -115,28 +115,24 @@ int Player::PlaceNewArmies() {
 		if (!HasArmiesToPlace()) {
 			cout << "SORRY, cannot perform action (No armies to place) " << endl;
 			PrintPlacedArmies();
-			return 1;
+			return COST_ONE_ACTIONVALUE;
 		}
-		else cout << endl << lastName << " randomly picks up an army unit in his hand... " << endl;
+		cout << "Here are VALID inputs: " << endl;
+		cout << "-> Territory ID (Starting Region): " << MasterGame->map->starting_territory_index << endl;
+		PrintPlacedCities();
 		cube = GetRandomArmy();
-		cout << lastName << " - Where would you like to place a new army (territory ID)? (-1 to skip action) ";
+		cout << lastName << " - PLACE NEW ARMY (-1 to skip): " ;
 		cin >> dest;
-		if (HasSkipped(dest)) return 1;
+		if (HasSkipped(dest)) return COST_ONE_ACTIONVALUE;
 		if (GetTerritory(dest) == nullptr) continue;
 		destination = GetTerritory(dest);
-		if (dest == MasterGame->map->starting_territory_index || destination->city_count[position] > 0) {		// Placing Army unit
-			destination = GetTerritory(dest);	// Retrive terr object using terr id
-			AddArmy(destination, cube);				// Update Player & Map
-			return 1;
+		if (dest == MasterGame->map->starting_territory_index || destination->city_count[position] > 0) {		
+			destination = GetTerritory(dest);	
+			AddArmy(destination, cube);				
+			return COST_ONE_ACTIONVALUE;
 		}
-		else {									// Shows available places to place armies
-			cout << endl << "WARNING - You cannot place an army at territory ID " << dest << ". " << endl;
-			cout << "Here are available territories to place your armies: " << endl;
-			cout << "-> Territory ID (Starting Region): " << MasterGame->map->starting_territory_index << endl;
-			for (int i = 0; i < disks.size(); i++) {
-				if (disks[i]->isBuilt)
-					cout << "-> Territory ID (City): " << disks[i]->location->territoryID << endl;
-			}
+		else {									
+			cout << endl << "WARNING - You cannot place an army at territory ID. " << dest << ". " << endl;
 		}
 	}  // While(true)
 }
@@ -151,32 +147,25 @@ int Player::MoveArmies(int numOfMoves) {
 	if (!HasArmiesOnBoard()) {
 		cout << "SORRY, cannot perform action (No armies to move)" << endl;
 		PrintPlacedArmies();
-		return 1;
+		return COST_ONE_ACTIONVALUE;
 	}
 	while (true) {
-		cout << lastName << " - Where would you like to move an army FROM (territory ID)? (-1 to skip action) ";
+		cout << "Here are VALID inputs: " << endl;
+		PrintPlacedArmies();
+		cout << lastName << " - MOVE FROM (-1 to skip): ";
 		cin >> src;
-		if (HasSkipped(src)) return 0;
+		if (HasSkipped(src)) return COST_ONE_ACTIONVALUE;
 		if (!HasArmyAtLocation(src)) {
 			cout << endl << "WARNING - You do not have any armies at territory ID: " << src << endl;
-			cout << "Here are possible armies you can move: " << endl;
-			PrintPlacedArmies();
 			continue;
 		}
-		else
-			cout << "* Picked-up * - Army unit at territory ID " << src << ". " << endl;
 		Territory* source = GetTerritory(src);
-		cout << lastName << " - Where would you like to move an army TO (territory ID)? (-1 to skip action) ";
+		cout << lastName << " - MOVE TO (-1 to skip): ";
 		cin >> dest;
-		if (HasSkipped(dest)) return 1;
+		if (HasSkipped(dest)) return COST_ONE_ACTIONVALUE;
 		if (GetTerritory(dest) == nullptr) continue;
 		Territory* destination = GetTerritory(dest);
 		Cube* srcArmy = GetArmyAtLocation(src);
-		if (srcArmy == nullptr) {
-			cout << "You have no armies at that location" << endl;
-			PrintPlacedArmies();
-			continue;
-		}
 		movementCost = source->CheckAdjacency(destination);
 		if (movementCost <= numOfMoves && movementCost > 0){
 			srcArmy->location = destination;
@@ -192,7 +181,9 @@ int Player::MoveArmies(int numOfMoves) {
 			return movementCost;
 		}
 		else {
-			cout << "Movement is invalid, please try again. (cost " << movementCost << ", avail " << numOfMoves << ") " << endl;
+			cout << endl;
+			cout << "WARNING -> MOVEMENT COST: " << movementCost << " -> REMAINING MOVES: " << numOfMoves << ") " << endl;
+			cout << endl;
 			continue;
 		}
 	}
@@ -210,35 +201,33 @@ int Player::BuildCity() {
 	Disk* city;
 	int dest;
 	if (!HasArmiesOnBoard()) {
-		cout << "SORRY, cannot perform action (No armies to build city with)" << endl;
-		PrintPlacedArmies();
-		return 1;
+		cout << "Put some armies first, jeez!" << endl;
+		return COST_ZERO_ACTIONVALUE;
 	}
 	if (!HasCitiesToPlace()) {
-		cout << "SORRY, cannot perform action (You do not have any cities to place)" << endl;
+		cout << "Are you trying to become a real estate agent o.O? I think not." << endl;
 		PrintPlacedCities();
-		return 1;
+		return COST_ZERO_ACTIONVALUE;
 	}
-	else
-		for (int i = 0; i < disks.size(); i++)
-			if (!disks[i]->isBuilt) {
-				city = disks[i];
-				cout << " * Random City unit picked-up * " << endl;
-				break;
-			}
+	cout << endl;
+	for (int i = 0; i < disks.size(); i++)
+		if (!disks[i]->isBuilt) {
+			city = disks[i];
+			break;
+		}
 	while (true) {
-		cout << lastName << " - Where would you like to build a city (territory ID)? (-1 to skip action) " << endl;
-		cout << "Here are possible locations: " << endl;
+		cout << "Here are VALID inputs: " << endl;
 		PrintPlacedArmies();
+		cout << lastName << " - BUILD CITY AT (-1 to skip): " << endl;
 		cin >> dest;
-		if (HasSkipped(dest)) return 1;
+		if (HasSkipped(dest)) return COST_ONE_ACTIONVALUE;
 		if (GetTerritory(dest) == nullptr) continue;
 		if (HasArmyAtLocation(dest)) {
 			AddCity(GetTerritory(dest));
-			return 1;
+			return COST_ONE_ACTIONVALUE;
 		}
 		else
-			cout << lastName << " - You do not have any armies to build a city at territory ID: " << dest << "." << endl;
+			cout << "Don't you dare try to build a city at "<< dest <<"! You have no armies there! " << dest << "." << endl;
 	}
 }
 
@@ -246,46 +235,43 @@ int Player::DestroyArmy() {//Checks if friendly & enemy in same location -> Retu
 	int enemy, battlefieldTerrId;
 	Territory* battlefieldTerr = nullptr;
 	if (!HasArmiesOnBoard()) {
-		cout << "SORRY, cannot perform action (No armies to attack with)" << endl;
+		cout << "Attacking with no armies... Pathetic..." << endl;
 		PrintPlacedArmies();
-		return 1;
+		return COST_ZERO_ACTIONVALUE;
 	}
 	while (true) {
-		cout << lastName << " - Where would you like to attack (territory id) (-1 to skip action)? ";
+		cout << "Here are VALID inputs: " << endl;
+		PrintPlacedArmies();
+		cout << lastName << " - DESTROY AT (-1 to skip)? ";
 		cin >> battlefieldTerrId;
-		if (HasSkipped(battlefieldTerrId)) return 1;
+		if (HasSkipped(battlefieldTerrId)) return COST_ONE_ACTIONVALUE;
 		if (GetTerritory(battlefieldTerrId) == nullptr) continue;
 		if (!HasArmyAtLocation(battlefieldTerrId)) {
-			cout << endl << "WARNING - You do not have an army at territory ID " << battlefieldTerrId << endl;
-			cout << "Here are the armies you have at your disposal: " << endl;
-			PrintPlacedArmies();
+			cout << endl << "There is nobody at " << battlefieldTerrId << "to fight for you! Think again." << endl;
 			continue;
 		}
-		else {
-			cout << endl << lastName << " is scanning the room his next victim... " << battlefieldTerrId << endl;
-			battlefieldTerr = GetTerritory(battlefieldTerrId);
-		}
-		cout << lastName << " - Whose army would you like to destroy (player position) (-1 to skip action)? " << endl;
+		battlefieldTerr = GetTerritory(battlefieldTerrId);
 		for (int i = 0; i < GetTerritory(battlefieldTerrId)->army_count.size(); i++)
 			cout << MasterGame->players[i]->lastName << " at pos " << MasterGame->players[i]->position << " has " << GetTerritory(battlefieldTerrId)->army_count[i] << " armies at your location" << endl;
+		cout << lastName << " - DESTROY WHO (-1 to skip): " << endl;
 		cin >> enemy;
-		if (HasSkipped(battlefieldTerrId)) return 1; // Check if wants to skip action
+		if (HasSkipped(battlefieldTerrId)) return COST_ONE_ACTIONVALUE; // Check if wants to skip action
 		if (enemy < 0 || enemy >= MasterGame->players.size()) { // Checking if valid player position
-			cout << "Invalid player position" << endl << endl;
+			cout << "Might aswell attack the chair! Find a real opponent." << endl << endl;
 			continue;
 		}
 		if (enemy == position) {
-			cout << "You cannot attack yourself" << endl << endl;
+			cout << "Feel free to punch yourself in real life but not happening in my game!" << endl << endl;
 			continue;
 		}
 		if (battlefieldTerr->army_count[enemy] <= 0) { // Checking if ennemy has armies
-			cout << "Player " << enemy << " does not have any armies at territory ID " << battlefieldTerr->territoryID << " to destroy. " << endl << endl;
+			cout << "Now you are attacking straight wind. " << enemy << " does not have anything at " << battlefieldTerr->territoryID << " to destroy. " << endl << endl;
 			continue;
 		}
 		MasterGame->players[enemy]->RemoveArmy(battlefieldTerr); // Destroying Army
 		cout << "BANG BANG. You shot him down, BANG BANG. " << MasterGame->players[enemy]->lastName << " hit the gound. BANG bang ...(at territory id " << battlefieldTerrId << ") That awful sound.." << endl;
 		MasterGame->players[enemy]->PrintPlayerStatus();
-		return 1;
+		return COST_ONE_ACTIONVALUE;
 	}
 }
 //**********
@@ -425,7 +411,10 @@ int Player::AndOrAction() {
 		and_or = "AND";
 	if (currentCard->actionChoice == eChoice_Or) // For nice output
 		and_or = "OR";
+	if (currentCard->actionChoice == eChoice_None) // For nice output
+		and_or = "";
 	cout << lastName << " - The card you have chosen allows you to " << currentCard->actions[0] << " " << and_or << " " << currentCard->actions[1] << endl;
+	PrintPlayerStatus();
 	if (currentCard->actionChoice == eChoice_Or) {
 		cout << lastName << " - Since you have the OR card, please choose: " << endl;
 		for (int i = 0; i < currentCard->actionCount; i++)
@@ -447,11 +436,13 @@ int Player::AndOrAction() {
 void Player::PrintPlayerStatus() {
 	vector <Territory*> territories = GetTerritories();
 	Territory* terr = nullptr;
+	cout << ">>>>" << endl;
 	cout << endl << lastName << " control statistics:" << endl;
 	for (int i = 0; i < territories.size(); i++) {
 		terr = territories[i];
 		cout << "Territory ID " << terr->territoryID << ": " << terr->army_count[position] << " cube(s) & " << terr->city_count[position] << " disk(s) " << endl;
 	}
+	cout << "<<<<" << endl;
 }
 //**********
 //GetRandomArmy
@@ -603,7 +594,7 @@ bool Player::Find(Territory* terr) {
 void Player::PrintPlacedCities() {
 	for (int i = 0; i < territories.size(); i++) {
 		if (territories[i]->city_count[position] > 0)
-			cout <<  "-> " << territories[i]->city_count[position] << " city(ies) at territory ID " << territories[i]->territoryID << endl;
+			cout << "-> Territory ID (" << territories[i]->city_count[position] << " City(ies)): " << territories[i]->territoryID << endl;
 	}
 	cout << endl;
 }
@@ -613,7 +604,7 @@ void Player::PrintPlacedCities() {
 void Player::PrintPlacedArmies() {
 	for (int i = 0; i < territories.size(); i++) {
 		if (territories[i]->army_count[position] > 0)
-			cout << "-> " << territories[i]->army_count[position] << " army(ies) at territory ID " << territories[i]->territoryID << endl;
+			cout << "-> Territory ID (" << territories[i]->army_count[position] << " Army(ies)): " << territories[i]->territoryID << endl;
 	}
 	cout << endl;
 }
