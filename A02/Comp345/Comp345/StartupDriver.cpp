@@ -33,7 +33,8 @@ int DoBidding(Player* players_In_Game , int numPlayer )
 	}
 	int Player_Starter;
 	//Winmer Index
-	Player_Starter = CheckBidWinner(players_In_Game, numPlayer);
+	//Player_Starter = CheckBidWinner(players_In_Game, numPlayer);
+	Player_Starter = 0;
 	Bank += players_In_Game[Player_Starter].GetBf()->GetBid();
 	cout << "\n Bank : " << Bank << endl;
 	return Player_Starter;

@@ -12,6 +12,7 @@ int main() {
 	MasterGame = new Game();
 	SetupDriver();
 	MasterGame->Setup();
+	MasterGame->Startup();
 	MasterGame->MainLoop();
 	MasterGame->GetWinner();
 	delete MasterGame;

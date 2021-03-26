@@ -48,6 +48,7 @@ void MapLoader::readFile()
 
 	if (players == 2 || players == 3) {		// Check for valid number of users
 		boards = 3;							// Assign 3 continents for 2-3 users
+		players = 3;						// We set players to 3 here because 2-player games also have a third 'neutral' player
 	}
 	else if (players == 4) {
 		boards = 4;							// Assign 4 continents for 4 users

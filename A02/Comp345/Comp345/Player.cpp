@@ -153,6 +153,33 @@ bool Player::PlaceNewArmies() {
 	}
 	return hasPlaced;
 }
+
+bool Player::PlaceNewArmiesDirectly(int territoryIndex) {
+	bool hasPlaced = false;
+	Territory* destination;
+
+	if (GetTerritory(territoryIndex) == nullptr) {
+		cout << "Invalid Territory ID " << territoryIndex << ". Please try again." << endl;
+		return false;
+	}
+
+	destination = GetTerritory(territoryIndex);
+
+	for (int i = 0; i < cubes.size(); i++) { // check if have available armies and places it if it does
+		if (!cubes[i]->isPlaced) {
+			cubes[i]->isPlaced = true;
+			cubes[i]->location = destination;
+			UpdateTerritory(destination); // Updating player territories
+			destination->addArmy(position); // Updating map territories
+			return true;
+		}
+	}
+
+	cout << "Error: failed to place army at Territory ID " << territoryIndex << ", no available armies found.";
+	return false;
+}
+
+
 //**********
 //MoveArmies
 //**********
