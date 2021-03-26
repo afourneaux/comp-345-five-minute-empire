@@ -74,6 +74,8 @@ public:
 	int GetPosition() { return position; };
 	void setCoins(int amt) { coins = amt; };
 	void setPosition(int pos) { position = pos; };
+
+	bool neutralPlayer = false;
 private:
 	string lastName;
 	vector<Territory*> territories;
