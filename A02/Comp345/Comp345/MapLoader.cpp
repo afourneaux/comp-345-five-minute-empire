@@ -31,7 +31,7 @@ MapLoader::MapLoader(string filename) {
 
 void MapLoader::readFile()
 {
-	myFile.open(".\\Maps\\" + userFileName);				// Open stream file
+	myFile.open(".\\Maps\\" + userFileName);// Open stream file
 
 	//--------------------------------------//
 	//----------Read # of players-----------//

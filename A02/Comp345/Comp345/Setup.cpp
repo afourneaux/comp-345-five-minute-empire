@@ -64,10 +64,13 @@ void Setup::MakePlayers() {
 //------------------------------------------//
 void Setup::DisplayMaps() {
 	cout << "Here's a list of maps you can choose from: " << endl;
-
-	//string path = ".\\Maps\\";
+	mapInput = "";							// to store map names
+	mapChoice = 0;
 	for (const auto& entry : filesystem::directory_iterator(path)) {
-		cout << entry.path() << endl;
+		mapInput = (entry.path()).string();	// to turn path into string
+		mapInput = mapInput.substr(7);		// to exclude everything, but the filename
+		mapNames.push_back(mapInput);		// to store the map names into vectors
+		cout << mapChoice++ << " => " << mapInput << endl;
 	}
 }
 
@@ -78,11 +81,18 @@ void Setup::DisplayMaps() {
 //------------------------------------------//
 void Setup::MakeMap() {
 	invalid = true;							// Reset value
+	mapInput = "";							// Reset value
+	mapChoice = -1;							// Reset value
 	do {
-		cout << endl << "Type in the name of the map file you'd like to play with (example: Map2a.txt): ";
+		cout << endl << "Type in the map number you'd like to play with (example: type 0 for " << mapNames[0] << "): ";
 		cin >> mapInput;
 
 		cout << endl << "Running map..." << endl;
+
+		mapChoice = stoi(mapInput); // to parse the string input into an int
+
+		mapInput = mapNames[mapChoice];
+		cout << "This it your map name---> '" << mapInput << "'" << endl;
 
 		MapLoader* mapObject = new MapLoader(mapInput);
 		mapObject->readFile();
