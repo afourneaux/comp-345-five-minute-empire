@@ -9,22 +9,21 @@
 
 using namespace std;
 
-int SetupDriver() {
+void SetupDriver() {
 	cout << endl;
 	cout << "#----------------------------------#" << endl;
 	cout << "#            MAIN MENU             #" << endl;
 	cout << "#----------------------------------#" << endl;
 
-	Setup* setup = new Setup();
+	SetupObj* setup = new SetupObj();
 	setup->RequestPlayers();
 	setup->MakePlayers();
 	setup->DisplayMaps();
 	setup->MakeMap();
-
-	return 0;
 }
 
-// THIS IS THE SETUP CODE FROM GAME.CPP
+// THIS IS THE SETUP CODE FROM GAME.CPP IN CASE WE NEED TO GO BACK
+// DELETE BEFORE SUBMISSION ONCE EVERYTHING WORKS
 /*
 //------------------------------------------//
 	//------------- MAP VARIABLES --------------//

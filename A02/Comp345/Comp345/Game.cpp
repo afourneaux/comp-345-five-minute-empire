@@ -7,6 +7,15 @@ Game* MasterGame;
 
 // Get number of players, perform bidding, distribute tokens, generate deck
 void Game::Setup() {
+	cout << endl;
+	cout << "#----------------------------------#" << endl;
+	cout << "#            MAIN MENU             #" << endl;
+	cout << "#----------------------------------#" << endl;
+	SetupObj* setupObj = new SetupObj();
+	setupObj->RequestPlayers();
+	setupObj->MakePlayers();
+	setupObj->DisplayMaps();
+	setupObj->MakeMap();
 	deck = new Deck(playerCount);
 	hand = new Hand(deck);
 
@@ -27,6 +36,29 @@ void Game::Setup() {
 	}
 	if (playerCount == 4) {
 		gameTurns = GAME_TURNS_4_PLAYERS;
+	}
+}
+
+void Game::Startup() {
+	// Add starting armies for each 'human' player to starting territory
+	cout << "Placed 4 armies on the starting territory for each active player" << endl;
+	for (int i = 0; i < playerCount; i++) {
+		for (int j = 0; j < STARTING_TERRITORY_ARMIES; j++) {
+			players[i]->PlaceNewArmiesDirectly(map->starting_territory_index);
+		}
+	}
+	// Place neutral armies if 2-player game
+	if (playerCount == 2) {
+		cout << "Because this is a 2-player game, the players must place 10 armies of a third non-player color on the map" << endl;
+		for (int i = 0; i < NEUTRAL_ARMY_COUNT; i++) {
+			bool validPlacement;
+			do {
+				cout << players[i % 2]->GetLastName() << ", please choose a territory in which to place a neutral army: ";
+				int terr;
+				cin >> terr;
+				validPlacement = players[2]->PlaceNewArmiesDirectly(terr);
+			} while (!validPlacement);
+		}
 	}
 }
 

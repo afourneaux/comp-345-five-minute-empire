@@ -12,9 +12,9 @@ class MapLoader;
 class Deck;
 class Hand;
 
-class Setup {
+class SetupObj {
 public:
-	Setup();								// Constructor
+	SetupObj();								// Constructor
 
 	// map variables
 	bool invalid;							// true for invalid, false for valid

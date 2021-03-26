@@ -10,7 +10,7 @@
 
 using namespace std;
 
-Setup::Setup()
+SetupObj::SetupObj()
 {
 	invalid = true;
 	mapInput = "";
@@ -21,7 +21,7 @@ Setup::Setup()
 //------------------------------------------//
 //-------- DECIDE NUMBER OF PLAYERS --------//
 //------------------------------------------//
-void Setup::RequestPlayers() {
+void SetupObj::RequestPlayers() {
 	invalid = true;							// Reset value
 	do {
 		cout << "\n(Number of players must be between 2 and 4)" << endl;
@@ -40,7 +40,7 @@ void Setup::RequestPlayers() {
 //------------------------------------------//
 //------------ CREATE PLAYERS --------------//
 //------------------------------------------//
-void Setup::MakePlayers() {
+void SetupObj::MakePlayers() {
 	Player* player;
 	// Getting player names
 	for (int i = 0; i < MasterGame->playerCount; i++) {
@@ -49,6 +49,14 @@ void Setup::MakePlayers() {
 		cin >> playerName;
 		player->SetLastName(playerName);
 		player->setPosition(i);
+		MasterGame->players.push_back(player);
+	}
+	//If 2-player game, also create a neutral player
+	if (MasterGame->playerCount == 2) {
+		player = new Player();
+		player->SetLastName("NeutralPlayer");
+		player->setPosition(2);
+		player->neutralPlayer = true;
 		MasterGame->players.push_back(player);
 	}
 	cout << endl << "Players for this game are: " << endl;
@@ -62,8 +70,8 @@ void Setup::MakePlayers() {
 //------------------------------------------//
 //--------- DISPLAY LIST OF MAPS -----------//
 //------------------------------------------//
-void Setup::DisplayMaps() {
-	cout << "Here's a list of maps you can choose from: " << endl;
+void SetupObj::DisplayMaps() {
+	cout << endl << "Here's a list of maps you can choose from: " << endl;
 	mapInput = "";							// to store map names
 	mapChoice = 0;
 	for (const auto& entry : filesystem::directory_iterator(path)) {
@@ -79,7 +87,7 @@ void Setup::DisplayMaps() {
 //------------------------------------------//
 //------ REQUEST & CREATE VALID MAP --------//
 //------------------------------------------//
-void Setup::MakeMap() {
+void SetupObj::MakeMap() {
 	invalid = true;							// Reset value
 	mapInput = "";							// Reset value
 	mapChoice = -1;							// Reset value
@@ -89,22 +97,15 @@ void Setup::MakeMap() {
 
 		cout << endl << "Running map..." << endl;
 
-		mapChoice = stoi(mapInput); // to parse the string input into an int
+		mapChoice = stoi(mapInput);						// to parse the string input into an int
+		mapInput = mapNames[mapChoice];					// to select the map from the array
+		MapLoader* mapObject = new MapLoader(mapInput);	// instantiate map
+		mapObject->readFile();							// read mapfile
 
-		mapInput = mapNames[mapChoice];
-		cout << "This it your map name---> '" << mapInput << "'" << endl;
-
-		MapLoader* mapObject = new MapLoader(mapInput);
-		mapObject->readFile();
-		if (mapObject->players != MasterGame->playerCount) {
-			cout << "Sorry, this map version is only for " << MasterGame->playerCount << "players. Choose another map." << endl;
-			delete mapObject;
-			invalid = true;
-		}
-		else {
-			mapObject->buildMap(mapObject->regions, mapObject->regionsSize, mapObject->players, mapObject->continents);
+		if ((mapObject->players == 3 && (MasterGame->playerCount == 2 || MasterGame->playerCount == 3)) || (mapObject->players == 4 && MasterGame->playerCount == 4) || (mapObject->players > 4 || mapObject->players < 2)) {
+			MasterGame->map = mapObject->buildMap(mapObject->regions, mapObject->regionsSize, mapObject->players, mapObject->continents);
 			if (mapObject->validity == 0) {
-				cout << "Sorry, this map version in invalid. Choose another map." << endl;
+				cout << endl << "Sorry, this map version is INVALID. Choose another map." << endl;
 				delete mapObject;
 				invalid = true;
 			}
@@ -112,5 +113,29 @@ void Setup::MakeMap() {
 				invalid = false;
 			}
 		}
+		else {
+			cout << endl << "Sorry, this map version doesn't allow for your NUMBER OF PLAYERS: " << MasterGame->playerCount << ". Choose another map." << endl;
+			delete mapObject;
+			invalid = true;
+		}
 	} while (invalid);
 }
+
+/* OLD LOGIC TO CHECK MAP VALIDITY
+if (!((mapObject->players == 3 && (MasterGame->playerCount == 2 || MasterGame->playerCount == 3)) || (mapObject->players == 4 && MasterGame->playerCount == 4))) {
+			cout << endl << "Sorry, this map version doesn't allow for your number of players: " << MasterGame->playerCount <<". Choose another map." << endl;
+			delete mapObject;
+			invalid = true;
+		}
+		else {
+			MasterGame->map = mapObject->buildMap(mapObject->regions, mapObject->regionsSize, mapObject->players, mapObject->continents);
+			if (mapObject->validity == 0) {
+				cout << endl << "Sorry, this map version in invalid. Choose another map." << endl;
+				delete mapObject;
+				invalid = true;
+			}
+			else {
+				invalid = false;
+			}
+		}
+*/

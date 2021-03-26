@@ -1,8 +1,8 @@
 #pragma once
-#include "MapLoader.h"
 #include <iostream>		// used for cin & cout
 #include <fstream>		// used for file i/o
 #include <string>
+#include "MapLoader.h"
 
 using namespace std;
 
@@ -46,15 +46,11 @@ void MapLoader::readFile()
 	//--------Determine # of boards---------//
 	//--------------------------------------//
 
-	if (players == 2 || players == 3) {		// Check for valid number of users
+	if (players == 3) {						// Check for valid number of users
 		boards = 3;							// Assign 3 continents for 2-3 users
-		players = 3;						// We set players to 3 here because 2-player games also have a third 'neutral' player
 	}
 	else if (players == 4) {
 		boards = 4;							// Assign 4 continents for 4 users
-	}
-	else {
-		throw "Invalid number of players";  // Throw error if numbers of users is not between 2 and 4
 	}
 											//cout << "Boards: " << boards << endl;
 

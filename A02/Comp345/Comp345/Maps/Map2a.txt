@@ -1,5 +1,5 @@
 players
-2
+3
 regions
 13
 continents(indexTerritory,indexContinent)
