@@ -284,11 +284,11 @@ int Player::DestroyArmy() {//Checks if friendly & enemy in same location -> Retu
 		battlefieldTerr = GetTerritory(battlefieldTerrId);
 		for (int i = 0; i < GetTerritory(battlefieldTerrId)->army_count.size(); i++)
 			cout << MasterGame->players[i]->lastName << " at pos " << MasterGame->players[i]->position << " has " << GetTerritory(battlefieldTerrId)->army_count[i] << " armies at your location" << endl;
-		cout << lastName << " - DESTROY WHO (-1 to skip): " << endl;
+		cout << lastName << " - DESTROY WHOM (-1 to skip): " << endl;
 		cin >> enemy;
 		if (HasSkipped(battlefieldTerrId)) return COST_ONE_ACTIONVALUE; // Check if wants to skip action
 		if (enemy < 0 || enemy >= MasterGame->players.size()) { // Checking if valid player position
-			cout << "Might aswell attack the chair! Find a real opponent." << endl << endl;
+			cout << "Might as well attack the chair! Find a real opponent." << endl << endl;
 			continue;
 		}
 		if (enemy == position) {
