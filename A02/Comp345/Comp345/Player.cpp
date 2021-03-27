@@ -436,6 +436,19 @@ int Player::ComputeScore() {
 						cout << "Bonus from coins: " << (coins / ability->setTarget) * ability->value << endl;
 						score += (coins / ability->setTarget) * ability->value;
 					}
+					else if (ability->type == eAbility_VpPerFlying) {
+						cout << "Card " << hand[card_index]->name << " grants VP for flying cards" << endl;
+						int count = 0;
+						for (int i = 0; i < hand.size(); i++) {
+							for (int j = 0; j < hand[i]->abilityCount; j++) {
+								if (hand[i]->abilities[j].type == eAbility_Flying) {
+									count++;
+									cout << "Found flying card: " << hand[i]->name << endl;;
+								}
+							}
+						}
+						score += ability->value * count;
+					}
 				}
 			}
 		}
