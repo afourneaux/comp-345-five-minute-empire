@@ -315,7 +315,6 @@ int Player::DestroyArmy() {//Checks if friendly & enemy in same location -> Retu
 //DoAction
 //**********
 void Player::DoAction(Card* card) {
-	int receivedCoins;
 	bool hasActed = false;
 	int possibleActions = 0, cost = 0, receivedCoins = 0;
 	hand.push_back(card);						// puts drawn card in the hand of player
