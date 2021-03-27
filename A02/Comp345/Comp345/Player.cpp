@@ -238,7 +238,7 @@ int Player::BuildCity() {
 	if (!HasCitiesToPlace()) {
 		cout << "Are you trying to become a real estate agent o.O? I think not." << endl;
 		PrintPlacedCities();
-		return COST_ZERO_ACTIONVALUE;
+		return COST_ONE_ACTIONVALUE;
 	}
 	cout << endl;
 	for (int i = 0; i < disks.size(); i++)
