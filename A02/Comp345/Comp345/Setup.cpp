@@ -123,6 +123,7 @@ void SetupObj::MakeMap() {
 			}
 			else {
 				invalid = false;
+				delete mapObject;
 			}
 		}
 		else {

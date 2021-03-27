@@ -16,6 +16,7 @@ void Game::Setup() {
 	setupObj->MakePlayers();
 	setupObj->DisplayMaps();
 	setupObj->MakeMap();
+	delete setupObj;
 
 	deck = new Deck(playerCount);
 	hand = new Hand(deck);
