@@ -440,13 +440,13 @@ int Player::ComputeScore() {
 						score += (coins / ability->setTarget) * ability->value;
 					}
 					else if (ability->type == eAbility_VpPerFlying) {
-						cout << "Card " << hand[card_index]->name << " grants VP for flying cards" << endl;
+						cout << "Card " << playerHand[card_index]->name << " grants VP for flying cards" << endl;
 						int count = 0;
-						for (int i = 0; i < hand.size(); i++) {
-							for (int j = 0; j < hand[i]->abilityCount; j++) {
-								if (hand[i]->abilities[j].type == eAbility_Flying) {
+						for (int i = 0; i < playerHand.size(); i++) {
+							for (int j = 0; j < playerHand[i]->abilityCount; j++) {
+								if (playerHand[i]->abilities[j].type == eAbility_Flying) {
 									count++;
-									cout << "Found flying card: " << hand[i]->name << endl;;
+									cout << "Found flying card: " << playerHand[i]->name << endl;;
 								}
 							}
 						}
