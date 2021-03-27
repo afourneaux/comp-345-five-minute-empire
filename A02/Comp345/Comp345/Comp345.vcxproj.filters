@@ -31,6 +31,10 @@
     <ClCompile Include="ScoreDriver.cpp">
       <Filter>Source Files</Filter>
     </ClCompile>
+    <ClCompile Include="CardsDriver.cpp" />
+    <ClCompile Include="MapDriver.cpp" />
+    <ClCompile Include="MapLoaderDriver.cpp" />
+    <ClCompile Include="Setup.cpp" />
   </ItemGroup>
   <ItemGroup>
     <ClInclude Include="BiddingFacility.h">
@@ -51,6 +55,7 @@
     <ClInclude Include="Cards.h">
       <Filter>Header Files</Filter>
     </ClInclude>
+    <ClInclude Include="Setup.h" />
   </ItemGroup>
   <ItemGroup>
     <Filter Include="Source Files">
@@ -61,11 +66,15 @@
     </Filter>
   </ItemGroup>
   <ItemGroup>
-    <Text Include="Map2a.txt" />
-    <Text Include="Map2b.txt" />
-    <Text Include="Map3a.txt" />
-    <Text Include="Map3b.txt" />
-    <Text Include="Map4a.txt" />
-    <Text Include="Map4b.txt" />
+    <Text Include="Maps\Map2a.txt" />
+    <Text Include="Maps\Map2b.txt" />
+    <Text Include="Maps\Map3a.txt" />
+    <Text Include="Maps\Map3b.txt" />
+    <Text Include="Maps\Map4a.txt" />
+    <Text Include="Maps\Map4b.txt" />
+    <Text Include="Team members.txt" />
+    <Text Include="Work Log.txt" />
+    <Text Include="Maps\MapFail1.txt" />
+    <Text Include="Maps\MapFail2.txt" />
   </ItemGroup>
 </Project>
