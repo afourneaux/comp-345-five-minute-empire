@@ -38,8 +38,6 @@ void Game::Setup() {
 	if (playerCount == 4) {
 		gameTurns = GAME_TURNS_4_PLAYERS;
 	}
-
-	delete mapObject;
 }
 
 void Game::Startup() {
