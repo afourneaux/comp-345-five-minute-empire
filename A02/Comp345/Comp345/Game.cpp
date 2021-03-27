@@ -61,7 +61,7 @@ void Game::Startup() {
 	}
 	// Place neutral armies if 2-player game
 	if (playerCount == 2) {
-		cout << "Because this is a 2-player game, the players must place 10 armies of a third non-player color on the map" << endl;
+		cout << "Because this is a 2-player game, the players must place 10 armies of a third non-player colour on the map" << endl;
 		for (int i = 0; i < NEUTRAL_ARMY_COUNT; i++) {
 			bool validPlacement;
 			do {
