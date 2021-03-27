@@ -195,7 +195,7 @@ void Deck::Generate(int num_player)
 	card->actions[1].action = eAction_DestroyArmies;
 	card->actions[1].actionValue = 1;
 	cards.push_back(card);
-
+	
 	card = new Card();
 	card->name = "Noble Unicorn";
 	card->image = "card_noble_unicorn.png";
@@ -510,8 +510,9 @@ void Deck::Generate(int num_player)
 		card = new Card();
 		card->name = "Castle";
 		card->image = "card_castle.png";
-		card->actionCount = 1;
+		card->actionCount = 2;
 		card->abilityCount = 1;
+		card->actionChoice = eChoice_And;
 		card->abilities = new Ability[card->abilityCount];
 		card->actions = new Action[card->actionCount];
 		card->abilities[0].type = eAbility_Elixir;
@@ -525,8 +526,9 @@ void Deck::Generate(int num_player)
 		card = new Card();
 		card->name = "Castle";
 		card->image = "card_castle.png";
-		card->actionCount = 1;
+		card->actionCount = 2;
 		card->abilityCount = 1;
+		card->actionChoice = eChoice_And;
 		card->abilities = new Ability[card->abilityCount];
 		card->actions = new Action[card->actionCount];
 		card->abilities[0].type = eAbility_Elixir;
