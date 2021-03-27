@@ -102,11 +102,18 @@ void SetupObj::MakeMap() {
 		cout << endl << "Running map..." << endl;
 
 		mapChoice = stoi(mapInput);						// to parse the string input into an int
+
+		// Conditional to not choose a map out of bounds
+		if ((mapChoice < 0) || (mapChoice >= mapNames.size())) {
+			cout << endl << "This map does not exist. Please enter an existing map." << endl;
+			continue;
+		}
+
 		mapInput = mapNames[mapChoice];					// to select the map from the array
 		MapLoader* mapObject = new MapLoader(mapInput);	// instantiate map
 		mapObject->readFile();							// read mapfile
 
-		// This conditional verifies that 
+		// Conditional to check map validity
 		if ((mapObject->players == 3 && (MasterGame->playerCount == 2 || MasterGame->playerCount == 3)) || (mapObject->players == 4 && MasterGame->playerCount == 4) || (mapObject->players > 4 || mapObject->players < 2)) {
 			MasterGame->map = mapObject->buildMap(mapObject->regions, mapObject->regionsSize, mapObject->players, mapObject->continents);
 			if (mapObject->validity == 0) {
