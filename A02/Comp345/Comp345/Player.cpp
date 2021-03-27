@@ -314,7 +314,7 @@ int Player::DestroyArmy() {//Checks if friendly & enemy in same location -> Retu
 //**********
 void Player::DoAction(Card* card) {
 	bool hasActed = false;
-	int possibleActions = 0, cost = 0;
+	int possibleActions = 0, cost = 0, receivedCoins = 0;
 	hand.push_back(card);						// puts drawn card in the hand of player
 	//update player with relevant card bonuses
 	for (int i = 0; i < card->abilityCount; i++) {
@@ -329,7 +329,7 @@ void Player::DoAction(Card* card) {
 			bonusMoves++;
 			break;
 		case eAbility_Coins:
-			int receivedCoins = min(MasterGame->bank, card->abilities[i].value);
+			receivedCoins = min(MasterGame->bank, card->abilities[i].value);
 			cout << "You get " << receivedCoins << " bonus coins from " << card->name << endl;
 			coins += receivedCoins;
 			break;
