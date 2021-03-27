@@ -1,7 +1,9 @@
 #include "Map.h"
 #include "MapLoader.h"
-#include <iostream>
 #include "Game.h"
+#include <iostream>
+#include <algorithm>
+
 using namespace std;
 
 extern Game* MasterGame;

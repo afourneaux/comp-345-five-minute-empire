@@ -1,5 +1,7 @@
 #include<iostream>
+#include <algorithm>
 #include "Game.h"
+
 using namespace std;
 
 extern Game* MasterGame;
@@ -313,6 +315,7 @@ int Player::DestroyArmy() {//Checks if friendly & enemy in same location -> Retu
 //DoAction
 //**********
 void Player::DoAction(Card* card) {
+	int receivedCoins;
 	bool hasActed = false;
 	int possibleActions = 0, cost = 0;
 	hand.push_back(card);						// puts drawn card in the hand of player
@@ -329,7 +332,7 @@ void Player::DoAction(Card* card) {
 			bonusMoves++;
 			break;
 		case eAbility_Coins:
-			int receivedCoins = min(MasterGame->bank, card->abilities[i].value);
+			receivedCoins = min(MasterGame->bank, card->abilities[i].value);
 			cout << "You get " << receivedCoins << " bonus coins from " << card->name << endl;
 			coins += receivedCoins;
 			break;
