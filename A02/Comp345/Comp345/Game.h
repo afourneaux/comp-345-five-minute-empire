@@ -32,10 +32,10 @@ public:
 	int bank;
 	int GetPlayerCount();
 	Hand* GetHand();
+	int playerCount;
 private:
 	Deck* deck;
 	Hand* hand;
-	int playerCount;
 	int gameTurns;
 };
 
