@@ -90,6 +90,10 @@ private:
 	int COST_X_ACTIONVALUE;
 	int COST_THREE_ACTIONVALUE = 3;
 	int position; // the position of the player at the table
+	int bonusMoves = 0;
+	int bonusArmies = 0;
+	int bonusFlying = 0;
+	bool bonusImmune = false;
 };
 int testPlayer();
 

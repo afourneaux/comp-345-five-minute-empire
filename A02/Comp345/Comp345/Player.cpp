@@ -186,7 +186,7 @@ int Player::MoveArmies(int numOfMoves) {
 		if (GetTerritory(dest) == nullptr) continue;
 		Territory* destination = GetTerritory(dest);
 		Cube* srcArmy = GetArmyAtLocation(src);
-		movementCost = MasterGame->map->GetMovementCost(src, dest);
+		movementCost = MasterGame->map->GetMovementCost(src, dest, bonusFlying);
 		if (movementCost <= numOfMoves && movementCost > 0){
 			cout << "This move will cost " << movementCost << " move(s). Do you wish to continue? (Y/N) ";
 			string ans;
@@ -295,6 +295,10 @@ int Player::DestroyArmy() {//Checks if friendly & enemy in same location -> Retu
 			cout << "Feel free to punch yourself in real life but not happening in my game!" << endl << endl;
 			continue;
 		}
+		if (MasterGame->players[enemy]->bonusImmune) {
+			cout << "You can't attack " << enemy << " because they have the 'Immune to Attack' bonus. Please choose a different target." << endl;
+			continue;
+		}
 		if (battlefieldTerr->army_count[enemy] <= 0) { // Checking if ennemy has armies
 			cout << "Now you are attacking straight wind. " << enemy << " does not have anything at " << battlefieldTerr->territoryID << " to destroy. " << endl << endl;
 			continue;
@@ -312,6 +316,29 @@ void Player::DoAction(Card* card) {
 	bool hasActed = false;
 	int possibleActions = 0, cost = 0;
 	hand.push_back(card);						// puts drawn card in the hand of player
+	//update player with relevant card bonuses
+	for (int i = 0; i < card->abilityCount; i++) {
+		switch (card->abilities[i].type) {
+		case eAbility_PlusOneArmy:
+			bonusArmies++;
+			break;
+		case eAbility_Flying:
+			bonusFlying++;
+			break;
+		case eAbility_PlusOneMove:
+			bonusMoves++;
+			break;
+		case eAbility_Coins:
+			int receivedCoins = min(MasterGame->bank, card->abilities[i].value);
+			cout << "You get " << receivedCoins << " bonus coins from " << card->name << endl;
+			coins += receivedCoins;
+			break;
+		case eAbility_Immune:
+			bonusImmune = true;
+			break;
+		}
+	}
+
 	int choice = AndOrAction();					// Finds out choice of user
 	possibleActions = choice + 1;
 	if (card->actionChoice == eChoice_And || card->actionChoice == eChoice_None) {	// AND Card overwrites values
@@ -319,10 +346,22 @@ void Player::DoAction(Card* card) {
 		possibleActions = card->actionCount;
 	}
 	for (; choice < possibleActions; choice++) {
-		for (int i = 0; i < card->actions[choice].actionValue;) {
+		//apply relevant action bonuses based on cards player owns
+		int actionValueWithBonus = card->actions[choice].actionValue;
+		if (card->actions[choice].action == eAction_PlaceArmies) {
+			actionValueWithBonus += bonusArmies;
+			cout << "You currently have a bonus of " << bonusArmies << " when placing armies." << endl;
+		}
+		else if (card->actions[choice].action == eAction_MoveArmies) {
+			actionValueWithBonus += bonusMoves;
+			cout << "You currently have a bonus of " << bonusMoves << " moves when moving armies." << endl;
+			cout << "You currently have a Flying bonus of " << bonusFlying << " when moving armies over water." << endl;
+		}
+
+		for (int i = 0; i < actionValueWithBonus;) {
 			cout << endl;
 			cout << "Action: " << card->actions[choice].action << endl;
-			cout << card->actions[choice].actionValue - i << " moves left" << endl;
+			cout << actionValueWithBonus - i << " moves left" << endl;
 			cout << endl;
 			switch (card->actions[choice].action) {
 			case eAction_BuildCity: cost = BuildCity();
@@ -333,7 +372,7 @@ void Player::DoAction(Card* card) {
 				cout << endl;
 				i += cost;
 				break;
-			case eAction_MoveArmies: cost = MoveArmies(card->actions[choice].actionValue-i);
+			case eAction_MoveArmies: cost = MoveArmies(actionValueWithBonus-i);
 				i += cost;
 				cout << endl;
 				break;

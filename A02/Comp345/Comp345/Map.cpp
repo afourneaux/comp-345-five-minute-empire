@@ -523,7 +523,8 @@ int Map::getNumberControlledTerritories(int playerIndex) {
 	return count;
 }
 
-int Map::GetMovementCost(int origin, int destination) {
+// Calculates the movement cost for the shortest path between origin and destination
+int Map::GetMovementCost(int origin, int destination, int bonusFlying) {
 	bool* visited = new bool[territory_count];
 	int* distance = new int[territory_count];
 	int current_node = origin;
@@ -537,7 +538,7 @@ int Map::GetMovementCost(int origin, int destination) {
 		//iterate over ajcency list of current node and update their distances if they are shorter than the current minimum
 		Edge* temp = territories[current_node].head;
 		while (temp != nullptr) {
-			int candidate_distance = distance[current_node] + temp->movement_cost;
+			int candidate_distance = distance[current_node] + max(temp->movement_cost - bonusFlying, 1);
 			if (!visited[temp->destination_territory->territoryID] && candidate_distance < distance[temp->destination_territory->territoryID]) {
 				distance[temp->destination_territory->territoryID] = candidate_distance;
 			}
