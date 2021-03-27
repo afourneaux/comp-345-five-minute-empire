@@ -213,7 +213,6 @@ void Game::PlayerTurn(Player* player) {
 	cout << *card;
 	player->DoAction(card);
 	player->PrintPlayerStatus();
-	delete card;	// TODO: Delete as part of the player destructor
 }
 
 int Game::GetPlayerCount() {
