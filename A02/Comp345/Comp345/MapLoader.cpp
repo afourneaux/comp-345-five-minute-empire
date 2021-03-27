@@ -36,59 +36,47 @@ void MapLoader::readFile()
 	//--------------------------------------//
 	//----------Read # of players-----------//
 	//--------------------------------------//
-
 	myFile.ignore(100, '\n');				// Ignore label string
 	myFile >> line;							// Store number of players in line variable
 	players = stoi(line);					// Parse line to int and store value in players
-											//cout << "Players: " << players << endl;	// Print players
 
 	//--------------------------------------//
 	//--------Determine # of boards---------//
 	//--------------------------------------//
-
 	if (players == 3) {						// Check for valid number of users
 		boards = 3;							// Assign 3 continents for 2-3 users
-	}
-	else if (players == 4) {
+	} else if (players == 4) {
 		boards = 4;							// Assign 4 continents for 4 users
 	}
-											//cout << "Boards: " << boards << endl;
 
 	//--------------------------------------//
 	//----------Read # of regions-----------//
 	//--------------------------------------//
-
 	myFile.ignore(100, '\n');				// Ignore label string
 	myFile.ignore(100, '\n');				// Ignore label string
 	myFile >> line;							// Store number of regions
 	regionsSize = stoi(line);				// Parse line to int and store value in regionsSize
-											//cout << "Regions: " << regionsSize << endl;
 	this->regions = new int[regionsSize];	// Assign length of regions array
 
 	//--------------------------------------//
 	//--Read each region's continent label--//
 	//--------------------------------------//
-
 	myFile.ignore(100, '\n');				// Ignore label
-											//cout << "Index region and Index continent: " << endl;
 	myFile.ignore(100, '\n');				// Ignore label
 	for (i = 0; i < regionsSize; i++) {		// Loop through the regions array and label them with a continent
 		myFile >> line;						// Read region entry, but skip it
 		myFile >> line;						// Read continent of the region index read above
 		regions[i] = stoi(line);			// Parse to int and store it (not sure how to fix the warnings)
-											//cout << "Region[" << i << "]: " << regions[i] << endl;
 	}
 
 	//--------------------------------------//
 	//----Determine number of continents----//
 	//--------------------------------------//
-
 	for (i = 0; i < regionsSize; i++) {
 		if (continents <= regions[i]) {		// if # of continents < region's continent label
 			continents = regions[i] + 1;	// # of continents = continent # + 1 (+1 because it's enumerated by index)
 		}
 	}
-											//cout << "Continents: " << continents << endl;
 }
 
 Map* MapLoader::buildMap(int* regions, int regionsSize, int players, int continents)
@@ -96,7 +84,6 @@ Map* MapLoader::buildMap(int* regions, int regionsSize, int players, int contine
 	//--------------------------------------//
 	//----------Create map object-----------//
 	//--------------------------------------//
-
 	Map *userMap = new Map(regions, regionsSize, players, continents); // Use map class to create map
 	myFile.ignore(100, '\n');				// Ignore label
 	myFile.ignore(100, '\n');				// Ignore label
@@ -111,14 +98,12 @@ Map* MapLoader::buildMap(int* regions, int regionsSize, int players, int contine
 			}
 			temp = stoi(line);				// Parse adjacent territory to int
 			userMap->AddEdge(origin, temp);	// Add edge to and from origin
-											//cout << "New edge added: [" << origin << "<-->" << temp << "]" << endl;
 		}
 	}
 
 	//--------------------------------------//
 	//------Connect maps to each other------//
 	//--------------------------------------//
-
 	myFile.ignore(100, '\n');				// Ignore label
 	myFile.ignore(100, '\n');				// Ignore label
 
@@ -131,28 +116,22 @@ Map* MapLoader::buildMap(int* regions, int regionsSize, int players, int contine
 	}
 	myFile.ignore(100, '\n');				// Ignore the rest of the index for this line
 
-											//cout << "Origin: " << line;
-
 	myFile >> line;
 	if (line != ".") {						
 		temp = stoi(line);
 	}
 	myFile.ignore(100, '\n');
 
-											 //cout << "Destination: " << line << endl;
-
 	if (line != ".") {
 		userMap->AddEdge(origin, temp);		// Add edge to and from origin
 	}
 
 	origin = temp;							// Replace destination with origin
-											//cout << "Origin: " << origin;
-
+	
 	myFile >> line;
 	if (line != ".") {
 		temp = stoi(line);
 	}
-											//cout << "Destination: " << line << endl;
 
 	if (line != ".") {
 		userMap->AddEdge(origin, temp);		// Add edge to and from origin
@@ -161,15 +140,12 @@ Map* MapLoader::buildMap(int* regions, int regionsSize, int players, int contine
 	if (boards == 4) {						// Do this process again if we need to connect 4 maps
 		myFile.ignore(100, '\n');
 		origin = temp;						// Replace destination with origin
-											//cout << "Origin: " << origin;
-
 		myFile >> line;
+
 		if (line != ".") {
 			temp = stoi(line);
 		}
 		myFile.ignore(100, '\n');
-
-											//cout << "Destination: " << temp << endl;
 
 		if (line != ".") {
 			userMap->AddEdge(origin, temp);	// Add edge to and from origin
@@ -177,18 +153,11 @@ Map* MapLoader::buildMap(int* regions, int regionsSize, int players, int contine
 	}
 
 	//--------------------------------------//
-	//------------Print user map------------//
-	//--------------------------------------//
-
-	//cout << *userMap;
-
-	//--------------------------------------//
 	//----------Validate user map-----------//
 	//--------------------------------------//
 	validity = userMap->Validate();
-	cout << "Map validate() result: " << validity << endl;
+	cout << "Map validate() result (1 = Valid | 0 = Invalid): " << validity << endl;
 
-	//delete userMap;
 	delete[] regions;
 	regions = nullptr;
 
