@@ -89,6 +89,10 @@ private:
 	int coins = STARTING_COINS;
 	int armiesLeft = STARTING_ARMIES;
 	int position; // the position of the player at the table
+	int bonusMoves = 0;
+	int bonusArmies = 0;
+	int bonusFlying = 0;
+	bool bonusImmune = false;
 };
 int testPlayer();
 
