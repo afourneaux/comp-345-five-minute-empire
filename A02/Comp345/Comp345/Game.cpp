@@ -1,105 +1,22 @@
 #include "Game.h"
 #include <iostream>
 #include "MapLoader.h"
+#include "Setup.h"
 
 Game* MasterGame;
 
 // Get number of players, perform bidding, distribute tokens, generate deck
 void Game::Setup() {
-	//------------------------------------------//
-	//------------- MAP VARIABLES --------------//
-	//------------------------------------------//
-	char mapVersion = 'a';						// Map version (a, b)
-	bool invalid = true;						// true for invalid, false for valid
-	string mapInput;							// Stores the name of the map to be ran
-
-	//----------- ------------------------------//
-	//------------ PLAYER VARIABLES ------------//
-	//------------------------------------------//
-	string playerName = "";						// Container for a player's name
-
 	cout << endl;
 	cout << "#----------------------------------#" << endl;
 	cout << "#            MAIN MENU             #" << endl;
 	cout << "#----------------------------------#" << endl;
+	SetupObj* setupObj = new SetupObj();
+	setupObj->RequestPlayers();
+	setupObj->MakePlayers();
+	setupObj->DisplayMaps();
+	setupObj->MakeMap();
 
-	//----------- ------------------------------//
-	//-------- DECIDE NUMBER OF PLAYERS --------//
-	//------------------------------------------//
-	do {
-		cout << "\n(Number of players must be between 2 and 4)" << endl;
-		cout << "Input number of players and press [ENTER]: ";
-		cin >> playerCount;
-		if (playerCount >= 2) {
-			if (playerCount <= 4) {
-				invalid = false;
-			}
-		}
-	} while (invalid);
-
-	cout << endl;
-
-	//------------------------------------------//
-	//------------ CREATE PLAYERS --------------//
-	//------------------------------------------//
-	Player* player;
-	// Getting player names
-	for (int i = 0; i < playerCount; i++) {
-		player = new Player();
-		cout << "Enter the name of Player " << i + 1 << ": ";
-		cin >> playerName;
-		player->SetLastName(playerName);
-		player->setPosition(i);
-		players.push_back(player);
-	}
-	cout << endl << "Players for this game are: " << endl;
-	for (int j = 0; j < playerCount; j++) {
-		cout << j + 1 << ". " << players[j]->GetLastName() << endl;
-	}
-
-	//------------------------------------------//
-	//---------- DECIDE MAP VERSION ------------//
-	//------------------------------------------//
-	invalid = true;								// Reset value
-
-	do {
-		cout << "\n(Map version must be either 'a' or 'b')" << endl;
-		cout << "Input map version and press [ENTER]: ";
-		cin >> mapVersion;
-		if (mapVersion == 'a' || mapVersion == 'b') {
-			invalid = false;
-		}
-	} while (invalid);
-
-	cout << endl;
-
-	mapInput = "Map" + to_string(playerCount) + mapVersion + ".txt";
-
-	//------------------------------------------//
-	//-------------- CREATE MAP ----------------//
-	//------------------------------------------//
-	MapLoader* mapObject = new MapLoader(mapInput);
-	mapObject->readFile();
-	map = mapObject->buildMap(mapObject->regions, mapObject->regionsSize, mapObject->players, mapObject->continents);
-
-	//Set the starting territory
-	vector<int> possibleStartingTerritories = map->GetPotentialStartingTerritories();
-	int starter = 0;
-	cout << "Please select a starting region (legal options for this map: ";
-	for (int i = 0; i < possibleStartingTerritories.size(); i++) cout << possibleStartingTerritories[i] << " ";
-	cout << "): ";
-	do {
-		cin >> starter;
-		map->SetStartingTerritory(starter);
-	} while (map->starting_territory_index < 0);
-
-	cout << "\nX X X X X X X X X X X X X X X X X X X" << endl;
-	cout << "       INFORMATION ABOUT DECK" << endl;
-	cout << "X X X X X X X X X X X X X X X X X X X\n" << endl;
-
-	//------------------------------------------//
-	//---------- CREATE DECK & HAND ------------//
-	//------------------------------------------//
 	deck = new Deck(playerCount);
 	hand = new Hand(deck);
 
@@ -123,6 +40,40 @@ void Game::Setup() {
 	}
 
 	delete mapObject;
+}
+
+void Game::Startup() {
+	//Set the starting territory
+	vector<int> possibleStartingTerritories = map->GetPotentialStartingTerritories();
+	int starter = 0;
+	cout << "Please select a starting region (legal options for this map: ";
+	for (int i = 0; i < possibleStartingTerritories.size(); i++) cout << possibleStartingTerritories[i] << " ";
+	cout << "): ";
+	do {
+		cin >> starter;
+		map->SetStartingTerritory(starter);
+	} while (map->starting_territory_index < 0);
+
+	// Add starting armies for each 'human' player to starting territory
+	cout << "Placed 4 armies on the starting territory for each active player" << endl;
+	for (int i = 0; i < playerCount; i++) {
+		for (int j = 0; j < STARTING_TERRITORY_ARMIES; j++) {
+			players[i]->PlaceNewArmiesDirectly(map->starting_territory_index);
+		}
+	}
+	// Place neutral armies if 2-player game
+	if (playerCount == 2) {
+		cout << "Because this is a 2-player game, the players must place 10 armies of a third non-player color on the map" << endl;
+		for (int i = 0; i < NEUTRAL_ARMY_COUNT; i++) {
+			bool validPlacement;
+			do {
+				cout << players[i % 2]->GetLastName() << ", please choose a territory in which to place a neutral army: ";
+				int terr;
+				cin >> terr;
+				validPlacement = players[2]->PlaceNewArmiesDirectly(terr);
+			} while (!validPlacement);
+		}
+	}
 }
 
 void Game::MainLoop() {
@@ -215,7 +166,8 @@ void Game::PlayerTurn(Player* player) {
 	//       Figure out a more elegant solution
 	cin.ignore(INT_MAX, '\n');
 	cin.ignore(INT_MAX, '\n');
-
+	
+	cout << *map;
 	cout << *hand;
 
 	cout << "You have " << player->getCoins() << " coins." << endl;

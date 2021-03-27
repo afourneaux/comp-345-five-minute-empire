@@ -25,6 +25,7 @@ public:
 	Map* buildMap(int* regions, int regionsSize, int players, int continents); // Build map object based on .txt file configurations
 	int players;			// To store number of players
 	int continents;			// To store number of continents
+	int validity;			// To store the result of the map validation
 private:
 	int boards;				// To store number of boards
 	friend std::ostream& operator<<(std::ostream&, const MapLoader&);
