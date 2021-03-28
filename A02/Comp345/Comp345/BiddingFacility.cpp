@@ -22,7 +22,7 @@ int AskForBid(Player* player)
 	char input;
 	int counter = 0;
 	cout << player->GetLastName() << ", please input a two-digit bid (example: input 03 instead of 3)" << endl;
-	cout << "You Currently have "<< player->getCoins()<<" Coins to Bid";
+	cout << "You Currently have "<< player->getCoins()<<" Coins to Bid. ";
 	// Loop until a valid value is input
 	while (true)
 	{
