@@ -163,7 +163,6 @@ bool Player::PlaceNewArmiesDirectly(int territoryIndex) {
 //**********
 int Player::MoveArmies(int numOfMoves) {
 	int movementCost = 0;
-	int landOrSea;
 	int src, dest;
 	bool exit = false;
 	if (!HasArmiesOnBoard()) {

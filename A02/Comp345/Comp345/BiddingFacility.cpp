@@ -95,6 +95,8 @@ int AskForBid(Player* player)
 			cout << "*";
 		}
 	}
+
+	return 0;
 }
 
 // Compare each player's bid and determine a winner
