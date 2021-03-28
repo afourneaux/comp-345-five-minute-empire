@@ -182,13 +182,23 @@ int Player::MoveArmies(int numOfMoves) {
 			continue;
 		}
 		Territory* source = GetTerritory(src);
+
+		//Get all possible moves from src territory and print them
+		vector<int> possibleMoves = MasterGame->map->GetMovementCost(src, bonusFlying);
+		cout << "Legal moves from territory " << src << " with " << numOfMoves << " movement points: " << endl;
+		for (int i = 0; i < possibleMoves.size(); i++) {
+			if (possibleMoves[i] <= numOfMoves && i != src) {
+				cout << "Territory " << i << " (move cost: " << possibleMoves[i] << ")" << endl;
+			}
+		}
+
 		cout << lastName << " - MOVE TO (-1 to skip): ";
 		cin >> dest;
 		if (HasSkipped(dest)) return COST_ONE_ACTIONVALUE;
 		if (GetTerritory(dest) == nullptr) continue;
 		Territory* destination = GetTerritory(dest);
 		Cube* srcArmy = GetArmyAtLocation(src);
-		movementCost = MasterGame->map->GetMovementCost(src, dest, bonusFlying);
+		movementCost = possibleMoves[dest];
 		if (movementCost <= numOfMoves && movementCost > 0){
 			cout << "This move will cost " << movementCost << " move(s). Do you wish to continue? (Y/N) ";
 			string ans;

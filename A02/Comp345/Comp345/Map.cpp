@@ -522,9 +522,9 @@ int Map::getNumberControlledTerritories(int playerIndex) {
 }
 
 // Calculates the movement cost for the shortest path between origin and destination
-int Map::GetMovementCost(int origin, int destination, int bonusFlying) {
+vector<int> Map::GetMovementCost(int origin, int bonusFlying) {
 	bool* visited = new bool[territory_count];
-	int* distance = new int[territory_count];
+	vector<int> distance(territory_count);
 	int current_node = origin;
 	for (int i = 0; i < territory_count; i++) {
 		visited[i] = false;
@@ -544,13 +544,7 @@ int Map::GetMovementCost(int origin, int destination, int bonusFlying) {
 		}
 		// Mark current node as visited
 		visited[current_node] = true;
-		if (current_node == destination) {
-			// if the current node is the destination, shortest path length is stored as distance
-			int shortest = distance[current_node];
-			delete[] visited;
-			delete[] distance;
-			return shortest;
-		}
+
 		//select the unvisited node with smallest distance and loop
 		int shortest_unvisited = INT32_MAX;
 		for (int i = 0; i < territory_count; i++) {
@@ -563,10 +557,8 @@ int Map::GetMovementCost(int origin, int destination, int bonusFlying) {
 		if (visited[current_node]) break;
 	}
 
-	cout << "ERROR when calculating shortest path between " << origin << " and " << destination << ". No valid path found. Check that the map is valid." << endl;
 	delete[] visited;
-	delete[] distance;
-	return -1;
+	return distance;
 }
 
 void Territory::addArmy(int player_index) {
