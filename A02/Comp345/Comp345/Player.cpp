@@ -400,7 +400,9 @@ void Player::DoAction(Card* card) {
 	}
 }
 int Player::ComputeScore() {
-
+	cout << endl;
+	cout << "Score Calculation: " << lastName << endl;
+	cout << "------------------------------------------" << endl;
 	//Calculate the scores for controlled continents + territories
 	int mapScore = MasterGame->map->ComputeMapScore(position);
 	int score = 0;

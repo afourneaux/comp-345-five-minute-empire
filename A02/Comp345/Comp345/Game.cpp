@@ -95,6 +95,10 @@ void Game::MainLoop() {
 
 // Determine and output the winner of the game
 void Game::GetWinner() {
+	cout << endl;
+	cout << "#----------------------------------#" << endl;
+	cout << "#  GAME OVER - CALCULATING SCORES  #" << endl;
+	cout << "#----------------------------------#" << endl;
 	//Compute the final scores for each player
 	int* scores = new int[playerCount];
 	for (int i = 0; i < playerCount; i++) {
@@ -143,6 +147,10 @@ void Game::GetWinner() {
 			}
 		}
 	}
+	cout << endl;
+	cout << "#----------------------------------#" << endl;
+	cout << "#           FINAL RESULT           #" << endl;
+	cout << "#----------------------------------#" << endl;
 	if (tie_after_tiebreakers) {
 		cout << "The final score is a tie!" << endl;
 	}
