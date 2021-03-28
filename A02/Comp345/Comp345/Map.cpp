@@ -3,6 +3,7 @@
 #include "Game.h"
 #include <iostream>
 #include <algorithm>
+#include <iomanip>
 
 using namespace std;
 
@@ -450,7 +451,7 @@ std::ostream& operator<< (std::ostream& out, const Map& map) {
 		}
 		out << endl;
 		for (int j = 0; j < map.player_count; j++) {
-			out << "\tPlayer " << MasterGame->players[j]->GetLastName() << ": \tarmy count: " << map.territories[i].army_count[j] << "\tcity count: " << map.territories[i].city_count[j] << endl;
+			out << setw(MasterGame->maxPlayerNameLength + 5) << MasterGame->players[j]->GetLastName() << ":" << setw(15) << "army count: " << map.territories[i].army_count[j] << setw(15) << "  city count: " << map.territories[i].city_count[j] << endl;
 		}
 		out << "Controlling player: " << map.territories[i].controlling_player_name << endl;
 	}
