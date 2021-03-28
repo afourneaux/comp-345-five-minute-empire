@@ -443,6 +443,7 @@ Map& Map::operator= (const Map& map) {
 
 std::ostream& operator<< (std::ostream& out, const Map& map) {
 	for (int i = 0; i < map.territory_count; i++) {
+		out << "--------------------------------------------------------------------------" << endl;
 		out << "Territory index " << i << ", ContinentID " << map.territories[i].continentID << ". Connections to: ";
 		Edge* current = map.territories[i].head;
 		while (current != nullptr) {
@@ -450,11 +451,13 @@ std::ostream& operator<< (std::ostream& out, const Map& map) {
 			current = current->next;
 		}
 		out << endl;
+		int maxLength = max(MasterGame->maxPlayerNameLength + 5, 20);
 		for (int j = 0; j < map.player_count; j++) {
-			out << setw(MasterGame->maxPlayerNameLength + 5) << MasterGame->players[j]->GetLastName() << ":" << setw(15) << "army count: " << map.territories[i].army_count[j] << setw(15) << "  city count: " << map.territories[i].city_count[j] << endl;
+			out << setw(maxLength) << MasterGame->players[j]->GetLastName() << ":" << setw(15) << "army count: " << map.territories[i].army_count[j] << setw(15) << "  city count: " << map.territories[i].city_count[j] << endl;
 		}
 		out << "Controlling player: " << map.territories[i].controlling_player_name << endl;
 	}
+	out << "--------------------------------------------------------------------------" << endl;
 	return out;
 }
 
