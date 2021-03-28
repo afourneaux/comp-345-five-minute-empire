@@ -7,7 +7,7 @@
 
 using namespace std;
 
-class Player;
+struct Player;
 class MapLoader;
 class Deck;
 class Hand;

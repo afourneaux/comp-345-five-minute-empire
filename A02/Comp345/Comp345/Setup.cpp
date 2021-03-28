@@ -48,6 +48,7 @@ void SetupObj::MakePlayers() {
 		cout << "Enter the name of Player " << i + 1 << ": ";
 		cin >> playerName;
 		player->SetLastName(playerName);
+		if (playerName.length() > MasterGame->maxPlayerNameLength) MasterGame->maxPlayerNameLength = playerName.length();
 		player->setPosition(i);
 		MasterGame->players.push_back(player);
 	}
@@ -123,6 +124,7 @@ void SetupObj::MakeMap() {
 			}
 			else {
 				invalid = false;
+				delete mapObject;
 			}
 		}
 		else {

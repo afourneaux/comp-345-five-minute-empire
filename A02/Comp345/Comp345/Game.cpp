@@ -16,6 +16,7 @@ void Game::Setup() {
 	setupObj->MakePlayers();
 	setupObj->DisplayMaps();
 	setupObj->MakeMap();
+	delete setupObj;
 
 	deck = new Deck(playerCount);
 	hand = new Hand(deck);
@@ -94,11 +95,13 @@ void Game::MainLoop() {
 
 // Determine and output the winner of the game
 void Game::GetWinner() {
-	int player_count = GetPlayerCount();
-
+	cout << endl;
+	cout << "#----------------------------------#" << endl;
+	cout << "#  GAME OVER - CALCULATING SCORES  #" << endl;
+	cout << "#----------------------------------#" << endl;
 	//Compute the final scores for each player
-	int* scores = new int[player_count];
-	for (int i = 0; i < player_count; i++) {
+	int* scores = new int[playerCount];
+	for (int i = 0; i < playerCount; i++) {
 		scores[i] = players[i]->ComputeScore();
 	}
 
@@ -107,7 +110,7 @@ void Game::GetWinner() {
 	string tiebreaker = "";
 	bool tie_after_tiebreakers = false;
 	cout << "Calculating winner and processing tiebreakers: " << endl;
-	for (int i = 0; i < player_count; i++) {
+	for (int i = 0; i < playerCount; i++) {
 		if (scores[i] > max_score) {
 			winner_index = i;
 			max_score = scores[i];
@@ -144,6 +147,10 @@ void Game::GetWinner() {
 			}
 		}
 	}
+	cout << endl;
+	cout << "#----------------------------------#" << endl;
+	cout << "#           FINAL RESULT           #" << endl;
+	cout << "#----------------------------------#" << endl;
 	if (tie_after_tiebreakers) {
 		cout << "The final score is a tie!" << endl;
 	}

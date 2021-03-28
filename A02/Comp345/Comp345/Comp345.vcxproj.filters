@@ -22,19 +22,15 @@
     <ClCompile Include="Player.cpp">
       <Filter>Source Files</Filter>
     </ClCompile>
-    <ClCompile Include="PlayerDriver.cpp">
-      <Filter>Source Files</Filter>
-    </ClCompile>
     <ClCompile Include="SetupDriver.cpp">
       <Filter>Source Files</Filter>
     </ClCompile>
     <ClCompile Include="ScoreDriver.cpp">
       <Filter>Source Files</Filter>
     </ClCompile>
-    <ClCompile Include="CardsDriver.cpp" />
-    <ClCompile Include="MapDriver.cpp" />
-    <ClCompile Include="MapLoaderDriver.cpp" />
-    <ClCompile Include="Setup.cpp" />
+    <ClCompile Include="Setup.cpp">
+      <Filter>Source Files</Filter>
+    </ClCompile>
   </ItemGroup>
   <ItemGroup>
     <ClInclude Include="BiddingFacility.h">
@@ -55,7 +51,9 @@
     <ClInclude Include="Cards.h">
       <Filter>Header Files</Filter>
     </ClInclude>
-    <ClInclude Include="Setup.h" />
+    <ClInclude Include="Setup.h">
+      <Filter>Header Files</Filter>
+    </ClInclude>
   </ItemGroup>
   <ItemGroup>
     <Filter Include="Source Files">

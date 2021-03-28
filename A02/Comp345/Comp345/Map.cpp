@@ -3,6 +3,7 @@
 #include "Game.h"
 #include <iostream>
 #include <algorithm>
+#include <iomanip>
 
 using namespace std;
 
@@ -101,8 +102,6 @@ Map::~Map() {
 			delete current;
 			current = temp;
 		}
-		//delete territories[i].army_count;
-		//delete territories[i].city_count;
 	}
 	delete[] territories;
 	territories = nullptr;
@@ -379,8 +378,6 @@ Map& Map::operator= (const Map& map) {
 			delete current;
 			current = temp;
 		}
-		//delete[] territories[i].army_count;
-		//delete[] territories[i].city_count;
 	}
 	delete[] territories;
 	territories = nullptr;
@@ -446,6 +443,7 @@ Map& Map::operator= (const Map& map) {
 
 std::ostream& operator<< (std::ostream& out, const Map& map) {
 	for (int i = 0; i < map.territory_count; i++) {
+		out << "--------------------------------------------------------------------------" << endl;
 		out << "Territory index " << i << ", ContinentID " << map.territories[i].continentID << ". Connections to: ";
 		Edge* current = map.territories[i].head;
 		while (current != nullptr) {
@@ -453,11 +451,13 @@ std::ostream& operator<< (std::ostream& out, const Map& map) {
 			current = current->next;
 		}
 		out << endl;
+		int maxLength = max(MasterGame->maxPlayerNameLength + 5, 20);
 		for (int j = 0; j < map.player_count; j++) {
-			out << "\tPlayer " << MasterGame->players[j]->GetLastName() << ": \tarmy count: " << map.territories[i].army_count[j] << "\tcity count: " << map.territories[i].city_count[j] << endl;
+			out << setw(maxLength) << MasterGame->players[j]->GetLastName() << ":" << setw(15) << "army count: " << map.territories[i].army_count[j] << setw(15) << "  city count: " << map.territories[i].city_count[j] << endl;
 		}
 		out << "Controlling player: " << map.territories[i].controlling_player_name << endl;
 	}
+	out << "--------------------------------------------------------------------------" << endl;
 	return out;
 }
 
@@ -526,9 +526,9 @@ int Map::getNumberControlledTerritories(int playerIndex) {
 }
 
 // Calculates the movement cost for the shortest path between origin and destination
-int Map::GetMovementCost(int origin, int destination, int bonusFlying) {
+vector<int> Map::GetMovementCost(int origin, int bonusFlying) {
 	bool* visited = new bool[territory_count];
-	int* distance = new int[territory_count];
+	vector<int> distance(territory_count);
 	int current_node = origin;
 	for (int i = 0; i < territory_count; i++) {
 		visited[i] = false;
@@ -548,13 +548,7 @@ int Map::GetMovementCost(int origin, int destination, int bonusFlying) {
 		}
 		// Mark current node as visited
 		visited[current_node] = true;
-		if (current_node == destination) {
-			// if the current node is the destination, shortest path length is stored as distance
-			int shortest = distance[current_node];
-			delete[] visited;
-			delete[] distance;
-			return shortest;
-		}
+
 		//select the unvisited node with smallest distance and loop
 		int shortest_unvisited = INT32_MAX;
 		for (int i = 0; i < territory_count; i++) {
@@ -567,10 +561,8 @@ int Map::GetMovementCost(int origin, int destination, int bonusFlying) {
 		if (visited[current_node]) break;
 	}
 
-	cout << "ERROR when calculating shortest path between " << origin << " and " << destination << ". No valid path found. Check that the map is valid." << endl;
 	delete[] visited;
-	delete[] distance;
-	return -1;
+	return distance;
 }
 
 void Territory::addArmy(int player_index) {
