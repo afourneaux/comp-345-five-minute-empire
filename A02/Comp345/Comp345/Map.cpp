@@ -101,8 +101,6 @@ Map::~Map() {
 			delete current;
 			current = temp;
 		}
-		//delete territories[i].army_count;
-		//delete territories[i].city_count;
 	}
 	delete[] territories;
 	territories = nullptr;
@@ -379,8 +377,6 @@ Map& Map::operator= (const Map& map) {
 			delete current;
 			current = temp;
 		}
-		//delete[] territories[i].army_count;
-		//delete[] territories[i].city_count;
 	}
 	delete[] territories;
 	territories = nullptr;
