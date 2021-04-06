@@ -26,7 +26,7 @@ struct Disk {
 	Territory* location;
 	bool isBuilt = false;
 };
-struct Player {
+struct Player: public Subject {
 public:
 	Player();
 	~Player();
@@ -77,10 +77,11 @@ public:
 	int GetPosition() { return position; };
 	void setCoins(int amt) { coins = amt; };
 	void setPosition(int pos) { position = pos; };
+	bool getElixirs() { return elixirs; };
 	int getBonusMoves() { return bonusMoves; };
 	int getBonusArmies() { return bonusArmies; };
 	int getBonusFlying() { return bonusFlying; };
-	bool getBonusImmune() { return bonusFlying; };
+	bool getBonusImmune() { return bonusImmune; };
 
 	bool neutralPlayer = false;
 private:
@@ -93,6 +94,7 @@ private:
 	int coins = STARTING_COINS;
 	int armiesLeft = STARTING_ARMIES;
 	int position; // the position of the player at the table
+	int elixirs = 0;
 	int bonusMoves = 0;
 	int bonusArmies = 0;
 	int bonusFlying = 0;

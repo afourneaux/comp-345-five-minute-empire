@@ -19,7 +19,9 @@ void Game::Setup() {
 	setupObj->MakeMap();
 	delete setupObj;
 
-	map->Attach(new GameStateView(this));
+	//Register gamestateview with map
+	GameStateView *gameStateView = new GameStateView(this);
+	map->Attach(gameStateView);
 	deck = new Deck(playerCount);
 	hand = new Hand(deck);
 
@@ -31,6 +33,8 @@ void Game::Setup() {
 
 	for (int i = 0; i < playerCount; i++) {
 		cout << *players[i];
+		//Register gamestateview with players
+		players[i]->Attach(gameStateView);
 	}
 	if (playerCount == 2) {
 		gameTurns = GAME_TURNS_2_PLAYERS;
@@ -173,9 +177,6 @@ void Game::PlayerTurn(Player* player) {
 	//       Figure out a more elegant solution
 	cin.ignore(INT_MAX, '\n');
 	cin.ignore(INT_MAX, '\n');
-	
-	cout << *map;
-	cout << *hand;
 
 	cout << "You have " << player->getCoins() << " coins." << endl;
 	cout << "Please select a card to draw:" << endl;

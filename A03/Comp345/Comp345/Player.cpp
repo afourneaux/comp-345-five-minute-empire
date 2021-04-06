@@ -347,8 +347,13 @@ void Player::DoAction(Card* card) {
 		case eAbility_Immune:
 			bonusImmune = true;
 			break;
+		case eAbility_Elixir:
+			elixirs += card->abilities[i].value;
+			break;
 		}
 	}
+	// Trigger GameStateView update
+	Notify();
 
 	int choice = AndOrAction();					// Finds out choice of user
 	possibleActions = choice + 1;

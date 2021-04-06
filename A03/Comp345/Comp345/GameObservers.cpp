@@ -50,7 +50,7 @@ void GameStateView::Update() {
 void GameStateView::Display() {
 	system("CLS");
 	HANDLE hConsole = GetStdHandle(STD_OUTPUT_HANDLE);
-	int maxLength = max(MasterGame->maxPlayerNameLength + 5, 15);
+	int maxLength = max(game->maxPlayerNameLength + 5, 15);
 	cout << setiosflags(ios::left);
 
 	//////////////////////////////////////////////////
@@ -69,6 +69,7 @@ void GameStateView::Display() {
 	cout << "+" << setfill(' ') << endl;
 	//Print headers
 	cout << left << setw(maxLength) << "| Player";
+	cout << left << "| " << setw(STATS_COLUMN_WIDTH - 2) << "Coins";
 	cout << left << "| " << setw(STATS_COLUMN_WIDTH - 2) << "# Territories";
 	cout << left << "| " << setw(STATS_COLUMN_WIDTH - 2) << "# Continents";
 	cout << left << "| " << setw(STATS_COLUMN_WIDTH - 2) << "# Elixirs";
@@ -88,15 +89,16 @@ void GameStateView::Display() {
 	cout << "+" << setfill(' ') << endl;
 
 	//Print player rows: player name + game stats
-	for (int i = 0; i < MasterGame->players.size(); i++) {
-		cout << '|' << right << setw(maxLength-1) << (MasterGame->players[i]->GetLastName() + " ");
+	for (int i = 0; i < game->players.size(); i++) {
+		cout << '|' << right << setw(maxLength-1) << (game->players[i]->GetLastName() + " ");
+		cout << left << "| " << setw(STATS_COLUMN_WIDTH - 2) << game->players[i]->getCoins();
 		cout << left << "| " << setw(STATS_COLUMN_WIDTH - 2) << "TODO: TERR";
 		cout << left << "| " << setw(STATS_COLUMN_WIDTH - 2) << "TODO: CONT";
-		cout << left << "| " << setw(STATS_COLUMN_WIDTH - 2) << "TODO: ELIXIR";
-		cout << left << "| " << setw(STATS_COLUMN_WIDTH - 2) << MasterGame->players[i]->getBonusArmies();
-		cout << left << "| " << setw(STATS_COLUMN_WIDTH - 2) << MasterGame->players[i]->getBonusMoves();
-		cout << left << "| " << setw(STATS_COLUMN_WIDTH - 2) << MasterGame->players[i]->getBonusFlying();
-		cout << left << "| " << setw(STATS_COLUMN_WIDTH - 2) << MasterGame->players[i]->getBonusImmune();
+		cout << left << "| " << setw(STATS_COLUMN_WIDTH - 2) << game->players[i]->getElixirs();
+		cout << left << "| " << setw(STATS_COLUMN_WIDTH - 2) << game->players[i]->getBonusArmies();
+		cout << left << "| " << setw(STATS_COLUMN_WIDTH - 2) << game->players[i]->getBonusMoves();
+		cout << left << "| " << setw(STATS_COLUMN_WIDTH - 2) << game->players[i]->getBonusFlying();
+		cout << left << "| " << setw(STATS_COLUMN_WIDTH - 2) << game->players[i]->getBonusImmune();
 		cout << left << "| " << setw(STATS_COLUMN_WIDTH - 2) << "TODO: VP ABIL";
 		cout << left << "| " << setw(STATS_COLUMN_WIDTH - 2) << "TODO: VP TOT";
 
@@ -181,8 +183,15 @@ void GameStateView::Display() {
 			cout << setw(10);
 			for (int k = 0; k < game->map->territories[j].city_count[i]; k++)
 				barGraph.append("C");
-			for (int k = 0; k < game->map->territories[j].army_count[i]; k++)
-				barGraph.append("A");
+			//If the player has a lot of armies render compact version to avoid breaking columns alignment
+			if (game->map->territories[j].army_count[i] > 7) {
+				barGraph.append("Ax" + to_string(game->map->territories[j].army_count[i]));
+			}
+			else {
+				for (int k = 0; k < game->map->territories[j].army_count[i]; k++)
+					barGraph.append("A");
+			}
+			
 			cout << left << setw(MAP_COLUMN_WIDTH - 2) << barGraph;
 			SetConsoleTextAttribute(hConsole, 15); // Reset console colour
 		}
@@ -203,7 +212,7 @@ void GameStateView::Display() {
 
 	cout << '+' << setfill('=') << setw(CARD_WIDTH - 1) << "=";
 	cout << '+' << setfill(' ') << endl;
-	cout << '|' << setw(CARD_WIDTH - 1) << " CARDS";
+	cout << '|' << setw(CARD_WIDTH - 1) << " AVAILABLE CARDS";
 	cout << '|' << endl;
 
 	//Print horizontal divider

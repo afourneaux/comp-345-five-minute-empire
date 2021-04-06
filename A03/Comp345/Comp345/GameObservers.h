@@ -33,7 +33,7 @@ public:
 private:
 	const int MAP_COLUMN_WIDTH = 12;
 	const int STATS_COLUMN_WIDTH = 15;
-	const int STATS_COLUMN_COUNT = 9;
+	const int STATS_COLUMN_COUNT = 10;
 	const int CARD_WIDTH = 25;
 	Game* game;
 };
