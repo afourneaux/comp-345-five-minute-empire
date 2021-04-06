@@ -48,6 +48,12 @@ void GameStateView::Update() {
 }
 
 void GameStateView::Display() {
+	// Recalculate all player scores on refresh
+	// TODO: move this logic elsewhere
+	for (int i = 0; i < game->playerCount; i++) {
+		game->players[i]->ComputeScore();
+	}
+
 	system("CLS");
 	HANDLE hConsole = GetStdHandle(STD_OUTPUT_HANDLE);
 	int maxLength = max(game->maxPlayerNameLength + 5, 15);
@@ -77,7 +83,7 @@ void GameStateView::Display() {
 	cout << left << "| " << setw(STATS_COLUMN_WIDTH - 2) << "Move Bonus";
 	cout << left << "| " << setw(STATS_COLUMN_WIDTH - 2) << "Flying Bonus";
 	cout << left << "| " << setw(STATS_COLUMN_WIDTH - 2) << "Immune";
-	cout << left << "| " << setw(STATS_COLUMN_WIDTH - 2) << "VP Abilities";
+	cout << left << "| " << setw(STATS_COLUMN_WIDTH - 2) << "Card VPs";
 	cout << left << "| " << setw(STATS_COLUMN_WIDTH - 2) << "Total VP";
 	cout << left << "|" << endl;
 	//Print horizontal divider
@@ -92,15 +98,25 @@ void GameStateView::Display() {
 	for (int i = 0; i < game->players.size(); i++) {
 		cout << '|' << right << setw(maxLength-1) << (game->players[i]->GetLastName() + " ");
 		cout << left << "| " << setw(STATS_COLUMN_WIDTH - 2) << game->players[i]->getCoins();
-		cout << left << "| " << setw(STATS_COLUMN_WIDTH - 2) << "TODO: TERR";
-		cout << left << "| " << setw(STATS_COLUMN_WIDTH - 2) << "TODO: CONT";
-		cout << left << "| " << setw(STATS_COLUMN_WIDTH - 2) << game->players[i]->getElixirs();
+		cout << left << "| " << setw(STATS_COLUMN_WIDTH - 2) << game->players[i]->getTerritoryScore();
+		cout << left << "| " << setw(STATS_COLUMN_WIDTH - 2) << game->players[i]->getContinentScore();
+		if (game->players[i]->getElixirWinner()) {
+			cout << left << "| ";
+			SetConsoleTextAttribute(hConsole, 10); // Set colour to green for elixir winner
+			cout << setw(STATS_COLUMN_WIDTH - 2) << game->players[i]->getElixirs();
+		}
+		else {
+			cout << left << "| ";
+			SetConsoleTextAttribute(hConsole, 12); // Set colour to red for elixir loser
+			cout << setw(STATS_COLUMN_WIDTH - 2) << game->players[i]->getElixirs();
+		}
+		SetConsoleTextAttribute(hConsole, 15); // reset to White
 		cout << left << "| " << setw(STATS_COLUMN_WIDTH - 2) << game->players[i]->getBonusArmies();
 		cout << left << "| " << setw(STATS_COLUMN_WIDTH - 2) << game->players[i]->getBonusMoves();
 		cout << left << "| " << setw(STATS_COLUMN_WIDTH - 2) << game->players[i]->getBonusFlying();
 		cout << left << "| " << setw(STATS_COLUMN_WIDTH - 2) << game->players[i]->getBonusImmune();
-		cout << left << "| " << setw(STATS_COLUMN_WIDTH - 2) << "TODO: VP ABIL";
-		cout << left << "| " << setw(STATS_COLUMN_WIDTH - 2) << "TODO: VP TOT";
+		cout << left << "| " << setw(STATS_COLUMN_WIDTH - 2) << game->players[i]->getCardScore();
+		cout << left << "| " << setw(STATS_COLUMN_WIDTH - 2) << game->players[i]->getTotalScore();
 
 		cout << "|" << endl;
 	}

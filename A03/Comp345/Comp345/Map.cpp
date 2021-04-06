@@ -462,20 +462,8 @@ std::ostream& operator<< (std::ostream& out, const Map& map) {
 	return out;
 }
 
-int Map::ComputeMapScore(int playerIndex) {
-	int score{0};
-	//Loop through territories and increment each player's score for each territory they control
-	cout << "Territories controlled by player " << MasterGame->players[playerIndex]->GetLastName() << ": ";
-	for (int i = 0; i < territory_count; i++) {
-		if (territories[i].controlling_player == playerIndex) {
-			score++;
-			cout << i << " ";
-		}
-	}
-	cout << endl;
-
-	cout << "Player " << MasterGame->players[playerIndex]->GetLastName() << " score for controlled territories: " << score << endl;
-
+int Map::ComputeMapContinentScore(int playerIndex) {
+	int score{ 0 };
 	//Loop through each continent
 	for (int i = 0; i < continent_count; i++) {
 		int* continent_scores = new int[player_count];
@@ -504,16 +492,25 @@ int Map::ComputeMapScore(int playerIndex) {
 			}
 		}
 		if (winning_player == playerIndex) {
-			cout << "Player " << MasterGame->players[playerIndex]->GetLastName() << " controls Continent " << i << ", gets 1 bonus point." << endl;
 			score++;
 		}
-			
 		delete[] continent_scores;
-
 	}
 
 	return score;
 
+}
+
+int Map::ComputeMapTerritoryScore(int playerIndex) {
+	int score{0};
+	//Loop through territories and increment each player's score for each territory they control
+	for (int i = 0; i < territory_count; i++) {
+		if (territories[i].controlling_player == playerIndex) {
+			score++;
+			cout << i << " ";
+		}
+	}
+	return score;
 }
 
 int Map::getNumberControlledTerritories(int playerIndex) {

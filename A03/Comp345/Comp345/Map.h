@@ -67,7 +67,8 @@ public:
 	Territory* SetStartingTerritory(int territory_index);	// Sets the starting territory for army placement
 	void PrintMapMemAddresses();					// DEBUG: prints a string representation of the map's memory addresses
 	bool Validate();								// Validates if the map is a valid game map
-	int ComputeMapScore(int playerIndex);
+	int ComputeMapContinentScore(int playerIndex);
+	int ComputeMapTerritoryScore(int playerIndex);
 	Map& operator= (const Map& map);				// Assignment operator
 	friend std::ostream& operator<< (std::ostream& out, const Map& map); // Stream insertion operator
 	int getNumberControlledTerritories(int playerIndex);

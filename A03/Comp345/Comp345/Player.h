@@ -77,11 +77,16 @@ public:
 	int GetPosition() { return position; };
 	void setCoins(int amt) { coins = amt; };
 	void setPosition(int pos) { position = pos; };
-	bool getElixirs() { return elixirs; };
+	int getElixirs() { return elixirs; };
+	bool getElixirWinner() { return elixirWinner; }
 	int getBonusMoves() { return bonusMoves; };
 	int getBonusArmies() { return bonusArmies; };
 	int getBonusFlying() { return bonusFlying; };
 	bool getBonusImmune() { return bonusImmune; };
+	int getTerritoryScore() { return territoryScore; };
+	int getContinentScore() { return continentScore; };
+	int getCardScore() { return cardScore; };
+	int getTotalScore() { return totalScore; };
 
 	bool neutralPlayer = false;
 private:
@@ -99,6 +104,11 @@ private:
 	int bonusArmies = 0;
 	int bonusFlying = 0;
 	bool bonusImmune = false;
+	int territoryScore = 0;
+	int continentScore = 0;
+	int cardScore = 0;
+	bool elixirWinner = false;
+	int totalScore = 0;
 };
 int testPlayer();
 
