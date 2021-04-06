@@ -96,7 +96,9 @@ public:
 	int GetCostAtIndex(const int index) const;			// Returns the coin cost to retrieve a card at a given index
 	Hand& operator= (const Hand& hand);								// Assignment operator
 	friend ostream& operator<< (ostream& out, const Hand& hand);	// Stream insertion operator
+	int GetSize() { return size; };
 private:
 	Card* cards[HAND_SIZE];								// The contents of the hand
 	Deck* deck;											// The associated deck from which to draw cards from
+	int size = HAND_SIZE;
 };

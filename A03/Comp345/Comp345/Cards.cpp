@@ -627,6 +627,8 @@ Card* Hand::Exchange(const int index)
 		cards[i] = cards[i + 1];
 	}
 	cards[HAND_SIZE - 1] = deck->Draw();
+	if (cards[HAND_SIZE - 1] == nullptr)
+		size--;
 	return card;
 }
 
