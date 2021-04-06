@@ -32,6 +32,7 @@ Map::Map(int* territories, int territory_count, int player_count, int continent_
 	//Initialize territories array
 	this->territories = new Territory[territory_count];
 	for (int i = 0; i < territory_count; i++) {
+		this->territories[i].map = this;
 		this->territories[i].head = nullptr;
 		this->territories[i].continentID = territories[i];
 		this->territories[i].territoryID = i;
@@ -621,6 +622,7 @@ void Territory::UpdateControl() {
 			current_max = player_control_score;
 		}
 	}
+	map->Notify();
 }
 
 

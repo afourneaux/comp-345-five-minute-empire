@@ -77,6 +77,10 @@ public:
 	int GetPosition() { return position; };
 	void setCoins(int amt) { coins = amt; };
 	void setPosition(int pos) { position = pos; };
+	int getBonusMoves() { return bonusMoves; };
+	int getBonusArmies() { return bonusArmies; };
+	int getBonusFlying() { return bonusFlying; };
+	bool getBonusImmune() { return bonusFlying; };
 
 	bool neutralPlayer = false;
 private:

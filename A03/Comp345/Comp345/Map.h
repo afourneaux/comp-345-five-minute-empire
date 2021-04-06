@@ -1,10 +1,14 @@
 #pragma once
 #include <iostream>
 #include <vector>
+#include "GameObservers.h"
 
 struct Edge;
+class Map;
+class Subject;
 
 struct Territory {
+	Map* map;
 	Edge* head;							// Pointer to head of linked list of edge objects (edge object contains a pointer to an adjacent territory)
 	int continentID;					// Index of continent that the territory belongs to - maps to continents[] array in Map class
 	int territoryID;					// Index of the territory in the territories[] array of Map class
@@ -41,8 +45,10 @@ struct TerritoryList {					// Territorylist is a generic linked list data struct
 	TerritoryListNode* Pop();			// Removes first territory from linked list
 };
 
-class Map {
+class Map: public Subject {
 public:
+	const int LAND_MOVEMENT_COST = 1;
+	const int WATER_MOVEMENT_COST = 3;
 	int territory_count;							// Number of territories in Map
 	int continent_count;							// Number of continents in Map
 	int player_count;								// Number of players in Map
@@ -67,8 +73,7 @@ public:
 	int getNumberControlledTerritories(int playerIndex);
 	std::vector<int> GetMovementCost(int origin, int bonusFlying); // Shortest path length calculation
 private:
-	const int LAND_MOVEMENT_COST = 1;
-	const int WATER_MOVEMENT_COST = 3;
+
 	int CountContiguousNodes();						// Used in validate() to check that all territories are connected
 	int CountContiguousNodesInContinent(TerritoryList* continent);	// Used in validate() to check that all continents are contiguous
 	int CountWaterConnections(int territory_index);	// Used in setStartingTerritory() to check if the placement is valid

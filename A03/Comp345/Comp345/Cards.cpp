@@ -894,7 +894,7 @@ ostream& operator<<(ostream& out, const Ability& ability) {
 	case eAbility_VpPerCardName:
 		out << "+" << ability.value << "VP ";
 		if (ability.countSetOnce) {
-			out << "if you have ";
+			out << "if ";
 		}
 		else {
 			out << "per ";
@@ -903,7 +903,7 @@ ostream& operator<<(ostream& out, const Ability& ability) {
 			out << ability.setName << " card";
 		}
 		else {
-			out << ability.setTarget << " " << ability.setName << " cards";
+			out << ability.setTarget << " " << ability.setName;
 		}
 		break;
 	case eAbility_VpPerCoins:

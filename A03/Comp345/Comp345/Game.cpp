@@ -2,6 +2,7 @@
 #include <iostream>
 #include "MapLoader.h"
 #include "Setup.h"
+#include "GameObservers.h"
 
 Game* MasterGame;
 
@@ -18,6 +19,7 @@ void Game::Setup() {
 	setupObj->MakeMap();
 	delete setupObj;
 
+	map->Attach(new GameStateView(this));
 	deck = new Deck(playerCount);
 	hand = new Hand(deck);
 
