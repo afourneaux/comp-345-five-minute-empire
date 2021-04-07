@@ -85,12 +85,15 @@ public:
 	int getBonusArmies() { return bonusArmies; };
 	int getBonusFlying() { return bonusFlying; };
 	bool getBonusImmune() { return bonusImmune; };
+	bool getBonusForFlying() { return bonusForFlying; };
+	bool getBonusForCoins() { return bonusForCoins; };
 	int getTerritoryScore() { return territoryScore; };
 	int getContinentScore() { return continentScore; };
 	int getCardScore() { return cardScore; };
 	int getTotalScore() { return totalScore; };
 
 	int cardsByTrackedName[TRACKED_CARD_COUNT]{};
+	bool bonusForTrackedName[TRACKED_CARD_COUNT]{};
 	bool neutralPlayer = false;
 private:
 	string lastName;
@@ -106,6 +109,8 @@ private:
 	int bonusMoves = 0;
 	int bonusArmies = 0;
 	int bonusFlying = 0;
+	bool bonusForFlying = false;
+	bool bonusForCoins = false;
 	bool bonusImmune = false;
 	int territoryScore = 0;
 	int continentScore = 0;

@@ -350,6 +350,20 @@ void Player::DoAction(Card* card) {
 		case eAbility_Elixir:
 			elixirs += card->abilities[i].value;
 			break;
+		case eAbility_VpPerCardName:
+			for (int j = 0; j < TRACKED_CARD_COUNT; j++) {
+				if (card->abilities[i].setName.find(TRACKED_CARD_NAMES[j]) != string::npos) {
+					bonusForTrackedName[j] = true;
+					break;
+				}
+			}
+			break;
+		case eAbility_VpPerCoins:
+			bonusForCoins = true;
+			break;
+		case eAbility_VpPerFlying:
+			bonusForFlying = true;
+			break;
 		}
 	}
 	// Update count of tracked card names

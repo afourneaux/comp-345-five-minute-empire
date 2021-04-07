@@ -65,7 +65,11 @@ void GameStateView::Display() {
 	cout << '+' << setfill('=') << setw(maxLength-1) << "=";
 	cout << '+' << setfill(' ') << endl;
 	cout << setw(maxLength) << "| PLAYER STATS";
-	cout << '|' << endl;
+	cout << '|';
+	cout << " Special bonuses are displayed in ";
+	SetConsoleTextAttribute(hConsole, 10); // Set colour to green 
+	cout << "green" << endl;
+	SetConsoleTextAttribute(hConsole, 15); // Set colour to  white
 	//Print horizontal divider
 	cout << '+' << setfill('=') << setw(maxLength-1) << "=";
 	for (int i = 0; i < STATS_COLUMN_COUNT; i++) {
@@ -97,7 +101,15 @@ void GameStateView::Display() {
 	//Print player rows: player name + game stats
 	for (int i = 0; i < game->players.size(); i++) {
 		cout << '|' << right << setw(maxLength-1) << (game->players[i]->GetLastName() + " ");
-		cout << left << "| " << setw(STATS_COLUMN_WIDTH - 2) << game->players[i]->getCoins();
+		if (game->players[i]->getBonusForCoins()) {
+			cout << left << "| ";
+			SetConsoleTextAttribute(hConsole, 10); // Set colour to green if player gets bonus VP for coins
+			cout << setw(STATS_COLUMN_WIDTH - 2) << game->players[i]->getCoins();
+			SetConsoleTextAttribute(hConsole, 15); // reset to White
+		}
+		else {
+			cout << left << "| " << setw(STATS_COLUMN_WIDTH - 2) << game->players[i]->getCoins();
+		}
 		cout << left << "| " << setw(STATS_COLUMN_WIDTH - 2) << game->players[i]->getTerritoryScore();
 		cout << left << "| " << setw(STATS_COLUMN_WIDTH - 2) << game->players[i]->getContinentScore();
 		if (game->players[i]->getElixirWinner()) {
@@ -113,7 +125,16 @@ void GameStateView::Display() {
 		SetConsoleTextAttribute(hConsole, 15); // reset to White
 		cout << left << "| " << setw(STATS_COLUMN_WIDTH - 2) << game->players[i]->getBonusArmies();
 		cout << left << "| " << setw(STATS_COLUMN_WIDTH - 2) << game->players[i]->getBonusMoves();
-		cout << left << "| " << setw(STATS_COLUMN_WIDTH - 2) << game->players[i]->getBonusFlying();
+
+		if (game->players[i]->getBonusForFlying()) {
+			cout << left << "| ";
+			SetConsoleTextAttribute(hConsole, 10); // Set colour to green if player gets bonus VP for flying
+			cout << setw(STATS_COLUMN_WIDTH - 2) << game->players[i]->getBonusFlying();
+			SetConsoleTextAttribute(hConsole, 15); // reset to White
+		}
+		else {
+			cout << left << "| " << setw(STATS_COLUMN_WIDTH - 2) << game->players[i]->getBonusFlying();
+		}
 		cout << left << "| " << setw(STATS_COLUMN_WIDTH - 2) << game->players[i]->getBonusImmune();
 		cout << left << "| " << setw(STATS_COLUMN_WIDTH - 2) << game->players[i]->getCardScore();
 		cout << left << "| " << setw(STATS_COLUMN_WIDTH - 2) << game->players[i]->getTotalScore();
@@ -156,11 +177,19 @@ void GameStateView::Display() {
 	}
 	cout << "+" << setfill(' ') << endl;
 
-	//Print player rows: player name + game stats
+	//Print player rows: player name + card count by type
 	for (int i = 0; i < game->players.size(); i++) {
 		cout << '|' << right << setw(maxLength - 1) << (game->players[i]->GetLastName() + " ");
 		for (int j = 0; j < TRACKED_CARD_COUNT; j++) {
-			cout << left << "| " << setw(STATS_COLUMN_WIDTH - 2) << game->players[i]->cardsByTrackedName[j];
+			if (game->players[i]->bonusForTrackedName[j]) {
+				cout << left << "| ";
+				SetConsoleTextAttribute(hConsole, 10); // Set colour to green if player gets bonus VP for the card type
+				cout<< setw(STATS_COLUMN_WIDTH - 2) << game->players[i]->cardsByTrackedName[j];
+				SetConsoleTextAttribute(hConsole, 15); // reset to white
+			}
+			else {
+				cout << left << "| " << setw(STATS_COLUMN_WIDTH - 2) << game->players[i]->cardsByTrackedName[j];
+			}
 		}
 		cout << "|" << endl;
 	}
