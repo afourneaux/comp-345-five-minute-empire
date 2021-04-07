@@ -129,7 +129,51 @@ void GameStateView::Display() {
 	cout << "+" << setfill(' ') << endl;
 
 	//////////////////////////////////////////////////
-	// PART 2: RENDER MAP
+	// PART 2: RENDER TRACKED CARD COUNTS BY PLAYER
+	//////////////////////////////////////////////////
+	cout << '+' << setfill('=') << setw(maxLength - 1) << "=";
+	cout << '+' << setfill(' ') << endl;
+	cout << setw(maxLength) << "| PLAYER CARDS";
+	cout << '|' << endl;
+	//Print horizontal divider
+	cout << '+' << setfill('=') << setw(maxLength - 1) << "=";
+	for (int i = 0; i < TRACKED_CARD_COUNT; i++) {
+		cout << '+';
+		cout << setfill('=') << setw(STATS_COLUMN_WIDTH - 1) << "=";
+	}
+	cout << "+" << setfill(' ') << endl;
+	//Print headers
+	cout << left << setw(maxLength) << "| Player";
+	for (int i = 0; i < TRACKED_CARD_COUNT; i++) {
+		cout << left << "| " << setw(STATS_COLUMN_WIDTH - 2) << TRACKED_CARD_NAMES[i];
+	}
+	cout << left << "|" << endl;
+	//Print horizontal divider
+	cout << '+' << setfill('=') << setw(maxLength - 1) << "=";
+	for (int i = 0; i < TRACKED_CARD_COUNT; i++) {
+		cout << '+';
+		cout << setfill('=') << setw(STATS_COLUMN_WIDTH - 1) << "=";
+	}
+	cout << "+" << setfill(' ') << endl;
+
+	//Print player rows: player name + game stats
+	for (int i = 0; i < game->players.size(); i++) {
+		cout << '|' << right << setw(maxLength - 1) << (game->players[i]->GetLastName() + " ");
+		for (int j = 0; j < TRACKED_CARD_COUNT; j++) {
+			cout << left << "| " << setw(STATS_COLUMN_WIDTH - 2) << game->players[i]->cardsByTrackedName[j];
+		}
+		cout << "|" << endl;
+	}
+	//Print horizontal divider
+	cout << '+' << setfill('=') << setw(maxLength - 1) << "=";
+	for (int i = 0; i < TRACKED_CARD_COUNT; i++) {
+		cout << '+';
+		cout << setfill('=') << setw(STATS_COLUMN_WIDTH - 1) << "=";
+	}
+	cout << "+" << setfill(' ') << endl;
+
+	//////////////////////////////////////////////////
+	// PART 3: RENDER MAP
 	//////////////////////////////////////////////////
 	cout << '+' << setfill('=') << setw(maxLength-1) << "=";
 	cout << '+' << setfill(' ') << endl;
@@ -223,7 +267,7 @@ void GameStateView::Display() {
 	cout << '+' << setfill(' ') << endl;
 
 	//////////////////////////////////////////////////
-	// PART 3: RENDER DRAFTABLE CARDS 
+	// PART 4: RENDER DRAFTABLE CARDS 
 	//////////////////////////////////////////////////
 	int handSize = game->GetHand()->GetSize();
 	cout << '+' << setfill('=') << setw(CARD_WIDTH - 1) << "=";

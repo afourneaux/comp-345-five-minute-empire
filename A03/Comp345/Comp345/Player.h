@@ -12,6 +12,8 @@ const int STARTING_ARMIES = 18;
 const int COST_ONE_ACTIONVALUE = 1;
 const int COST_ZERO_ACTIONVALUE = 0;
 const int COST_THREE_ACTIONVALUE = 3;
+const int TRACKED_CARD_COUNT = 8;
+const string TRACKED_CARD_NAMES[TRACKED_CARD_COUNT] = { "Dire", "Forest", "Cursed", "Arcane", "Ancient", "Night", "Mountain", "Noble" };
 
 class Map;
 struct Card;
@@ -88,6 +90,7 @@ public:
 	int getCardScore() { return cardScore; };
 	int getTotalScore() { return totalScore; };
 
+	int cardsByTrackedName[TRACKED_CARD_COUNT]{};
 	bool neutralPlayer = false;
 private:
 	string lastName;

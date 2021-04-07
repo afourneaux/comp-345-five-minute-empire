@@ -352,6 +352,14 @@ void Player::DoAction(Card* card) {
 			break;
 		}
 	}
+	// Update count of tracked card names
+	for (int i = 0; i < TRACKED_CARD_COUNT; i++) {
+		if (card->name.find(TRACKED_CARD_NAMES[i]) != string::npos) {
+			cardsByTrackedName[i]++;
+			break;
+		}
+	}
+
 	// Trigger GameStateView update
 	Notify();
 
