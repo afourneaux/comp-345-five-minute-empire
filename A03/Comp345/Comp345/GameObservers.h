@@ -31,7 +31,7 @@ public:
 	void Update();
 	void Display();
 private:
-	const int MAP_COLUMN_WIDTH = 12;
+	const int MAP_COLUMN_WIDTH = 10;
 	const int STATS_COLUMN_WIDTH = 15;
 	const int STATS_COLUMN_COUNT = 10;
 	const int CARD_WIDTH = 25;

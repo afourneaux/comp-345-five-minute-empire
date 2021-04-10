@@ -212,7 +212,7 @@ void GameStateView::Display() {
 	cout << '+' << setfill('=') << setw(maxLength-1) << "=";
 	for (int i = 0; i < game->map->territory_count; i++) {
 		cout << '+';
-		cout << setfill('=') << setw(MAP_COLUMN_WIDTH - 1) << "=";
+		cout << setfill('=') << setw(max(MAP_COLUMN_WIDTH - 1, game->map->territories[i].edgeStrLength + 3)) << "=";
 	}
 	cout << '+' << setfill(' ') << endl;
 
@@ -225,7 +225,7 @@ void GameStateView::Display() {
 		else
 			SetConsoleTextAttribute(hConsole, 15); // White otherwise
 		string terr = "T" + to_string(i) + ", C" + to_string(game->map->territories[i].continentID);
-		cout << left << setw(MAP_COLUMN_WIDTH - 2) << terr;
+		cout << left << setw(max(MAP_COLUMN_WIDTH - 2, game->map->territories[i].edgeStrLength + 2)) << terr;
 	}
 	SetConsoleTextAttribute(hConsole, 15);  // Reset console colour
 	cout << '|' << endl;
@@ -237,6 +237,8 @@ void GameStateView::Display() {
 		int connections_str_length = 3;
 		Edge* temp = game->map->territories[i].head;
 		while (temp != nullptr) {
+			//if (connections_str_length > MAP_COLUMN_WIDTH - 2) break;
+
 			if (temp->movement_cost == game->map->WATER_MOVEMENT_COST)
 				SetConsoleTextAttribute(hConsole, 11); // set output colour to cyan if water connection
 			else 
@@ -255,7 +257,7 @@ void GameStateView::Display() {
 	cout << '+' << setfill('=') << setw(maxLength-1) << "=";
 	for (int i = 0; i < game->map->territory_count; i++) {
 		cout << '+';
-		cout << setfill('=') << setw(MAP_COLUMN_WIDTH - 1) << "=";
+		cout << setfill('=') << setw(max(MAP_COLUMN_WIDTH - 1, game->map->territories[i].edgeStrLength + 3)) << "=";
 	}
 	cout << '+' << setfill(' ') << endl;
 
@@ -273,7 +275,7 @@ void GameStateView::Display() {
 			for (int k = 0; k < game->map->territories[j].city_count[i]; k++)
 				barGraph.append("C");
 			//If the player has a lot of armies render compact version to avoid breaking columns alignment
-			if (game->map->territories[j].army_count[i] > 7) {
+			if (game->map->territories[j].army_count[i] > 6) {
 				barGraph.append("Ax" + to_string(game->map->territories[j].army_count[i]));
 			}
 			else {
@@ -281,7 +283,7 @@ void GameStateView::Display() {
 					barGraph.append("A");
 			}
 			
-			cout << left << setw(MAP_COLUMN_WIDTH - 2) << barGraph;
+			cout << left << setw(max(MAP_COLUMN_WIDTH - 2, game->map->territories[j].edgeStrLength + 2)) << barGraph;
 			SetConsoleTextAttribute(hConsole, 15); // Reset console colour
 		}
 		cout << '|' << endl;
@@ -291,7 +293,7 @@ void GameStateView::Display() {
 	cout << '+' << setfill('=') << setw(maxLength-1) << "=";
 	for (int i = 0; i < game->map->territory_count; i++) {
 		cout << '+';
-		cout << setfill('=') << setw(MAP_COLUMN_WIDTH - 1) << "=";
+		cout << setfill('=') << setw(max(MAP_COLUMN_WIDTH - 1, game->map->territories[i].edgeStrLength + 3)) << "=";
 	}
 	cout << '+' << setfill(' ') << endl;
 

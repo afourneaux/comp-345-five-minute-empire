@@ -17,6 +17,7 @@ struct Territory {
 	int controlling_player = -1;
 	std::string controlling_player_name = "None";
 	int max_count = 0;
+	int edgeStrLength = 0;
 	void addArmy(int player_index);
 	void addCity(int player_index);
 	void removeArmy(int player_index);
