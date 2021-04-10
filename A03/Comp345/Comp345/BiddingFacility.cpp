@@ -102,9 +102,6 @@ int AskForBid(Player* player)
 // Compare each player's bid and determine a winner
 int CheckBidWinner(vector<Player*> players , int const numPlayer)
 {
-	cout << endl;
-	cout << "  __________________________________________________________" << endl;
-	cout << endl;
 	int winnerIndex = 0;
 	int winnerBid = -1;
 	for (int i = 0; i < numPlayer; i++)
@@ -134,8 +131,6 @@ int CheckBidWinner(vector<Player*> players , int const numPlayer)
 	cout << endl;
 	cout << endl;
 	cout << "		********************************" << endl;
-	cout << "		        ****************" << endl;
-	cout << "		            ********" << endl;
 	cout << endl;
 	cout << "		         " << players[winnerIndex]->GetLastName() << " won the bid " << endl;
 	cout << "		            Bid :   " << players[winnerIndex]->GetBf()->GetBid() << endl;
@@ -143,10 +138,7 @@ int CheckBidWinner(vector<Player*> players , int const numPlayer)
 	int winningBid = players[winnerIndex]->GetBf()->GetBid();
 	players[winnerIndex]->PayCoin(winningBid);
 	cout << endl;
-	cout << "		            ********" << endl;
-	cout << "		        ****************" << endl;
 	cout << "		********************************" << endl;
-	cout << endl;
 	cout << endl;
 	return winnerIndex;
 }
@@ -190,6 +182,7 @@ int BiddingFacility::DoBidding(vector<Player*> players, int playerCount)
 		cout << "___________________________________________________\n";
 		players[i]->GetBf()->SetBid(AskForBid(players.at(i)));
 		cout << "Your bid has been submitted" << endl << endl;
+		players.at(i)->Notify();
 	}
 	int Player_Starter;
 	//Winner Index

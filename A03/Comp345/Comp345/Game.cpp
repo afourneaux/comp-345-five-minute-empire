@@ -82,12 +82,16 @@ void Game::Startup() {
 }
 
 void Game::MainLoop() {
-	cout << "Press Enter to start!";
+	cout << "Press Enter to start bidding!";
 	cin.ignore(INT_MAX, '\n');
 	cin.ignore(INT_MAX, '\n');
 
 	int startingPlayer = BiddingFacility::DoBidding(players, playerCount);
 
+	cout << "Press Enter to start!";
+	cin.ignore(INT_MAX, '\n');
+	cin.ignore(INT_MAX, '\n');
+	map->Notify();
 	for (int turn = 0; turn < gameTurns; turn++) {
 		cout << "XXXXXXXXXXXX" << endl;
 		cout << "BEGIN ROUND " << turn + 1 << endl;
