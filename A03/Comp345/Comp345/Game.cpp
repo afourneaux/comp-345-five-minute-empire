@@ -168,15 +168,16 @@ void Game::GetWinner() {
 }
 
 void Game::PlayerTurn(Player* player) {
-	cout << "========================================" << endl;
-	cout << player->GetLastName() << " - It is your turn!" << endl;
-	cout << "========================================" << endl;
-
 	cout << "Press Enter to continue...";
 	// TODO: This requires two taps of enter on the first go.
 	//       Figure out a more elegant solution
 	cin.ignore(INT_MAX, '\n');
 	cin.ignore(INT_MAX, '\n');
+	player->Notify();
+
+	cout << "========================================" << endl;
+	cout << player->GetLastName() << " - It is your turn!" << endl;
+	cout << "========================================" << endl;
 
 	cout << "You have " << player->getCoins() << " coins." << endl;
 	cout << "Please select a card to draw:" << endl;
