@@ -121,14 +121,14 @@ void Game::GetWinner() {
 			cout << "Players " << winner_index << " and " << i << " are tied. Proceeding to tiebreakers..." << endl;
 			//Tiebreaker 1: player with the most coins
 			tiebreaker = "have the most coins.";
-			if (players[i]->getCoins() > players[winner_index]->getCoins())
+			if (players[i]->GetCoins() > players[winner_index]->GetCoins())
 				winner_index = i;
-			else if (players[i]->getCoins() == players[winner_index]->getCoins()) {
+			else if (players[i]->GetCoins() == players[winner_index]->GetCoins()) {
 				//Tiebreaker 2: player with the most armies
 				tiebreaker = "have the most armies on the board.";
-				if (players[i]->getArmiesLeft() < players[winner_index]->getArmiesLeft())
+				if (players[i]->GetArmiesLeft() < players[winner_index]->GetArmiesLeft())
 					winner_index = i;
-				else if (players[i]->getArmiesLeft() == players[winner_index]->getArmiesLeft()) {
+				else if (players[i]->GetArmiesLeft() == players[winner_index]->GetArmiesLeft()) {
 					//Tiebreaker 3: player with the most territories
 					tiebreaker = "control the most territories.";
 					if(map->getNumberControlledTerritories(i) > map->getNumberControlledTerritories(winner_index))
@@ -175,7 +175,7 @@ void Game::PlayerTurn(Player* player) {
 	cout << *map;
 	cout << *hand;
 
-	cout << "You have " << player->getCoins() << " coins." << endl;
+	cout << "You have " << player->GetCoins() << " coins." << endl;
 	cout << "Please select a card to draw:" << endl;
 	for (int handIndex = 0; handIndex < HAND_SIZE; handIndex++) {
 		Card* cardAtIndex = hand->GetCardAtIndex(handIndex);
@@ -200,8 +200,8 @@ void Game::PlayerTurn(Player* player) {
 		}
 		else {
 			// Card index is valid, check if the player can afford this card
-			if (player->getCoins() < hand->GetCostAtIndex(desiredCardIndex)) {
-				cout << "You cannot afford this card. You have " << player->getCoins() << " coins." << endl;
+			if (player->GetCoins() < hand->GetCostAtIndex(desiredCardIndex)) {
+				cout << "You cannot afford this card. You have " << player->GetCoins() << " coins." << endl;
 			}
 			else {
 				if (hand->GetCardAtIndex(desiredCardIndex) == nullptr) {

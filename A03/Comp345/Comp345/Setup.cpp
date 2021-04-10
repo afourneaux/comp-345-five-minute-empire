@@ -49,7 +49,7 @@ void SetupObj::MakePlayers() {
 		cin >> playerName;
 		player->SetLastName(playerName);
 		if (playerName.length() > MasterGame->maxPlayerNameLength) MasterGame->maxPlayerNameLength = playerName.length();
-		player->setPosition(i);
+		player->SetPosition(i);
 		MasterGame->players.push_back(player);
 	}
 
@@ -57,7 +57,7 @@ void SetupObj::MakePlayers() {
 	if (MasterGame->playerCount == 2) {
 		player = new Player();
 		player->SetLastName("NeutralPlayer");
-		player->setPosition(2);
+		player->SetPosition(2);
 		player->neutralPlayer = true;
 		MasterGame->players.push_back(player);
 	}
