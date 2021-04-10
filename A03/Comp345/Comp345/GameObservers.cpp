@@ -56,7 +56,7 @@ void GameStateView::Display() {
 
 	system("CLS");
 	HANDLE hConsole = GetStdHandle(STD_OUTPUT_HANDLE);
-	int maxLength = max(game->maxPlayerNameLength + 5, 15);
+	int maxLength = max(game->maxPlayerNameLength + 5, 16);
 	cout << setiosflags(ios::left);
 
 	//////////////////////////////////////////////////
@@ -100,7 +100,13 @@ void GameStateView::Display() {
 
 	//Print player rows: player name + game stats
 	for (int i = 0; i < game->players.size(); i++) {
-		cout << '|' << right << setw(maxLength-1) << (game->players[i]->GetLastName() + " ");
+		if (game->currentPlayer == i) {
+			SetConsoleTextAttribute(hConsole, 14);
+			cout << '|' << right << setw(maxLength - 1) << ("-> " + game->players[i]->GetLastName() + " ");
+			SetConsoleTextAttribute(hConsole, 15);
+		}
+		else
+			cout << '|' << right << setw(maxLength - 1) << (game->players[i]->GetLastName() + " ");
 		if (game->players[i]->getBonusForCoins()) {
 			cout << left << "| ";
 			SetConsoleTextAttribute(hConsole, 10); // Set colour to green if player gets bonus VP for coins
@@ -179,7 +185,13 @@ void GameStateView::Display() {
 
 	//Print player rows: player name + card count by type
 	for (int i = 0; i < game->players.size(); i++) {
-		cout << '|' << right << setw(maxLength - 1) << (game->players[i]->GetLastName() + " ");
+		if (game->currentPlayer == i) {
+			SetConsoleTextAttribute(hConsole, 14);
+			cout << '|' << right << setw(maxLength - 1) << ("-> " + game->players[i]->GetLastName() + " ");
+			SetConsoleTextAttribute(hConsole, 15);
+		}
+		else
+			cout << '|' << right << setw(maxLength - 1) << (game->players[i]->GetLastName() + " ");
 		for (int j = 0; j < TRACKED_CARD_COUNT; j++) {
 			if (game->players[i]->bonusForTrackedName[j]) {
 				cout << left << "| ";
@@ -263,7 +275,13 @@ void GameStateView::Display() {
 
 	//Print player rows: player name + city/army count per territory
 	for (int i = 0; i < MasterGame->players.size(); i++) {
-		cout << '|' << right << setw(maxLength-1) << (MasterGame->players[i]->GetLastName() + " ");
+		if (game->currentPlayer == i) {
+			SetConsoleTextAttribute(hConsole, 14);
+			cout << '|' << right << setw(maxLength - 1) << ("-> " + game->players[i]->GetLastName() + " ");
+			SetConsoleTextAttribute(hConsole, 15);
+		}
+		else
+			cout << '|' << right << setw(maxLength - 1) << (game->players[i]->GetLastName() + " ");
 		for (int j = 0; j < game->map->territory_count; j++) {
 			cout << "| ";
 			if (game->map->territories[j].controlling_player == i)

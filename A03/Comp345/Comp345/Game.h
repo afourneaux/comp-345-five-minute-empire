@@ -34,6 +34,7 @@ public:
 	Hand* GetHand();
 	int playerCount;
 	int maxPlayerNameLength = 0;
+	int currentPlayer = -1;
 private:
 	Deck* deck;
 	Hand* hand;

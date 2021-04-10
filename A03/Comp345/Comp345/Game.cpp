@@ -172,6 +172,7 @@ void Game::GetWinner() {
 }
 
 void Game::PlayerTurn(Player* player) {
+	currentPlayer = player->GetPosition();
 	cout << "Press Enter to continue...";
 	// TODO: This requires two taps of enter on the first go.
 	//       Figure out a more elegant solution
