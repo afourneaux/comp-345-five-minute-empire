@@ -104,13 +104,11 @@ int CheckBidWinner(vector<Player*> players , int const numPlayer)
 {
 	int winnerIndex = 0;
 	int winnerBid = -1;
+	cout << "             *================================*" << endl;
 	for (int i = 0; i < numPlayer; i++)
 	{
 		// Print everyone's name and their bid value
-		cout << "             *================================*" << endl;
-		cout << "		" << players[i]->GetLastName() << " : " << endl;
-		cout << "		Bid :   " << players[i]->GetBf()->GetBid() << endl;
-		cout << "             ===============================" << endl << endl;
+		cout << "		" << players[i]->GetLastName() << " bid " << players[i]->GetBf()->GetBid() << " coins" << endl; 
 
 		// Find the highest bid
 		if (players[i]->GetBf()->GetBid() > winnerBid)
@@ -128,13 +126,12 @@ int CheckBidWinner(vector<Player*> players , int const numPlayer)
 			}
 		}
 	}
+	cout << "             *================================*" << endl;
 	cout << endl;
 	cout << endl;
 	cout << "		********************************" << endl;
-	cout << endl;
 	cout << "		         " << players[winnerIndex]->GetLastName() << " won the bid " << endl;
 	cout << "		            Bid :   " << players[winnerIndex]->GetBf()->GetBid() << endl;
-	cout << endl;
 	int winningBid = players[winnerIndex]->GetBf()->GetBid();
 	players[winnerIndex]->PayCoin(winningBid);
 	cout << endl;
