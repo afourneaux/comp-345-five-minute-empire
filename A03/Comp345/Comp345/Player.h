@@ -10,6 +10,7 @@ using namespace std;
 
 const int STARTING_COINS = 14;
 const int STARTING_ARMIES = 18;
+const int STARTING_CITIES = 3;
 const int COST_ONE_ACTIONVALUE = 1;
 const int COST_ZERO_ACTIONVALUE = 0;
 const int COST_THREE_ACTIONVALUE = 3;
@@ -62,6 +63,7 @@ public:
 	bool Find(Territory* terr);
 	bool HasSkipped(int input);
 	void InitializePlayer(int pos);
+	void InitializePlayerForTournament(int pos);
 	int ComputeScore();
 	void PrintPlacedCities();
 	void PrintPlacedArmies();

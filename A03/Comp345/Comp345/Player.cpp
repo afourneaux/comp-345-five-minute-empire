@@ -11,7 +11,12 @@ extern Game* MasterGame;
 
 Player::Player(int pos)
 {
-	InitializePlayer(pos);
+	if (MasterGame->IsTournament()) {
+		InitializePlayerForTournament(pos);
+	}
+	else {
+		InitializePlayer(pos);
+	}
 	this->bf = new BiddingFacility();
 }
 //Destructor
@@ -593,6 +598,52 @@ void Player::InitializePlayer(int pos) {
 	strat->SetPlayer(this);
 }
 
-
-
-
+//**********
+//InitializePlayerForTournament
+//**********
+void Player::InitializePlayerForTournament(int pos) {
+	bool isValidInput = false;
+	char type;
+	for (int i = 0; i < STARTING_ARMIES; i++) {
+		cubes.push_back(new Cube());
+		cubes[i]->isPlaced = false;
+	}
+	for (int j = 0; j < STARTING_ARMIES; j++)
+		disks.push_back(new Disk());
+	if (MasterGame->playerCount == 2 && pos == 2)
+		return;
+	cout << "Enter the name of Player " << pos + 1 << ": ";
+	cin >> lastName;
+	while (isValidInput == false) {
+		cout << endl << lastName << " is what kind of player are you?" << endl;
+		cout << "(G) Greedy" << endl;
+		cout << "(M) Moderate" << endl;
+		cin >> type;
+		if (cin.fail()) {
+			cout << "Invalid input, please try again" << endl;
+		}
+		else {
+			switch (type) {
+			case 'G':
+			case 'g':
+				strat = new GreedyPlayer();
+				cout << lastName << " is a greedy player" << endl;
+				lastName += " (Greedy)";
+				cout << endl << endl;
+				isValidInput = true;
+				break;
+			case 'M':
+			case 'm':
+				strat = new ModeratePlayer();
+				cout << lastName << " is a moderate player" << endl;
+				lastName += " (Moderate)";
+				cout << endl << endl;
+				isValidInput = true;
+				break;
+			default:
+				cout << "Invalid input, please try again" << endl;
+			}
+		}
+	}
+	strat->SetPlayer(this);
+}

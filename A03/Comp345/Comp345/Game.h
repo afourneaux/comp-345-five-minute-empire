@@ -10,8 +10,11 @@ using namespace std;
 const int GAME_TURNS_2_PLAYERS = 13;
 const int GAME_TURNS_3_PLAYERS = 10;
 const int GAME_TURNS_4_PLAYERS = 8;
+const int GAME_TURNS_TOURNAMENT = 20;
 const int STARTING_TERRITORY_ARMIES = 4;
 const int NEUTRAL_ARMY_COUNT = 10;
+const int DEVELOPER_COUNT = 4;
+const string DEVELOPERS[DEVELOPER_COUNT] = { "Alexander Fourneaux", "Georges Grodin", "Michel Laplaine-Pereira", "Souheil Al-awar" };
 
 // Declare custom classes to be used
 struct Player;
@@ -21,6 +24,9 @@ class Map;
 
 class Game {
 public:
+	void MainMenu();					// Present the game, select single game or tournament
+	void DisplayMenuSplash();			// Display the main title and options menu of the game
+	void DisplayCredits();				// Display developers and Concordia information
 	void Setup();						// Get number of players, perform bidding, distribute tokens, generate deck
 	void Startup();						// Perform initial board setup
 	void MainLoop();					// Process each player's turn until the game is over
@@ -34,12 +40,15 @@ public:
 	Hand* GetHand();
 	int playerCount;
 	int maxPlayerNameLength = 0;
+	bool IsTournament() { return isTournament; }
 private:
 	Deck* deck;
 	Hand* hand;
 	int gameTurns;
+	bool isTournament;
 };
 
 extern Game* MasterGame;
 int StartupDriver();
 void TestScoreCalculation();
+void EnterToContinue();

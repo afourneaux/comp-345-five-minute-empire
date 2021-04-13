@@ -5,11 +5,88 @@
 
 Game* MasterGame;
 
+void Game::MainMenu() {
+	bool isValidInput;
+	bool isReadyToPlay = false;
+	int menuOption;
+	while (isReadyToPlay == false) {
+		DisplayMenuSplash();
+		isValidInput = false;
+		while (isValidInput == false) {
+			cin >> menuOption;
+			if (cin.fail() || menuOption < 0 || menuOption > 2) {
+				cout << "Input invalid";
+				// Clear the CIN buffer
+				cin.clear();
+				cin.ignore(INT_MAX, '\n');
+			}
+			else {
+				isValidInput = true;
+			}
+		}
+		switch (menuOption) {
+		case 0:
+			DisplayCredits();
+			break;
+		case 1:
+			isTournament = false;
+			isReadyToPlay = true;
+			break;
+		case 2:
+			isTournament = true;
+			isReadyToPlay = true;
+			break;
+		default:
+			throw "Game::MainMenu - Invalid menu option input escaped validation";
+		}
+	}
+	system("cls");
+}
+
+void Game::DisplayMenuSplash() {
+	system("cls");
+	cout << endl;
+	cout << "        __ _                     _             _           __                _          " << endl;
+	cout << "     /\\ \\ (_)_ __   ___    /\\/\\ (_)_ __  _   _| |_ ___    /__\\ __ ___  _ __ (_)_ __ ___ " << endl;
+	cout << "    /  \\/ / | '_ \\ / _ \\  /    \\| | '_ \\| | | | __/ _ \\  /_\\| '_ ` _ \\| '_ \\| | '__/ _ \\" << endl;
+	cout << "   / /\\  /| | | | |  __/ / /\\/\\ \\ | | | | |_| | ||  __/ //__| | | | | | |_) | | | |  __/" << endl;
+	cout << "   \\_\\ \\/ |_|_| |_|\\___| \\/    \\/_|_| |_|\\__,_|\\__\\___| \\__/|_| |_| |_| .__/|_|_|  \\___|" << endl;
+	cout << "                                                                      |_|               " << endl;
+	cout << "                ____   _____  _____  _____  _____  _____  _____ " << endl;
+	cout << "               /  _/  /   __\\/   __\\/   __\\/  _  \\|  _  \\/  ___>" << endl;
+	cout << "               |  |---|   __||  |_ ||   __||  |  ||  |  ||___  |" << endl;
+	cout << "               \\_____/\\_____/\\_____/\\_____/\\__|__/|_____/<_____/" << endl;
+	cout << "                                                                " << endl;
+	cout << endl << endl << endl;
+	cout << "                     Please select an option" << endl;
+	cout << "                     0. Credits" << endl;
+	cout << "                     1. Standard Game" << endl;
+	cout << "                     2. Tournament" << endl;
+	cout << endl << endl;
+}
+
+void Game::DisplayCredits() {
+	cout << endl << endl;
+	cout << "#===============#" << endl;
+	cout << "|    CREDITS    |" << endl;
+	cout << "#===============#" << endl;
+	cout << endl;
+	for (int i = 0; i < DEVELOPER_COUNT; i++) {
+		cout << DEVELOPERS[i] << endl;
+	}
+	cout << endl;
+	cout << "Created for Concordia University's Gina Cody School of Engineering and Computer Science" << endl;
+	cout << "COMP 345 - Advanced Program Design with C++ instructed by Nora Houari" << endl;
+	cout << "Winter 2021 semester" << endl;
+	cout << endl;
+	EnterToContinue();
+}
+
 // Get number of players, perform bidding, distribute tokens, generate deck
 void Game::Setup() {
 	cout << endl;
 	cout << "#----------------------------------#" << endl;
-	cout << "#            MAIN MENU             #" << endl;
+	cout << "#              SETUP               #" << endl;
 	cout << "#----------------------------------#" << endl;
 	SetupObj* setupObj = new SetupObj();
 	setupObj->RequestPlayers();
@@ -30,14 +107,22 @@ void Game::Setup() {
 	for (int i = 0; i < playerCount; i++) {
 		cout << *players[i];
 	}
-	if (playerCount == 2) {
-		gameTurns = GAME_TURNS_2_PLAYERS;
+
+	if (isTournament) {
+		// For tournament play, insist on a maximum number of player turns
+		gameTurns = GAME_TURNS_TOURNAMENT / playerCount;
 	}
-	if (playerCount == 3) {
-		gameTurns = GAME_TURNS_3_PLAYERS;
-	}
-	if (playerCount == 4) {
-		gameTurns = GAME_TURNS_4_PLAYERS;
+	else {
+		// For standard play, play until each player has played a certain number of turns
+		if (playerCount == 2) {
+			gameTurns = GAME_TURNS_2_PLAYERS;
+		}
+		if (playerCount == 3) {
+			gameTurns = GAME_TURNS_3_PLAYERS;
+		}
+		if (playerCount == 4) {
+			gameTurns = GAME_TURNS_4_PLAYERS;
+		}
 	}
 }
 
@@ -76,9 +161,9 @@ void Game::Startup() {
 }
 
 void Game::MainLoop() {
-	cout << "Press Enter to start!";
-	cin.ignore(INT_MAX, '\n');
-	cin.ignore(INT_MAX, '\n');
+	if (isTournament == false) {
+		EnterToContinue();
+	}
 
 	int startingPlayer = BiddingFacility::DoBidding(players, playerCount);
 
@@ -166,11 +251,9 @@ void Game::PlayerTurn(Player* player) {
 	cout << player->GetLastName() << " - It is your turn!" << endl;
 	cout << "========================================" << endl;
 
-	cout << "Press Enter to continue...";
-	// TODO: This requires two taps of enter on the first go.
-	//       Figure out a more elegant solution
-	cin.ignore(INT_MAX, '\n');
-	cin.ignore(INT_MAX, '\n');
+	if (isTournament == false) {
+		EnterToContinue();
+	}
 	
 	cout << *map;
 	cout << *hand;
@@ -194,4 +277,10 @@ Game::~Game() {
 
 Hand* Game::GetHand() {
 	return hand;
+}
+
+void EnterToContinue() {
+	cout << "Press Enter to continue...";
+	cin.ignore(INT_MAX, '\n');
+	cin.ignore(INT_MAX, '\n');
 }
