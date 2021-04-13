@@ -30,7 +30,7 @@ struct Disk {
 };
 struct Player {
 public:
-	Player();
+	Player(int pos);
 	~Player();
 	Player(const Player* player);
 	Player& operator= (const Player& player);
@@ -58,9 +58,10 @@ public:
 	void AddCity(Territory* terr);
 	void AddArmy(Territory* terr, Cube* cube);
 	void RemoveArmy(Territory* terr);
+	void MoveArmy(Territory* src, Territory* dest, Cube* cube);
 	bool Find(Territory* terr);
 	bool HasSkipped(int input);
-	void InitializePlayer();
+	void InitializePlayer(int pos);
 	int ComputeScore();
 	void PrintPlacedCities();
 	void PrintPlacedArmies();
@@ -72,7 +73,7 @@ public:
 	vector<Territory*> GetTerritories() const { return territories; };
 	vector<Cube*> GetCubes() const { return cubes; };
 	vector<Disk*> GetDisks() const { return disks; };
-	vector <Card*> getHand() const { return hand; };
+	vector <Card*> GetHand() const { return hand; };
 	BiddingFacility* GetBf() const { return bf; };
 	int GetCoins() const { return coins; };
 	int GetArmiesLeft() const { return armiesLeft; };

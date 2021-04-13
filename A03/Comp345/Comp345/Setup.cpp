@@ -44,10 +44,7 @@ void SetupObj::MakePlayers() {
 	Player* player;
 	// Getting player names
 	for (int i = 0; i < MasterGame->playerCount; i++) {
-		player = new Player();
-		cout << "Enter the name of Player " << i + 1 << ": ";
-		cin >> playerName;
-		player->SetLastName(playerName);
+		player = new Player(i);
 		if (playerName.length() > MasterGame->maxPlayerNameLength) MasterGame->maxPlayerNameLength = playerName.length();
 		player->SetPosition(i);
 		MasterGame->players.push_back(player);
@@ -55,7 +52,7 @@ void SetupObj::MakePlayers() {
 
 	//If 2-player game, also create a neutral player
 	if (MasterGame->playerCount == 2) {
-		player = new Player();
+		player = new Player(2);
 		player->SetLastName("NeutralPlayer");
 		player->SetPosition(2);
 		player->neutralPlayer = true;

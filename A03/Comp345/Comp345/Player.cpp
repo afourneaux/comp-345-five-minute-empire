@@ -9,9 +9,9 @@ using namespace std;
 
 extern Game* MasterGame;
 
-Player::Player()
+Player::Player(int pos)
 {
-	InitializePlayer();
+	InitializePlayer(pos);
 	this->bf = new BiddingFacility();
 }
 //Destructor
@@ -241,6 +241,7 @@ void Player::DoAction(Card* card) {
 			}
 		}
 	}
+	PrintPlayerStatus();
 }
 int Player::ComputeScore() {
 	cout << endl;
@@ -257,7 +258,7 @@ int Player::ComputeScore() {
 	//Loop through each player
 	for (int player_index = 0; player_index < player_count; player_index++) {
 		Player* player = MasterGame->players[player_index];
-		vector<Card*> playerHand = player->getHand();
+		vector<Card*> playerHand = player->GetHand();
 		//Loop through each card player owns
 		for (int card_index = 0; card_index < playerHand.size(); card_index++) {
 			//loop through each ability on each card
@@ -351,13 +352,13 @@ int Player::AndOrAction() {
 void Player::PrintPlayerStatus() {
 	vector <Territory*> territories = GetTerritories();
 	Territory* terr = nullptr;
-	cout << ">>>>" << endl;
-	cout << endl << lastName << " control statistics:" << endl;
+	cout << endl << "================" << endl;
+	cout << lastName << " control statistics:" << endl;
 	for (int i = 0; i < territories.size(); i++) {
 		terr = territories[i];
 		cout << "Territory ID " << terr->territoryID << ": " << terr->army_count[position] << " cube(s) & " << terr->city_count[position] << " disk(s) " << endl;
 	}
-	cout << "<<<<" << endl;
+	cout << "================" << endl;
 }
 //**********
 //GetRandomArmy
@@ -391,6 +392,7 @@ Territory* Player::GetTerritory(int id) {
 //**********
 //HasArmyAtLocation
 //**********
+
 bool Player::HasArmyAtLocation(int id) {
 	for (int i = 0; i < cubes.size(); i++)
 		if (cubes[i]->location != nullptr && cubes[i]->location->territoryID == id)
@@ -460,9 +462,14 @@ void Player::AddArmy(Territory* terr, Cube* cube) {
 	terr->addArmy(position);			// Updating map territories
 	if (!Find(terr))					// Updating Player territories
 		territories.push_back(terr);
+	for (int i = 0; i < territories.size(); i++) {		// Updating Player territories
+		if (territories[i] == terr && terr->army_count[position] == 0 && terr->city_count[position] == 0)
+			territories.erase(territories.begin() + i);
+	}
 	cube->isPlaced = true;
 	cube->location = terr;
 	cout << "* Placed * - Army unit at territory ID " << terr->territoryID << endl;
+
 	return;
 }
 //**********
@@ -483,6 +490,24 @@ void Player::RemoveArmy(Territory* terr) {
 		}
 	}
 	cout << lastName << " - Player::RemoveArmy() Bug. Should not get here. " << endl;
+	return;
+}
+//**********
+//Add Army
+//**********
+void Player::MoveArmy(Territory* src, Territory* dest, Cube* cube) {
+	src->removeArmy(position);
+	dest->addArmy(position);			// Updating map territories
+	if (!Find(dest))					// Updating Player territories
+		territories.push_back(dest);
+	for (int i = 0; i < territories.size(); i++) {		// Updating Player territories
+		if (territories[i] == src && src->army_count[position] == 0 && src->city_count[position] == 0)
+			territories.erase(territories.begin() + i);
+	}
+	cube->isPlaced = true;
+	cube->location = dest;
+	cout << "* Placed * - Army unit at territory ID " << dest->territoryID << endl;
+
 	return;
 }
 //**********
@@ -527,7 +552,7 @@ bool Player::HasArmiesOnBoard() {
 //**********
 //InitializePlayer
 //**********
-void Player::InitializePlayer() {
+void Player::InitializePlayer(int pos) {
 	for (int i = 0; i < 18; i++) {
 		cubes.push_back(new Cube());
 		cubes[i]->isPlaced = false;
@@ -535,20 +560,37 @@ void Player::InitializePlayer() {
 	for (int j = 0; j < 3; j++)
 		disks.push_back(new Disk());
 	string type;
-	while (type != "H" || type != "h" || type != "G" || type != "g" || type != "M" || type != "m") {
-		cout << endl << lastName << " is what kind of player?" << endl;
-		cout << "Here are the available chocies :Human (H), Greedy (G), Moderate (M): ";
+	if (MasterGame->playerCount == 2 && pos == 2)
+		return;
+	cout << "Enter the name of Player " << pos + 1 << ": ";
+	cin >> lastName;
+	while (type != "H" && type != "h" && type != "G" && type != "g" && type != "M" && type != "m") {
+		cout << endl << lastName << " is what kind of player are you?" << endl;
+		cout << "Here are the available chocies: Human (H), Greedy (G), Moderate (M): ";
 		cin >> type;
 
-		if (type != "H" || type != "h" || type != "G" || type != "g" || type != "M" || type != "m")
+		if (type != "H" && type != "h" && type != "G" && type != "g" && type != "M" && type != "m")
 			cout << "Invalid input, please try again." << endl;
 	}
-	if (type == "G" || type == "g")
+	if (type == "G" || type == "g") {
 		strat = new GreedyPlayer();
-	if (type == "M" || type == "m")
+		cout << lastName << " is a greedy player" << endl;
+		lastName += " (Greedy)";
+		cout << endl << endl;
+	}
+	if (type == "M" || type == "m"){
 		strat = new ModeratePlayer();
-	if (type == "H" || type == "h")
+		cout << lastName << " is a moderate player" << endl;
+		lastName += " (Moderate)";
+		cout << endl << endl;
+	}
+	if (type == "H" || type == "h"){
 		strat = new HumanPlayer();
+		cout << lastName << " is a human player" << endl;
+		lastName += " (Human)";
+		cout << endl << endl;
+	}
+	strat->SetPlayer(this);
 }
 
 

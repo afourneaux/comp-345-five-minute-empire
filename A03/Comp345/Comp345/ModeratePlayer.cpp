@@ -1,6 +1,11 @@
 #include "ModeratePlayer.h"
 
+void ModeratePlayer::SelectCard() {
+	cout << "AUTOMATICALLY SECTING MODERATE CARD" << endl;
+}
+
 int ModeratePlayer::PlaceNewArmies() {
+	cout << "ACTING LIKE A MODERATE PLAYER" << endl;
 	int dest;
 	Cube* cube;
 	Territory* destination = nullptr;
@@ -30,6 +35,7 @@ int ModeratePlayer::PlaceNewArmies() {
 	}  // While(true)
 }
 int ModeratePlayer::MoveArmies(int numOfMoves) {
+	cout << "ACTING LIKE A MODERATE PLAYER" << endl;
 	int movementCost = 0;
 	int src, dest;
 	bool exit = false;
@@ -179,6 +185,7 @@ int ModeratePlayer::DestroyArmy() {
 	}
 }
 int ModeratePlayer::AndOrAction() {
+	cout << "ACTING LIKE A MODERATE PLAYER" << endl;
 	Card* currentCard = GetPlayer()->GetHand().back(); //Last drawn card
 	int choice = -1;
 	string and_or;

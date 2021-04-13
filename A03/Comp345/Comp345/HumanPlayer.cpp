@@ -3,7 +3,55 @@
 #include "HumanPlayer.h"
 using namespace std;
 
+void HumanPlayer::SelectCard() {
+	cout << "You have " << GetPlayer()->GetCoins() << " coins." << endl;
+	cout << "Please select a card to draw:" << endl;
+	for (int handIndex = 0; handIndex < HAND_SIZE; handIndex++) {
+		Card* cardAtIndex = MasterGame->GetHand()->GetCardAtIndex(handIndex);
+		if (cardAtIndex == nullptr) {
+			continue;
+		}
+		cout << handIndex << ". \"" << cardAtIndex->name << "\" (" << MasterGame->GetHand()->GetCostAtIndex(handIndex) << " coins)" << endl;
+	}
+
+	int desiredCardIndex;
+	bool validCardIndex = false;
+
+	// Select a card from the hand
+	while (validCardIndex == false)
+	{
+		cin >> desiredCardIndex;
+		if (cin.fail() || desiredCardIndex < 0 || desiredCardIndex >= HAND_SIZE) {
+			cout << "Please enter a number from 0 to " << HAND_SIZE - 1 << endl;
+			// Clear the CIN buffer
+			cin.clear();
+			cin.ignore(INT_MAX, '\n');
+		}
+		else {
+			// Card index is valid, check if the player can afford this card
+			if (GetPlayer()->GetCoins() < MasterGame->GetHand()->GetCostAtIndex(desiredCardIndex)) {
+				cout << "You cannot afford this card. You have " << GetPlayer()->GetCoins() << " coins." << endl;
+			}
+			else {
+				if (MasterGame->GetHand()->GetCardAtIndex(desiredCardIndex) == nullptr) {
+					cout << "No card exists in space " << desiredCardIndex << endl;
+				}
+				else {
+					validCardIndex = true;
+				}
+			}
+		}
+	}
+
+	// Pay for the card
+	GetPlayer()->PayCoin(MasterGame->GetHand()->GetCostAtIndex(desiredCardIndex));
+	Card* card = MasterGame->GetHand()->Exchange(desiredCardIndex);
+	cout << *card;
+	GetPlayer()->DoAction(card);
+	GetPlayer()->PrintPlayerStatus();
+}
 int HumanPlayer::PlaceNewArmies() {
+	cout << "ACTING LIKE A HUMAN PLAYER" << endl;
 	int dest;
 	Cube* cube;
 	Territory* destination = nullptr;
@@ -33,6 +81,7 @@ int HumanPlayer::PlaceNewArmies() {
 	}  // While(true)
 }
 int HumanPlayer::MoveArmies(int numOfMoves) {
+	cout << "ACTING LIKE A HUMAN PLAYER" << endl;
 	int movementCost = 0;
 	int src, dest;
 	bool exit = false;
@@ -182,6 +231,7 @@ int HumanPlayer::DestroyArmy() {
 	}
 }
 int HumanPlayer::AndOrAction() {
+	cout << "ACTING LIKE A HUMAN PLAYER" << endl;
 	Card* currentCard = GetPlayer()->GetHand().back(); //Last drawn card
 	int choice = -1;
 	string and_or;

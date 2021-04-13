@@ -175,51 +175,7 @@ void Game::PlayerTurn(Player* player) {
 	cout << *map;
 	cout << *hand;
 
-	cout << "You have " << player->GetCoins() << " coins." << endl;
-	cout << "Please select a card to draw:" << endl;
-	for (int handIndex = 0; handIndex < HAND_SIZE; handIndex++) {
-		Card* cardAtIndex = hand->GetCardAtIndex(handIndex);
-		if (cardAtIndex == nullptr) {
-			continue;
-		}
-		cout << handIndex << ". \"" << cardAtIndex->name << "\" (" << hand->GetCostAtIndex(handIndex) << " coins)" << endl;
-	}
-
-	int desiredCardIndex;
-	bool validCardIndex = false;
-
-	// Select a card from the hand
-	while (validCardIndex == false)
-	{
-		cin >> desiredCardIndex;
-		if (cin.fail() || desiredCardIndex < 0 || desiredCardIndex >= HAND_SIZE) {
-			cout << "Please enter a number from 0 to " << HAND_SIZE - 1 << endl;
-			// Clear the CIN buffer
-			cin.clear();
-			cin.ignore(INT_MAX, '\n');
-		}
-		else {
-			// Card index is valid, check if the player can afford this card
-			if (player->GetCoins() < hand->GetCostAtIndex(desiredCardIndex)) {
-				cout << "You cannot afford this card. You have " << player->GetCoins() << " coins." << endl;
-			}
-			else {
-				if (hand->GetCardAtIndex(desiredCardIndex) == nullptr) {
-					cout << "No card exists in space " << desiredCardIndex << endl;
-				}
-				else {
-					validCardIndex = true;
-				}
-			}
-		}
-	}
-
-	// Pay for the card
-	player->PayCoin(hand->GetCostAtIndex(desiredCardIndex));
-	Card* card = hand->Exchange(desiredCardIndex);
-	cout << *card;
-	player->DoAction(card);
-	player->PrintPlayerStatus();
+	player->GetStrategy()->SelectCard();
 }
 
 int Game::GetPlayerCount() {
