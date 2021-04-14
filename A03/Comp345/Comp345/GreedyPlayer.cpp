@@ -96,8 +96,9 @@ int GreedyPlayer::PlaceNewArmies() {
 	bool found = false;
 	Cube* cube;
 	Territory* destination = nullptr;
+	// Loop
 	while (true) {
-		if (!GetPlayer()->HasArmiesToPlace()) {
+		if (!GetPlayer()->HasArmiesToPlace()) {								// Check if player has armies to place
 			cout << "SORRY, cannot perform action (No armies to place) " << endl;
 			GetPlayer()->PrintPlacedArmies();
 			return COST_ONE_ACTIONVALUE;
@@ -105,9 +106,9 @@ int GreedyPlayer::PlaceNewArmies() {
 		cout << "Here are VALID inputs: " << endl;
 		cout << "-> Territory ID (Starting Region): " << MasterGame->map->starting_territory_index << endl;
 		GetPlayer()->PrintPlacedCities();
-		cube = GetPlayer()->GetRandomArmy();
+		cube = GetPlayer()->GetRandomArmy();	
 		cout << GetPlayer()->GetLastName() << " - PLACE NEW ARMY (-1 to skip): ";
-		while (!found) {
+		while (!found) {													// Randomly chooses a territory that has armies in it
 			int randomized = rand() % (GetPlayer()->GetTerritories().size());
 			if (GetPlayer()->GetTerritories()[randomized]->city_count[GetPlayer()->GetPosition()] > 0 || GetPlayer()->GetTerritories()[randomized]->territoryID == MasterGame->map->starting_territory_index) {
 				dest = GetPlayer()->GetTerritories()[randomized]->territoryID;
@@ -115,16 +116,16 @@ int GreedyPlayer::PlaceNewArmies() {
 			}
 		}
 		cout << dest << endl;
-		if (GetPlayer()->HasSkipped(dest)) return COST_ONE_ACTIONVALUE;
-		if (GetPlayer()->GetTerritory(dest) == nullptr) continue;
+		if (GetPlayer()->HasSkipped(dest)) return COST_ONE_ACTIONVALUE;		// Check if player skipped
+		if (GetPlayer()->GetTerritory(dest) == nullptr) continue;			// Checks if territory exists
 		destination = GetPlayer()->GetTerritory(dest);
-		if (dest == MasterGame->map->starting_territory_index || destination->city_count[GetPlayer()->GetPosition()] > 0) {
+		if (dest == MasterGame->map->starting_territory_index || destination->city_count[GetPlayer()->GetPosition()] > 0) {			// Check if territory is a valid game ID: Starting region or Has a city
 			destination = GetPlayer()->GetTerritory(dest);
 			GetPlayer()->AddArmy(destination, cube);
 			return COST_ONE_ACTIONVALUE;
 		}
 		else {
-			cout << endl << "WARNING - You cannot place an army at territory ID. " << dest << ". " << endl;
+			cout << endl << "WARNING - You cannot place an army at territory ID: " << dest << ". " << endl;
 		}
 	}  // While(true)
 }
@@ -134,16 +135,17 @@ int GreedyPlayer::MoveArmies(int numOfMoves) {
 	int movementCost = 0, randomized, count = 0;
 	int src = -1, dest = -1;
 	bool exit = false, found = false;
-	if (!GetPlayer()->HasArmiesOnBoard()) {
+	if (!GetPlayer()->HasArmiesOnBoard()) {									// Check if player has armies to place
 		cout << "SORRY, cannot perform action (No armies to move)" << endl;
 		GetPlayer()->PrintPlacedArmies();
 		return COST_ONE_ACTIONVALUE;
 	}
+	// Loop
 	while (true) {
 		cout << "Here are VALID inputs: " << endl;
 		GetPlayer()->PrintPlacedArmies();
 		cout << GetPlayer()->GetLastName() << " - MOVE FROM (-1 to skip): ";
-		while (!found) {
+		while (!found) {													// Randomizes player territories to see which one has armies in it
 			randomized = rand() % (GetPlayer()->GetTerritories().size());
 			if (GetPlayer()->GetTerritories()[randomized]->army_count[GetPlayer()->GetPosition()] > 0)
 				found = true;
@@ -152,16 +154,15 @@ int GreedyPlayer::MoveArmies(int numOfMoves) {
 		if (count == 15)
 			src = -1;
 		cout << src << endl;
-		if (GetPlayer()->HasSkipped(src)) return COST_ONE_ACTIONVALUE;
-		if (!GetPlayer()->HasArmyAtLocation(src)) {
+		if (GetPlayer()->HasSkipped(src)) return COST_ONE_ACTIONVALUE;		// Checks if player skipped
+		if (!GetPlayer()->HasArmyAtLocation(src)) {							//  Checks if player has army at source location
 			cout << endl << "WARNING - You do not have any armies at territory ID: " << src << endl;
 			count++;
 			continue;
 		}
 		Territory* source = GetPlayer()->GetTerritory(src);
 		vector <int> possMoves;
-		//Get all possible moves from src territory and print them
-		vector<int> possibleMoves = MasterGame->map->GetMovementCost(src, GetPlayer()->GetBonusFlying());
+		vector<int> possibleMoves = MasterGame->map->GetMovementCost(src, GetPlayer()->GetBonusFlying());		//Get all possible moves from src territory and print them
 		cout << "Legal moves from territory " << src << " with " << numOfMoves << " movement points: " << endl;
 		for (int i = 0; i < possibleMoves.size(); i++) {
 			if (possibleMoves[i] <= numOfMoves && i != src) {
