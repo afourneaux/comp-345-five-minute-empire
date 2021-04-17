@@ -1,10 +1,21 @@
 #include <iostream>
 #include <algorithm>
 #include <iomanip>
-#include <Windows.h>
+#include <Windows.h> // ONLY used to enable crossplatform colour output in console with ANSI escape codes
 #include "GameObservers.h"
 #include "Game.h"
-#include<sstream>
+#include <sstream>
+
+// ANSI escape codes - used to add colour to console output
+#define WHITE  "\x1B[0m"
+#define RED  "\x1B[31m"
+#define GREEN  "\x1B[32m"
+#define YELLOW  "\x1B[33m"
+#define BLUE  "\x1B[34m"
+#define MAGENTA  "\x1B[35m"
+#define CYAN  "\x1B[36m"
+#define WHITE  "\x1B[37m"
+
 
 Observer::Observer() {};
 Observer::~Observer() {};
@@ -48,14 +59,18 @@ void GameStateView::Update() {
 }
 
 void GameStateView::Display() {
+	//Enable ANSI colour code support on Windows:
+#ifdef _WIN32
+	SetConsoleMode(GetStdHandle(STD_OUTPUT_HANDLE), ENABLE_VIRTUAL_TERMINAL_PROCESSING);
+#endif
+
 	// Recalculate all player scores on refresh
 	// TODO: move this logic elsewhere
 	for (int i = 0; i < game->playerCount; i++) {
 		game->players[i]->ComputeScore();
 	}
 
-	system("CLS");
-	HANDLE hConsole = GetStdHandle(STD_OUTPUT_HANDLE);
+	ClearScreen();
 	int maxLength = max(game->maxPlayerNameLength + 5, 16);
 	cout << setiosflags(ios::left);
 
@@ -66,10 +81,7 @@ void GameStateView::Display() {
 	cout << '+' << setfill(' ') << endl;
 	cout << setw(maxLength) << "| PLAYER STATS";
 	cout << '|';
-	cout << " Special bonuses are displayed in ";
-	SetConsoleTextAttribute(hConsole, 10); // Set colour to green 
-	cout << "green" << endl;
-	SetConsoleTextAttribute(hConsole, 15); // Set colour to  white
+	cout << " Special bonuses are displayed in " << GREEN << "green" << WHITE << endl;
 	//Print horizontal divider
 	cout << '+' << setfill('=') << setw(maxLength-1) << "=";
 	for (int i = 0; i < STATS_COLUMN_COUNT; i++) {
@@ -101,18 +113,14 @@ void GameStateView::Display() {
 	//Print player rows: player name + game stats
 	for (int i = 0; i < game->players.size(); i++) {
 		if (game->currentPlayer == i) {
-			SetConsoleTextAttribute(hConsole, 14);
-			cout << '|' << right << setw(maxLength - 1) << ("-> " + game->players[i]->GetLastName() + " ");
-			SetConsoleTextAttribute(hConsole, 15);
+			cout << '|' << YELLOW << right << setw(maxLength - 1) << ("-> " + game->players[i]->GetLastName() + " ") << WHITE;
 		}
 		else
 			cout << '|' << right << setw(maxLength - 1) << (game->players[i]->GetLastName() + " ");
 		cout << left;
 		if (game->players[i]->getBonusForCoins()) {
 			cout << "| ";
-			SetConsoleTextAttribute(hConsole, 10); // Set colour to green if player gets bonus VP for coins
-			cout << setw(STATS_COLUMN_WIDTH - 2) << game->players[i]->getCoins();
-			SetConsoleTextAttribute(hConsole, 15); // reset to White
+			cout << setw(STATS_COLUMN_WIDTH - 2) << GREEN << game->players[i]->getCoins() << WHITE;
 		}
 		else {
 			cout << "| " << setw(STATS_COLUMN_WIDTH - 2) << game->players[i]->getCoins();
@@ -121,23 +129,18 @@ void GameStateView::Display() {
 		cout << "| " << setw(STATS_COLUMN_WIDTH - 2) << game->players[i]->getContinentScore();
 		if (game->players[i]->getElixirWinner()) {
 			cout << "| ";
-			SetConsoleTextAttribute(hConsole, 10); // Set colour to green for elixir winner
-			cout << setw(STATS_COLUMN_WIDTH - 2) << game->players[i]->getElixirs();
+			cout << GREEN << setw(STATS_COLUMN_WIDTH - 2) << game->players[i]->getElixirs() << WHITE;
 		}
 		else {
 			cout << "| ";
-			SetConsoleTextAttribute(hConsole, 12); // Set colour to red for elixir loser
-			cout << setw(STATS_COLUMN_WIDTH - 2) << game->players[i]->getElixirs();
+			cout << RED << setw(STATS_COLUMN_WIDTH - 2) << game->players[i]->getElixirs() << WHITE;
 		}
-		SetConsoleTextAttribute(hConsole, 15); // reset to White
 		cout << "| " << setw(STATS_COLUMN_WIDTH - 2) << game->players[i]->getBonusArmies();
 		cout << "| " << setw(STATS_COLUMN_WIDTH - 2) << game->players[i]->getBonusMoves();
 
 		if (game->players[i]->getBonusForFlying()) {
 			cout << "| ";
-			SetConsoleTextAttribute(hConsole, 10); // Set colour to green if player gets bonus VP for flying
-			cout << setw(STATS_COLUMN_WIDTH - 2) << game->players[i]->getBonusFlying();
-			SetConsoleTextAttribute(hConsole, 15); // reset to White
+			cout << GREEN << setw(STATS_COLUMN_WIDTH - 2) << game->players[i]->getBonusFlying() << WHITE;
 		}
 		else {
 			cout << "| " << setw(STATS_COLUMN_WIDTH - 2) << game->players[i]->getBonusFlying();
@@ -187,9 +190,7 @@ void GameStateView::Display() {
 	//Print player rows: player name + card count by type
 	for (int i = 0; i < game->players.size(); i++) {
 		if (game->currentPlayer == i) {
-			SetConsoleTextAttribute(hConsole, 14);
-			cout << '|' << right << setw(maxLength - 1) << ("-> " + game->players[i]->GetLastName() + " ");
-			SetConsoleTextAttribute(hConsole, 15);
+			cout << '|' << right << YELLOW << setw(maxLength - 1) << ("-> " + game->players[i]->GetLastName() + " ") << WHITE;
 		}
 		else
 			cout << '|' << right << setw(maxLength - 1) << (game->players[i]->GetLastName() + " ");
@@ -197,9 +198,7 @@ void GameStateView::Display() {
 		for (int j = 0; j < TRACKED_CARD_COUNT; j++) {
 			if (game->players[i]->bonusForTrackedName[j]) {
 				cout << "| ";
-				SetConsoleTextAttribute(hConsole, 10); // Set colour to green if player gets bonus VP for the card type
-				cout<< setw(STATS_COLUMN_WIDTH - 2) << game->players[i]->cardsByTrackedName[j];
-				SetConsoleTextAttribute(hConsole, 15); // reset to white
+				cout<< GREEN << setw(STATS_COLUMN_WIDTH - 2) << game->players[i]->cardsByTrackedName[j] << WHITE;
 			}
 			else {
 				cout << "| " << setw(STATS_COLUMN_WIDTH - 2) << game->players[i]->cardsByTrackedName[j];
@@ -235,13 +234,13 @@ void GameStateView::Display() {
 	for (int i = 0; i < game->map->territory_count; i++) {
 		cout << "| ";
 		if (game->map->starting_territory_index == i)
-			SetConsoleTextAttribute(hConsole, 14); // Set colour to yellow for starting territory
+			cout << YELLOW;
 		else
-			SetConsoleTextAttribute(hConsole, 15); // White otherwise
+			cout << WHITE;
 		string terr = "T" + to_string(i) + ", C" + to_string(game->map->territories[i].continentID);
 		cout << setw(max(MAP_COLUMN_WIDTH - 2, game->map->territories[i].edgeStrLength + 2)) << terr;
+		cout << WHITE;
 	}
-	SetConsoleTextAttribute(hConsole, 15);  // Reset console colour
 	cout << '|' << endl;
 
 	//Print headers row 2: Player label + adjacent territories
@@ -254,16 +253,16 @@ void GameStateView::Display() {
 			//if (connections_str_length > MAP_COLUMN_WIDTH - 2) break;
 
 			if (temp->movement_cost == game->map->WATER_MOVEMENT_COST)
-				SetConsoleTextAttribute(hConsole, 11); // set output colour to cyan if water connection
-			else 
-				SetConsoleTextAttribute(hConsole, 15); // White otherwise
+				cout << CYAN;
+			else
+				cout << WHITE;
 			string conn = to_string(temp->destination_territory->territoryID) + " ";
 			cout << conn;
 			connections_str_length += conn.length();
 			temp = temp->next;
 		}
 		cout << setw(MAP_COLUMN_WIDTH - connections_str_length) << " ";
-		SetConsoleTextAttribute(hConsole, 15);
+		cout << WHITE;
 	}
 	cout << '|' << endl;
 
@@ -278,9 +277,7 @@ void GameStateView::Display() {
 	//Print player rows: player name + city/army count per territory
 	for (int i = 0; i < MasterGame->players.size(); i++) {
 		if (game->currentPlayer == i) {
-			SetConsoleTextAttribute(hConsole, 14);
-			cout << '|' << right << setw(maxLength - 1) << ("-> " + game->players[i]->GetLastName() + " ");
-			SetConsoleTextAttribute(hConsole, 15);
+			cout << '|' << YELLOW << right << setw(maxLength - 1) << ("-> " + game->players[i]->GetLastName() + " ") << WHITE;
 		}
 		else
 			cout << '|' << right << setw(maxLength - 1) << (game->players[i]->GetLastName() + " ");
@@ -288,9 +285,9 @@ void GameStateView::Display() {
 		for (int j = 0; j < game->map->territory_count; j++) {
 			cout << "| ";
 			if (game->map->territories[j].controlling_player == i)
-				SetConsoleTextAttribute(hConsole, 10); // Set console colour to green for controlling player
+				cout << GREEN;
 			else
-				SetConsoleTextAttribute(hConsole, 12); // Set console colour to red for non-controlling player
+				cout << RED;
 			string barGraph = "";
 			cout << setw(10);
 			for (int k = 0; k < game->map->territories[j].city_count[i]; k++)
@@ -305,7 +302,7 @@ void GameStateView::Display() {
 			}
 			
 			cout << setw(max(MAP_COLUMN_WIDTH - 2, game->map->territories[j].edgeStrLength + 2)) << barGraph;
-			SetConsoleTextAttribute(hConsole, 15); // Reset console colour
+			cout << WHITE;
 		}
 		cout << '|' << endl;
 	}
@@ -423,4 +420,13 @@ void GameStateView::Display() {
 	}
 	
 }
+
+void ClearScreen() {
+#ifdef _WIN32
+	system("cls");
+#else
+	system("clear");
+#endif
+}
+
 

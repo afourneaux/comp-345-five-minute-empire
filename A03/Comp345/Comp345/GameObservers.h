@@ -37,3 +37,5 @@ private:
 	const int CARD_WIDTH = 25;
 	Game* game;
 };
+
+void ClearScreen();
