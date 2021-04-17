@@ -1,20 +1,10 @@
 #include <iostream>
 #include <algorithm>
 #include <iomanip>
-#include <Windows.h> // ONLY used to enable crossplatform colour output in console with ANSI escape codes
 #include "GameObservers.h"
 #include "Game.h"
 #include <sstream>
 
-// ANSI escape codes - used to add colour to console output
-#define WHITE  "\x1B[0m"
-#define RED  "\x1B[31m"
-#define GREEN  "\x1B[32m"
-#define YELLOW  "\x1B[33m"
-#define BLUE  "\x1B[34m"
-#define MAGENTA  "\x1B[35m"
-#define CYAN  "\x1B[36m"
-#define WHITE  "\x1B[37m"
 
 
 Observer::Observer() {};
@@ -59,11 +49,6 @@ void GameStateView::Update() {
 }
 
 void GameStateView::Display() {
-	//Enable ANSI colour code support on Windows:
-#ifdef _WIN32
-	SetConsoleMode(GetStdHandle(STD_OUTPUT_HANDLE), ENABLE_VIRTUAL_TERMINAL_PROCESSING);
-#endif
-
 	// Recalculate all player scores on refresh
 	// TODO: move this logic elsewhere
 	for (int i = 0; i < game->playerCount; i++) {
@@ -81,7 +66,7 @@ void GameStateView::Display() {
 	cout << '+' << setfill(' ') << endl;
 	cout << setw(maxLength) << "| PLAYER STATS";
 	cout << '|';
-	cout << " Special bonuses are displayed in " << GREEN << "green" << WHITE << endl;
+	cout << " Special bonuses are indicated with *." << endl;
 	//Print horizontal divider
 	cout << '+' << setfill('=') << setw(maxLength-1) << "=";
 	for (int i = 0; i < STATS_COLUMN_COUNT; i++) {
@@ -113,14 +98,14 @@ void GameStateView::Display() {
 	//Print player rows: player name + game stats
 	for (int i = 0; i < game->players.size(); i++) {
 		if (game->currentPlayer == i) {
-			cout << '|' << YELLOW << right << setw(maxLength - 1) << ("-> " + game->players[i]->GetLastName() + " ") << WHITE;
+			cout << '|' << right << setw(maxLength - 1) << ("-> " + game->players[i]->GetLastName() + " ");
 		}
 		else
 			cout << '|' << right << setw(maxLength - 1) << (game->players[i]->GetLastName() + " ");
 		cout << left;
 		if (game->players[i]->getBonusForCoins()) {
 			cout << "| ";
-			cout << setw(STATS_COLUMN_WIDTH - 2) << GREEN << game->players[i]->getCoins() << WHITE;
+			cout << setw(STATS_COLUMN_WIDTH - 2) << to_string(game->players[i]->getCoins()) + "*";
 		}
 		else {
 			cout << "| " << setw(STATS_COLUMN_WIDTH - 2) << game->players[i]->getCoins();
@@ -129,18 +114,18 @@ void GameStateView::Display() {
 		cout << "| " << setw(STATS_COLUMN_WIDTH - 2) << game->players[i]->getContinentScore();
 		if (game->players[i]->getElixirWinner()) {
 			cout << "| ";
-			cout << GREEN << setw(STATS_COLUMN_WIDTH - 2) << game->players[i]->getElixirs() << WHITE;
+			cout << setw(STATS_COLUMN_WIDTH - 2) << to_string(game->players[i]->getElixirs()) + "*";
 		}
 		else {
 			cout << "| ";
-			cout << RED << setw(STATS_COLUMN_WIDTH - 2) << game->players[i]->getElixirs() << WHITE;
+			cout << setw(STATS_COLUMN_WIDTH - 2) << game->players[i]->getElixirs();
 		}
 		cout << "| " << setw(STATS_COLUMN_WIDTH - 2) << game->players[i]->getBonusArmies();
 		cout << "| " << setw(STATS_COLUMN_WIDTH - 2) << game->players[i]->getBonusMoves();
 
 		if (game->players[i]->getBonusForFlying()) {
 			cout << "| ";
-			cout << GREEN << setw(STATS_COLUMN_WIDTH - 2) << game->players[i]->getBonusFlying() << WHITE;
+			cout << setw(STATS_COLUMN_WIDTH - 2) << to_string(game->players[i]->getBonusFlying()) + "*";
 		}
 		else {
 			cout << "| " << setw(STATS_COLUMN_WIDTH - 2) << game->players[i]->getBonusFlying();
@@ -190,7 +175,7 @@ void GameStateView::Display() {
 	//Print player rows: player name + card count by type
 	for (int i = 0; i < game->players.size(); i++) {
 		if (game->currentPlayer == i) {
-			cout << '|' << right << YELLOW << setw(maxLength - 1) << ("-> " + game->players[i]->GetLastName() + " ") << WHITE;
+			cout << '|' << right << setw(maxLength - 1) << ("-> " + game->players[i]->GetLastName() + " ");
 		}
 		else
 			cout << '|' << right << setw(maxLength - 1) << (game->players[i]->GetLastName() + " ");
@@ -198,7 +183,7 @@ void GameStateView::Display() {
 		for (int j = 0; j < TRACKED_CARD_COUNT; j++) {
 			if (game->players[i]->bonusForTrackedName[j]) {
 				cout << "| ";
-				cout<< GREEN << setw(STATS_COLUMN_WIDTH - 2) << game->players[i]->cardsByTrackedName[j] << WHITE;
+				cout<< setw(STATS_COLUMN_WIDTH - 2) << to_string(game->players[i]->cardsByTrackedName[j]) + "*";
 			}
 			else {
 				cout << "| " << setw(STATS_COLUMN_WIDTH - 2) << game->players[i]->cardsByTrackedName[j];
@@ -233,13 +218,12 @@ void GameStateView::Display() {
 	cout << setw(maxLength) << "|";
 	for (int i = 0; i < game->map->territory_count; i++) {
 		cout << "| ";
+		string terr;
 		if (game->map->starting_territory_index == i)
-			cout << YELLOW;
+			terr = "S-T" + to_string(i) + ", C" + to_string(game->map->territories[i].continentID);
 		else
-			cout << WHITE;
-		string terr = "T" + to_string(i) + ", C" + to_string(game->map->territories[i].continentID);
+			terr = "T" + to_string(i) + ", C" + to_string(game->map->territories[i].continentID);
 		cout << setw(max(MAP_COLUMN_WIDTH - 2, game->map->territories[i].edgeStrLength + 2)) << terr;
-		cout << WHITE;
 	}
 	cout << '|' << endl;
 
@@ -250,19 +234,16 @@ void GameStateView::Display() {
 		int connections_str_length = 3;
 		Edge* temp = game->map->territories[i].head;
 		while (temp != nullptr) {
-			//if (connections_str_length > MAP_COLUMN_WIDTH - 2) break;
-
+			string conn;
 			if (temp->movement_cost == game->map->WATER_MOVEMENT_COST)
-				cout << CYAN;
+				conn = to_string(temp->destination_territory->territoryID) + "W ";
 			else
-				cout << WHITE;
-			string conn = to_string(temp->destination_territory->territoryID) + " ";
+				conn = to_string(temp->destination_territory->territoryID) + " ";
 			cout << conn;
 			connections_str_length += conn.length();
 			temp = temp->next;
 		}
 		cout << setw(MAP_COLUMN_WIDTH - connections_str_length) << " ";
-		cout << WHITE;
 	}
 	cout << '|' << endl;
 
@@ -277,19 +258,18 @@ void GameStateView::Display() {
 	//Print player rows: player name + city/army count per territory
 	for (int i = 0; i < MasterGame->players.size(); i++) {
 		if (game->currentPlayer == i) {
-			cout << '|' << YELLOW << right << setw(maxLength - 1) << ("-> " + game->players[i]->GetLastName() + " ") << WHITE;
+			cout << '|' << right << setw(maxLength - 1) << ("-> " + game->players[i]->GetLastName() + " ");
 		}
 		else
 			cout << '|' << right << setw(maxLength - 1) << (game->players[i]->GetLastName() + " ");
 		cout << left;
 		for (int j = 0; j < game->map->territory_count; j++) {
-			cout << "| ";
+			cout << "|";
 			if (game->map->territories[j].controlling_player == i)
-				cout << GREEN;
+				cout << "*";
 			else
-				cout << RED;
+				cout <<" ";
 			string barGraph = "";
-			cout << setw(10);
 			for (int k = 0; k < game->map->territories[j].city_count[i]; k++)
 				barGraph.append("C");
 			//If the player has a lot of armies render compact version to avoid breaking columns alignment
@@ -302,7 +282,6 @@ void GameStateView::Display() {
 			}
 			
 			cout << setw(max(MAP_COLUMN_WIDTH - 2, game->map->territories[j].edgeStrLength + 2)) << barGraph;
-			cout << WHITE;
 		}
 		cout << '|' << endl;
 	}
