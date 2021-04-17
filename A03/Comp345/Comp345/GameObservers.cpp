@@ -316,89 +316,108 @@ void GameStateView::Display() {
 	cout << '+' << setfill(' ') << endl;
 
 	//////////////////////////////////////////////////
-	// PART 4: RENDER DRAFTABLE CARDS 
+	// PART 4A: PRINT WINNER IF GAME IS OVER
 	//////////////////////////////////////////////////
-	int handSize = game->GetHand()->GetSize();
-	cout << '+' << setfill('=') << setw(CARD_WIDTH - 1) << "=";
-	cout << '+' << setfill(' ') << endl;
-	cout << '|' << setw(CARD_WIDTH - 1) << " AVAILABLE CARDS";
-	cout << '|' << endl;
+	if (game->gameOver) {
+		cout << "===============================" << endl << endl;;
+		cout << "The game is over!" << endl << endl;
+		if (game->winnerIndex == -1) {
+			cout << "It's a tie!" << endl;
+		}
+		else {
+			cout << "The winner is... " << game->players[game->winnerIndex]->GetLastName() << "!" << endl;
+		}
+		cout << endl;
+		cout << "===============================" << endl;
+	}
+	//////////////////////////////////////////////////
+	// PART 4B: RENDER DRAFTABLE CARDS 
+	//////////////////////////////////////////////////
+	else {
+	
+		int handSize = game->GetHand()->GetSize();
+		cout << '+' << setfill('=') << setw(CARD_WIDTH - 1) << "=";
+		cout << '+' << setfill(' ') << endl;
+		cout << '|' << setw(CARD_WIDTH - 1) << " AVAILABLE CARDS";
+		cout << '|' << endl;
 
-	//Print horizontal divider
-	for (int i = 0; i < handSize; i++) {
-		cout << '+';
-		cout << setfill('=') << setw(CARD_WIDTH - 1) << "=";
-	}
-	cout << "+" << setfill(' ') << endl;
-	//Print card index and cost
-	for (int i = 0; i < handSize; i++) {
-		cout << left << setw(5) << ("| [" + to_string(i) + "]");
-		cout << right << setw(CARD_WIDTH - 5) << ("Cost: " + to_string(game->GetHand()->GetCostAtIndex(i)) + " ");
-	}
-	cout << "|" << endl;
-	//Print card name
-	for (int i = 0; i < handSize; i++) {
-		cout << left << setw(CARD_WIDTH) << "| " + game->GetHand()->GetCardAtIndex(i)->name;
-	}
-	cout << "|" << endl;
-	//Print horizontal divider
-	for (int i = 0; i < handSize; i++) {
-		cout << '+';
-		cout << setfill('=') << setw(CARD_WIDTH - 1) << "=";
-	}
-	cout << "+" << setfill(' ') << endl;
-	
-	stringstream ss;
-	//Print card abilities
-	for (int i = 0; i < handSize; i++) {
-		cout << "| " << left << setw(CARD_WIDTH - 2);
-		for (int j = 0; j < game->GetHand()->GetCardAtIndex(i)->abilityCount; j++) {
-			ss << game->GetHand()->GetCardAtIndex(i)->abilities[j];
-			if (j < game->GetHand()->GetCardAtIndex(i)->abilityCount - 1)
-				ss << ", ";
+		//Print horizontal divider
+		for (int i = 0; i < handSize; i++) {
+			cout << '+';
+			cout << setfill('=') << setw(CARD_WIDTH - 1) << "=";
 		}
-		cout << ss.str();
-		ss.str("");
-	}
-	cout << "|" << endl;
-	//Print first card action
-	for (int i = 0; i < handSize; i++) {
-		cout << "| " << left << setw(CARD_WIDTH - 2);
-		ss << game->GetHand()->GetCardAtIndex(i)->actions[0];
-		cout << ss.str();
-		ss.str("");
+		cout << "+" << setfill(' ') << endl;
+		//Print card index and cost
+		for (int i = 0; i < handSize; i++) {
+			cout << left << setw(5) << ("| [" + to_string(i) + "]");
+			cout << right << setw(CARD_WIDTH - 5) << ("Cost: " + to_string(game->GetHand()->GetCostAtIndex(i)) + " ");
+		}
+		cout << "|" << endl;
+		//Print card name
+		for (int i = 0; i < handSize; i++) {
+			cout << left << setw(CARD_WIDTH) << "| " + game->GetHand()->GetCardAtIndex(i)->name;
+		}
+		cout << "|" << endl;
+		//Print horizontal divider
+		for (int i = 0; i < handSize; i++) {
+			cout << '+';
+			cout << setfill('=') << setw(CARD_WIDTH - 1) << "=";
+		}
+		cout << "+" << setfill(' ') << endl;
+
+		stringstream ss;
+		//Print card abilities
+		for (int i = 0; i < handSize; i++) {
+			cout << "| " << left << setw(CARD_WIDTH - 2);
+			for (int j = 0; j < game->GetHand()->GetCardAtIndex(i)->abilityCount; j++) {
+				ss << game->GetHand()->GetCardAtIndex(i)->abilities[j];
+				if (j < game->GetHand()->GetCardAtIndex(i)->abilityCount - 1)
+					ss << ", ";
+			}
+			cout << ss.str();
+			ss.str("");
+		}
+		cout << "|" << endl;
+		//Print first card action
+		for (int i = 0; i < handSize; i++) {
+			cout << "| " << left << setw(CARD_WIDTH - 2);
+			ss << game->GetHand()->GetCardAtIndex(i)->actions[0];
+			cout << ss.str();
+			ss.str("");
+		}
+
+		cout << "|" << endl;
+		//Print card and/or modifier if applicable
+		for (int i = 0; i < handSize; i++) {
+			cout << "| " << left << setw(CARD_WIDTH - 2);
+			if (game->GetHand()->GetCardAtIndex(i)->actionCount > 1) {
+				if (game->GetHand()->GetCardAtIndex(i)->actionChoice == eChoice_And)
+					cout << "AND";
+				else if (game->GetHand()->GetCardAtIndex(i)->actionChoice == eChoice_Or)
+					cout << "OR";
+			}
+			else
+				cout << " ";
+		}
+		cout << "|" << endl;
+		//Print card action 2 if applicable
+		for (int i = 0; i < handSize; i++) {
+			cout << "| " << left << setw(CARD_WIDTH - 2);
+			if (game->GetHand()->GetCardAtIndex(i)->actionCount > 1)
+				ss << game->GetHand()->GetCardAtIndex(i)->actions[1];
+			else
+				ss << " ";
+			cout << ss.str();
+			ss.str("");
+		}
+		cout << "|" << endl;
+		//Print horizontal divider
+		for (int i = 0; i < handSize; i++) {
+			cout << '+';
+			cout << setfill('=') << setw(CARD_WIDTH - 1) << "=";
+		}
+		cout << "+" << setfill(' ') << endl;
 	}
 	
-	cout << "|" << endl;
-	//Print card and/or modifier if applicable
-	for (int i = 0; i < handSize; i++) {
-		cout << "| " << left << setw(CARD_WIDTH - 2);
-		if (game->GetHand()->GetCardAtIndex(i)->actionCount > 1) {
-			if (game->GetHand()->GetCardAtIndex(i)->actionChoice == eChoice_And)
-				cout << "AND";
-			else if (game->GetHand()->GetCardAtIndex(i)->actionChoice == eChoice_Or)
-				cout << "OR";
-		}
-		else
-			cout << " ";
-	}
-	cout << "|" << endl;
-	//Print card action 2 if applicable
-	for (int i = 0; i < handSize; i++) {
-		cout << "| " << left << setw(CARD_WIDTH - 2);
-		if (game->GetHand()->GetCardAtIndex(i)->actionCount > 1)
-			ss << game->GetHand()->GetCardAtIndex(i)->actions[1];
-		else
-			ss << " ";
-		cout << ss.str();
-		ss.str("");
-	}
-	cout << "|" << endl;
-	//Print horizontal divider
-	for (int i = 0; i < handSize; i++) {
-		cout << '+';
-		cout << setfill('=') << setw(CARD_WIDTH - 1) << "=";
-	}
-	cout << "+" << setfill(' ') << endl;
 }
 
