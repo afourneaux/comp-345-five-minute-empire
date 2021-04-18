@@ -3,6 +3,7 @@
 #include "MapLoader.h"
 #include "Setup.h"
 #include "GameObservers.h"
+#include <vector>
 
 Game* MasterGame;
 
@@ -31,10 +32,16 @@ void Game::Setup() {
 	cout << "      INFORMATION ABOUT PLAYERS" << endl;
 	cout << "X X X X X X X X X X X X X X X X X X X\n" << endl;
 
+	//Register playerstateview with map and players
+	PlayerStateView* playerStateView = new PlayerStateView(this);
+	Attach(playerStateView);
+
 	for (int i = 0; i < playerCount; i++) {
 		cout << *players[i];
 		//Register gamestateview with players
 		players[i]->Attach(gameStateView);
+		//Register playerstateview with players
+		players[i]->Attach(playerStateView);
 	}
 	if (playerCount == 2) {
 		gameTurns = GAME_TURNS_2_PLAYERS;
@@ -93,12 +100,15 @@ void Game::MainLoop() {
 	cin.ignore(INT_MAX, '\n');
 	map->Notify();
 	for (int turn = 0; turn < gameTurns; turn++) {
-		cout << "XXXXXXXXXXXX" << endl;
-		cout << "BEGIN ROUND " << turn + 1 << endl;
+		currentTurn = turn + 1;
+		cout << endl << "XXXXXXXXXXXX" << endl;
+		cout << "BEGIN ROUND " << currentTurn << endl;
 		cout << "XXXXXXXXXXXX" << endl;
 		// Run through each player's turn
 		for (int currentPlayer = startingPlayer; currentPlayer < playerCount + startingPlayer; currentPlayer++) {
 			PlayerTurn(players.at(currentPlayer % playerCount));
+			players[currentPlayer % playerCount]->actions.clear();
+			Notify();
 		}
 	}
 }
@@ -180,11 +190,11 @@ void Game::PlayerTurn(Player* player) {
 	cin.ignore(INT_MAX, '\n');
 	player->Notify();
 
-	cout << "========================================" << endl;
-	cout << player->GetLastName() << " - It is your turn!" << endl;
-	cout << "========================================" << endl;
+	//cout << "========================================" << endl;
+	//cout << player->GetLastName() << " - It is your turn!" << endl;
+	//cout << "========================================" << endl;
 
-	cout << "You have " << player->getCoins() << " coins." << endl;
+	cout << endl << "You have " << player->getCoins() << " coins." << endl;
 	cout << "Please select a card to draw:" << endl;
 	for (int handIndex = 0; handIndex < HAND_SIZE; handIndex++) {
 		Card* cardAtIndex = hand->GetCardAtIndex(handIndex);
@@ -226,6 +236,7 @@ void Game::PlayerTurn(Player* player) {
 	// Pay for the card
 	player->PayCoin(hand->GetCostAtIndex(desiredCardIndex));
 	Card* card = hand->Exchange(desiredCardIndex);
+	Notify();
 	cout << *card;
 	player->DoAction(card);
 	player->PrintPlayerStatus();

@@ -4,7 +4,10 @@
 #include <Windows.h>
 #include "GameObservers.h"
 #include "Game.h"
-#include<sstream>
+#include <sstream>
+#include <iostream>
+
+using namespace std;
 
 Observer::Observer() {};
 Observer::~Observer() {};
@@ -402,3 +405,41 @@ void GameStateView::Display() {
 	cout << "+" << setfill(' ') << endl;
 }
 
+PlayerStateView::PlayerStateView()
+{
+	game = nullptr;
+}
+
+PlayerStateView::PlayerStateView(Game* game)
+{
+	this->game = game;
+}
+
+PlayerStateView::~PlayerStateView()
+{
+}
+
+void PlayerStateView::Update()
+{
+	Display();
+}
+
+void PlayerStateView::Display()
+{
+	// Clear currentplayer's actions vector at the end of their turn
+	Player* currentPlayer;
+	if (game->currentTurn != 0) {
+		currentPlayer = game->players[game->currentPlayer]; // current player
+		cout << endl << "+========================================+" << endl;
+		cout << "  ROUND #" << game->currentTurn << ": It's " << currentPlayer->GetLastName() << "'s turn" << endl;
+		cout << "+========================================+" << endl;
+		if (currentPlayer->getHand().size() != 0) {
+			cout << "  - Selects '" << currentPlayer->getHand()[currentPlayer->getHand().size()-1]->name << "' card" << endl;
+			for (int i = 0; i < currentPlayer->actions.size(); i++) {
+				cout << currentPlayer->actions[i] << endl;
+			}
+		}
+		//if(actions != 0)
+			cout << "+========================================+\n" << endl;
+	}
+}
