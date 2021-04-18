@@ -431,13 +431,13 @@ void PlayerStateView::Display()
 {
 	// Clear currentplayer's actions vector at the end of their turn
 	Player* currentPlayer;
-	if (game->currentTurn != 0) {
+	if (game->currentTurn != 0 && !game->gameOver) {
 		currentPlayer = game->players[game->currentPlayer]; // current player
 		cout << endl << "+========================================+" << endl;
 		cout << "  ROUND #" << game->currentTurn << ": It's " << currentPlayer->GetLastName() << "'s turn" << endl;
 		cout << "+========================================+" << endl;
-		if (currentPlayer->getHand().size() != 0) {
-			cout << "  - Selects '" << currentPlayer->getHand()[currentPlayer->getHand().size()-1]->name << "' card" << endl;
+		if (currentPlayer->getHand().size() == game->currentTurn && currentPlayer->getHand().size() != 0) {
+			cout << "  - Selects '" << currentPlayer->getHand()[game->currentTurn-1]->name << "' card" << endl;
 			for (int i = 0; i < currentPlayer->actions.size(); i++) {
 				cout << currentPlayer->actions[i] << endl;
 			}
