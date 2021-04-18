@@ -91,10 +91,13 @@ void GreedyPlayer::SelectCard() {
 
 
 int GreedyPlayer::PlaceNewArmies() {
-	int dest;
+	int dest, count = 0;
 	bool found = false;
 	// Loop
 		while (!found) {													// Randomly chooses a territory that has armies in it
+			cout << "..";
+			if (count == 10)
+				return -1;
 			int randomized = rand() % (GetPlayer()->GetTerritories().size());
 			if (GetPlayer()->GetTerritories()[randomized]->city_count[GetPlayer()->GetPosition()] > 0 || GetPlayer()->GetTerritories()[randomized]->territoryID == MasterGame->map->starting_territory_index) {
 				dest = GetPlayer()->GetTerritories()[randomized]->territoryID;
