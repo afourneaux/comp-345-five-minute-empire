@@ -118,7 +118,40 @@ void Player::PayCoin(int amt) {
 //PlaceNewArmies
 //**********
 int Player::PlaceNewArmies() {
-	return strat->PlaceNewArmies();
+	int dest;
+	const int BIGGESTDIFF = 100;
+	int armyDiff = 0, count = 0, smallestDiff = BIGGESTDIFF;
+	bool found = false;
+	Cube* cube;
+	Territory* destination = nullptr;
+	Territory* temp = nullptr;
+	vector <Territory*> priorityTerr;
+	// Loop
+	while (true) {
+		if (!HasArmiesToPlace()) {							// Check if player has armies to place
+			cout << "SORRY, cannot perform action (No armies to place) " << endl;
+			PrintPlacedArmies();
+			return COST_ONE_ACTIONVALUE;
+		}
+	cout << "Here are VALID inputs: " << endl;
+	cout << "-> Territory ID (Starting Region): " << MasterGame->map->starting_territory_index << endl;
+	PrintPlacedCities();
+	cube = GetRandomArmy();
+	cout << GetLastName() << " - PLACE NEW ARMY (-1 to skip): ";
+
+	dest =  strat->PlaceNewArmies();						//implementing strat
+
+	if (HasSkipped(dest)) return COST_ONE_ACTIONVALUE;		// Check if player skipped
+	if (GetTerritory(dest) == nullptr) continue;			// Checks if territory exists
+	destination = GetTerritory(dest);
+	if (dest == MasterGame->map->starting_territory_index || destination->city_count[GetPosition()] > 0) {			// Check if territory is a valid game ID: Starting region or Has a city
+		destination = GetTerritory(dest);
+		AddArmy(destination, cube);
+		return COST_ONE_ACTIONVALUE;
+	}
+	else 
+		cout << endl << "WARNING - You cannot place an army at territory ID: " << dest << " (You do not have a city there or it's not the starting region" << endl;
+	}  // While(true)
 }
 
 bool Player::PlaceNewArmiesDirectly(int territoryIndex) {
@@ -144,7 +177,57 @@ bool Player::PlaceNewArmiesDirectly(int territoryIndex) {
 //MoveArmies
 //**********
 int Player::MoveArmies(int numOfMoves) {
-	return strat->MoveArmies(numOfMoves);
+	int movementCost = 0, randomized, count = 0;
+	int src = -1, dest = -1;
+	Territory* source = nullptr;
+	Territory* destination = nullptr;
+	bool exit = false, found = false;
+	vector<int> choices;
+	if (!HasArmiesOnBoard()) {									// Check if player has armies to place
+		cout << "SORRY, cannot perform action (No armies to move)" << endl;
+		PrintPlacedArmies();
+		return COST_ONE_ACTIONVALUE;
+	}
+	// Loop
+	while (true) {
+		cout << "Here are VALID inputs: " << endl;
+		PrintPlacedArmies();
+		cout << GetLastName() << " - MOVE FROM (-1 to skip): ";
+		
+		choices = strat->MoveArmies(numOfMoves);				// Implementing Strat
+
+		src = choices[0];
+		dest = choices[1];
+		if (HasSkipped(dest)) return COST_ONE_ACTIONVALUE;		// Check if player made a move
+		if (GetTerritory(dest) == nullptr) continue;			// Check if territory is valid
+		movementCost = MasterGame->map->GetMovementCost(src, GetBonusFlying())[dest];
+		source = MasterGame->map->GetTerritory(src);
+		destination = MasterGame->map->GetTerritory(dest);
+		Cube* srcArmy = GetArmyAtLocation(src);
+		if (movementCost <= numOfMoves && movementCost > 0) {				// Check if movement cost is within movements left
+			cout << "This move will cost " << movementCost << " move(s). Do you wish to continue? (Y/N) ";
+			string ans;
+			ans = "y";
+			cout << ans << endl;
+			if (ans == "N" || ans == "n")
+				continue;
+			else if (ans == "Y" || ans == "y") {
+				MoveArmy(source, destination, srcArmy);
+				cout << "Moved army from location " << src << " to destination " << dest << endl;
+				return movementCost;
+			}
+			else {
+				cout << "Invalid choice." << endl;
+				continue;
+			}
+		}
+		else {
+			cout << endl;
+			cout << "WARNING -> MOVEMENT COST: " << movementCost << " -> REMAINING MOVES: " << numOfMoves << ") " << endl;
+			cout << endl;
+			continue;
+		}
+	}
 }
 //**********
 //MoveOverLand
@@ -162,11 +245,95 @@ bool Player::MoveOverSea() {
 //BuildCity
 //**********
 int Player::BuildCity() {
-	return strat->BuildCity();
+	Disk* city;
+	int dest = -1, randomized = -1;
+	bool found = false;
+	if (!HasArmiesOnBoard()) {								// Check if player has army present on the board (to build the city)
+		cout << "Put some armies first, jeez!" << endl;
+		return COST_ONE_ACTIONVALUE;
+	}
+	if (!HasCitiesToPlace()) {								// Check if player has city to build 
+		cout << "Are you trying to become a real estate agent o.O? I think not. (No more cities to place)" << endl;
+		PrintPlacedCities();
+		return COST_ONE_ACTIONVALUE;
+	}
+	cout << endl;
+	for (int i = 0; i < GetDisks().size(); i++)
+		if (!GetDisks()[i]->isBuilt) {
+			city = GetDisks()[i];
+			break;
+		}
+	while (true) {
+		cout << "Here are VALID inputs: " << endl;
+		PrintPlacedArmies();
+		cout << GetLastName() << " - BUILD CITY AT (-1 to skip): ";
+
+		dest = strat->BuildCity();						//implementing strat
+
+		cout << dest << endl;
+		if (HasSkipped(dest)) return COST_ONE_ACTIONVALUE;
+		if (GetTerritory(dest) == nullptr) continue;
+		if (HasArmyAtLocation(dest)) {
+			AddCity(GetTerritory(dest));
+			return COST_ONE_ACTIONVALUE;
+		}
+		else
+			cout << "Don't you dare try to build a city at " << dest << "! You have no armies there! " << dest << "." << endl;
+	}
 }
 
 int Player::DestroyArmy() {//Checks if friendly & enemy in same location -> Returns if it was destroyed
-	return strat->DestroyArmy();
+	int enemy = 0, battlefieldTerrId = -1, count = 0;
+	Territory* battlefieldTerr = nullptr;
+	bool found = false;
+	vector<int> choices;
+	if (!HasArmiesOnBoard()) {
+		cout << "Attacking with no armies... Pathetic..." << endl;
+		PrintPlacedArmies();
+		return COST_ZERO_ACTIONVALUE;
+	}
+	while (true) {														// LOOP
+		cout << "Here are VALID inputs: " << endl;
+		PrintPlacedArmies();
+		cout << GetLastName() << " - DESTROY AT (-1 to skip)? ";
+		
+
+		choices = strat->DestroyArmy();							// Impementing Strategy
+
+		battlefieldTerrId = choices[0];
+		enemy = choices[1];
+		battlefieldTerr = MasterGame->map->GetTerritory(battlefieldTerrId);
+
+		if (count > 5) {
+			cout << "Tried too many times";
+			break;
+		}
+		if (HasSkipped(battlefieldTerrId)) return COST_ONE_ACTIONVALUE; // Check if wants to skip action
+		if (enemy < 0 || enemy >= MasterGame->players.size()) { // Checking if valid player GetPosition()
+			cout << "Might as well attack the chair! Find a real opponent." << endl << endl;
+			count++;
+			continue;
+		}
+		if (enemy == GetPosition()) {
+			cout << "Feel free to punch yourself in real life but not happening in my game!" << endl << endl;
+			count++;
+			continue;
+		}
+		if (MasterGame->players[enemy]->GetBonusImmune()) {
+			cout << "You can't attack " << enemy << " because they have the 'Immune to Attack' bonus. Please choose a different target." << endl;
+			count++;
+			continue;
+		}
+		if (battlefieldTerr->army_count[enemy] <= 0) { // Checking if ennemy has armies
+			cout << "Now you are attacking straight wind. " << enemy << " does not have anything at " << battlefieldTerr->territoryID << " to destroy. " << endl << endl;
+			count++;
+			continue;
+		}
+		MasterGame->players[enemy]->RemoveArmy(battlefieldTerr); // Destroying Army
+		cout << "BANG BANG. You shot him down, BANG BANG. " << MasterGame->players[enemy]->GetLastName() << " hit the gound. BANG bang ...(at territory id " << battlefieldTerrId << ") That awful sound.." << endl;
+		MasterGame->players[enemy]->PrintPlayerStatus();
+		return COST_ONE_ACTIONVALUE;
+	}
 }
 //**********
 //DoAction
@@ -349,7 +516,24 @@ void Player::AddCardToHand(Card* card) {
 
 // if OR -> Returns 0 or 1 depending on user inputs which is the action choosen. If AND -> Returns -1 is because we have an AND action
 int Player::AndOrAction() {
-	return strat->AndOrAction();
+	int choice = -1;
+	Card* currentCard = GetHand().back();
+	string and_or;
+	if (currentCard->actionChoice == eChoice_And) // For nice output
+		and_or = "AND";
+	if (currentCard->actionChoice == eChoice_Or) // For nice output
+		and_or = "OR";
+	if (currentCard->actionChoice == eChoice_None) // For nice output
+		and_or = "";
+	cout << GetLastName() << " - The card you have chosen allows you to " << currentCard->actions[0] << " " << and_or << " " << currentCard->actions[1] << endl;
+	PrintPlayerStatus();
+	if (currentCard->actionChoice == eChoice_Or) {
+		cout << GetLastName() << " - Since you have the OR card, please choose: " << endl;
+		for (int i = 0; i < currentCard->actionCount; i++)
+			cout << "Press " << i << ":" << currentCard->actions[i] << endl;
+		choice = strat->AndOrAction();
+		return choice;
+	}
 }
 //**********
 //PrintPrintPlayerStatus
