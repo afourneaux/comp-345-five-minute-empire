@@ -110,11 +110,11 @@ void GameStateView::Display() {
 		if (game->players[i]->getBonusForCoins()) {
 			cout << left << "| ";
 			SetConsoleTextAttribute(hConsole, 10); // Set colour to green if player gets bonus VP for coins
-			cout << setw(STATS_COLUMN_WIDTH - 2) << game->players[i]->getCoins();
+			cout << setw(STATS_COLUMN_WIDTH - 2) << game->players[i]->GetCoins();
 			SetConsoleTextAttribute(hConsole, 15); // reset to White
 		}
 		else {
-			cout << left << "| " << setw(STATS_COLUMN_WIDTH - 2) << game->players[i]->getCoins();
+			cout << left << "| " << setw(STATS_COLUMN_WIDTH - 2) << game->players[i]->GetCoins();
 		}
 		cout << left << "| " << setw(STATS_COLUMN_WIDTH - 2) << game->players[i]->getTerritoryScore();
 		cout << left << "| " << setw(STATS_COLUMN_WIDTH - 2) << game->players[i]->getContinentScore();
@@ -129,19 +129,19 @@ void GameStateView::Display() {
 			cout << setw(STATS_COLUMN_WIDTH - 2) << game->players[i]->getElixirs();
 		}
 		SetConsoleTextAttribute(hConsole, 15); // reset to White
-		cout << left << "| " << setw(STATS_COLUMN_WIDTH - 2) << game->players[i]->getBonusArmies();
-		cout << left << "| " << setw(STATS_COLUMN_WIDTH - 2) << game->players[i]->getBonusMoves();
+		cout << left << "| " << setw(STATS_COLUMN_WIDTH - 2) << game->players[i]->GetBonusArmies();
+		cout << left << "| " << setw(STATS_COLUMN_WIDTH - 2) << game->players[i]->GetBonusMoves();
 
 		if (game->players[i]->getBonusForFlying()) {
 			cout << left << "| ";
 			SetConsoleTextAttribute(hConsole, 10); // Set colour to green if player gets bonus VP for flying
-			cout << setw(STATS_COLUMN_WIDTH - 2) << game->players[i]->getBonusFlying();
+			cout << setw(STATS_COLUMN_WIDTH - 2) << game->players[i]->GetBonusFlying();
 			SetConsoleTextAttribute(hConsole, 15); // reset to White
 		}
 		else {
-			cout << left << "| " << setw(STATS_COLUMN_WIDTH - 2) << game->players[i]->getBonusFlying();
+			cout << left << "| " << setw(STATS_COLUMN_WIDTH - 2) << game->players[i]->GetBonusFlying();
 		}
-		cout << left << "| " << setw(STATS_COLUMN_WIDTH - 2) << game->players[i]->getBonusImmune();
+		cout << left << "| " << setw(STATS_COLUMN_WIDTH - 2) << game->players[i]->GetBonusImmune();
 		cout << left << "| " << setw(STATS_COLUMN_WIDTH - 2) << game->players[i]->getCardScore();
 		cout << left << "| " << setw(STATS_COLUMN_WIDTH - 2) << game->players[i]->getTotalScore();
 
