@@ -100,8 +100,25 @@ vector<int> HumanPlayer::DestroyArmy() {
 	Territory* battlefieldTerr = nullptr;
 	vector<int> choices;
 	bool found = false;
-	cin >> battlefieldTerrId;
-	battlefieldTerr = MasterGame->map->GetTerritory(battlefieldTerrId);
+	bool validInput = false;
+	while (validInput == false) {
+		cin >> battlefieldTerrId;
+		if (cin.fail()) {
+			cout << "Please input a number" << endl;
+			// Clear the CIN buffer
+			cin.clear();
+			cin.ignore(INT_MAX, '\n');
+			continue;
+		}
+		if (battlefieldTerrId == -1) {
+			break;
+		}
+		battlefieldTerr = MasterGame->map->GetTerritory(battlefieldTerrId);
+		if (battlefieldTerr == nullptr) {
+			continue;
+		}
+		validInput = true;
+	}
 	if (count >= 5)
 		battlefieldTerrId = -1;
 	if (GetPlayer()->HasSkipped(battlefieldTerrId)) return choices;							// Check if player skipped
@@ -114,7 +131,23 @@ vector<int> HumanPlayer::DestroyArmy() {
 	for (int i = 0; i <  battlefieldTerr->army_count.size(); i++)
 		cout << MasterGame->players[i]->GetLastName() << " at pos " << MasterGame->players[i]->GetPosition() << " has " << battlefieldTerr->army_count[i] << " armies at your location" << endl;
 	cout << GetPlayer()->GetLastName() << " - DESTROY WHOM (-1 to skip): ";
-	cin >> enemy;
+
+	validInput = false;
+	while (validInput == false) {
+		cin >> enemy;
+		if (cin.fail()) {
+			cout << "Please input a number" << endl;
+			// Clear the CIN buffer
+			cin.clear();
+			cin.ignore(INT_MAX, '\n');
+			continue;
+		}
+		if (enemy < -1 || enemy >= MasterGame->players.size()) {
+			cout << "The selected player does not exist" << endl;
+			continue;
+		}
+		validInput = true;
+	}
 	choices.push_back(battlefieldTerrId);
 	choices.push_back(enemy);
 	return choices;

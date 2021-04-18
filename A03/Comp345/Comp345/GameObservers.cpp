@@ -105,10 +105,10 @@ void GameStateView::Display() {
 		cout << left;
 		if (game->players[i]->getBonusForCoins()) {
 			cout << "| ";
-			cout << setw(STATS_COLUMN_WIDTH - 2) << to_string(game->players[i]->getCoins()) + "*";
+			cout << setw(STATS_COLUMN_WIDTH - 2) << to_string(game->players[i]->GetCoins()) + "*";
 		}
 		else {
-			cout << "| " << setw(STATS_COLUMN_WIDTH - 2) << game->players[i]->getCoins();
+			cout << "| " << setw(STATS_COLUMN_WIDTH - 2) << game->players[i]->GetCoins();
 		}
 		cout << "| " << setw(STATS_COLUMN_WIDTH - 2) << game->players[i]->getTerritoryScore();
 		cout << "| " << setw(STATS_COLUMN_WIDTH - 2) << game->players[i]->getContinentScore();
@@ -120,17 +120,17 @@ void GameStateView::Display() {
 			cout << "| ";
 			cout << setw(STATS_COLUMN_WIDTH - 2) << game->players[i]->getElixirs();
 		}
-		cout << "| " << setw(STATS_COLUMN_WIDTH - 2) << game->players[i]->getBonusArmies();
-		cout << "| " << setw(STATS_COLUMN_WIDTH - 2) << game->players[i]->getBonusMoves();
+		cout << "| " << setw(STATS_COLUMN_WIDTH - 2) << game->players[i]->GetBonusArmies();
+		cout << "| " << setw(STATS_COLUMN_WIDTH - 2) << game->players[i]->GetBonusMoves();
 
 		if (game->players[i]->getBonusForFlying()) {
 			cout << "| ";
-			cout << setw(STATS_COLUMN_WIDTH - 2) << to_string(game->players[i]->getBonusFlying()) + "*";
+			cout << setw(STATS_COLUMN_WIDTH - 2) << to_string(game->players[i]->GetBonusFlying()) + "*";
 		}
 		else {
-			cout << "| " << setw(STATS_COLUMN_WIDTH - 2) << game->players[i]->getBonusFlying();
+			cout << "| " << setw(STATS_COLUMN_WIDTH - 2) << game->players[i]->GetBonusFlying();
 		}
-		cout << "| " << setw(STATS_COLUMN_WIDTH - 2) << game->players[i]->getBonusImmune();
+		cout << "| " << setw(STATS_COLUMN_WIDTH - 2) << game->players[i]->GetBonusImmune();
 		cout << "| " << setw(STATS_COLUMN_WIDTH - 2) << game->players[i]->getCardScore();
 		cout << "| " << setw(STATS_COLUMN_WIDTH - 2) << game->players[i]->getTotalScore();
 
@@ -436,8 +436,8 @@ void PlayerStateView::Display()
 		cout << endl << "+========================================+" << endl;
 		cout << "  ROUND #" << game->currentTurn << ": It's " << currentPlayer->GetLastName() << "'s turn" << endl;
 		cout << "+========================================+" << endl;
-		if (currentPlayer->getHand().size() == game->currentTurn && currentPlayer->getHand().size() != 0) {
-			cout << "  - Selects '" << currentPlayer->getHand()[game->currentTurn-1]->name << "' card" << endl;
+		if (currentPlayer->GetHand().size() == game->currentTurn && currentPlayer->GetHand().size() != 0) {
+			cout << "  - Selects '" << currentPlayer->GetHand()[game->currentTurn-1]->name << "' card" << endl;
 			for (int i = 0; i < currentPlayer->actions.size(); i++) {
 				cout << currentPlayer->actions[i] << endl;
 			}
