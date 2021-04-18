@@ -114,10 +114,6 @@ void Game::MainLoop() {
 
 // Determine and output the winner of the game
 void Game::GetWinner() {
-	cout << endl;
-	cout << "#----------------------------------#" << endl;
-	cout << "#  GAME OVER - CALCULATING SCORES  #" << endl;
-	cout << "#----------------------------------#" << endl;
 	//Compute the final scores for each player
 	int* scores = new int[playerCount];
 	for (int i = 0; i < playerCount; i++) {
@@ -128,7 +124,7 @@ void Game::GetWinner() {
 	int max_score = -1;
 	string tiebreaker = "";
 	bool tie_after_tiebreakers = false;
-	cout << "Calculating winner and processing tiebreakers: " << endl;
+
 	for (int i = 0; i < playerCount; i++) {
 		if (scores[i] > max_score) {
 			winner_index = i;
@@ -137,7 +133,6 @@ void Game::GetWinner() {
 		}
 		//In the event that two players are tied, proceed to tiebreakers:
 		else if (scores[i] == max_score) {
-			cout << "Players " << winner_index << " and " << i << " are tied. Proceeding to tiebreakers..." << endl;
 			//Tiebreaker 1: player with the most coins
 			tiebreaker = "have the most coins.";
 			if (players[i]->getCoins() > players[winner_index]->getCoins())
@@ -157,27 +152,17 @@ void Game::GetWinner() {
 					}
 				}
 			}
-			//Print the result of the tiebreaker
-			if (tie_after_tiebreakers) {
-				cout << "Players " << players[winner_index]->GetLastName() << " and " << players[i]->GetLastName() << " are still tied after tiebreakers." << endl;
-			}
-			else {
-				cout << "Player " << players[winner_index]->GetLastName() << " wins the tiebreaker because they " << tiebreaker << endl;
-			}
 		}
 	}
-	cout << endl;
-	cout << "#----------------------------------#" << endl;
-	cout << "#           FINAL RESULT           #" << endl;
-	cout << "#----------------------------------#" << endl;
 	if (tie_after_tiebreakers) {
-		cout << "The final score is a tie!" << endl;
+		winnerIndex = -1;
 	}
 	else {
-		cout << "And the winner is... Player " << players[winner_index]->GetLastName() << "!" << endl;
+		winnerIndex = winner_index;
 	}
-
+	gameOver = true;
 	delete[] scores;
+	map->Notify();
 }
 
 void Game::PlayerTurn(Player* player) {

@@ -48,3 +48,5 @@ public:
 private:
 	Game* game;
 };
+
+void ClearScreen();
