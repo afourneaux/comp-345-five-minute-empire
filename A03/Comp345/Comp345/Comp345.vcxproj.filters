@@ -31,13 +31,13 @@
     <ClCompile Include="Setup.cpp">
       <Filter>Source Files</Filter>
     </ClCompile>
-    <ClCompile Include="ModeratePlayer.cpp">
+    <ClCompile Include="GreedyPlayer.cpp">
       <Filter>Source Files\Players</Filter>
     </ClCompile>
     <ClCompile Include="HumanPlayer.cpp">
       <Filter>Source Files\Players</Filter>
     </ClCompile>
-    <ClCompile Include="GreedyPlayer.cpp">
+    <ClCompile Include="ModeratePlayer.cpp">
       <Filter>Source Files\Players</Filter>
     </ClCompile>
   </ItemGroup>
@@ -69,10 +69,10 @@
     <ClInclude Include="GreedyPlayer.h">
       <Filter>Header Files\Players</Filter>
     </ClInclude>
-    <ClInclude Include="HumanPlayer.h">
+    <ClInclude Include="ModeratePlayer.h">
       <Filter>Header Files\Players</Filter>
     </ClInclude>
-    <ClInclude Include="ModeratePlayer.h">
+    <ClInclude Include="HumanPlayer.h">
       <Filter>Header Files\Players</Filter>
     </ClInclude>
   </ItemGroup>
