@@ -151,9 +151,9 @@ void Map::AddEdge(int origin, int destination) {
 	if (territories[origin].continentID != territories[destination].continentID) edgeCost = WATER_MOVEMENT_COST;
 	//Add edge (in both directions)
 	territories[origin].head = new Edge{ GetTerritory(destination), edgeCost, territories[origin].head };
-	territories[origin].edgeStrLength += to_string(destination).length() + 1;
+	territories[origin].edgeStrLength += to_string(destination).length() + (edgeCost == 1 ? 1 : 2);
 	territories[destination].head = new Edge{ GetTerritory(origin), edgeCost, territories[destination].head };
-	territories[destination].edgeStrLength += to_string(origin).length() + 1;
+	territories[destination].edgeStrLength += to_string(origin).length() + (edgeCost==1 ? 1 : 2);
 }
 
 
