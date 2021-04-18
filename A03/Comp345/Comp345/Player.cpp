@@ -117,6 +117,8 @@ int Player::PlaceNewArmies() {
 		if (!HasArmiesToPlace()) {
 			cout << "SORRY, cannot perform action (No armies to place) " << endl;
 			PrintPlacedArmies();
+			actions.push_back("- Player wanted to place an army, but has no armies to place.");
+			Notify();
 			return COST_ONE_ACTIONVALUE;
 		}
 		cout << "Here are VALID inputs: " << endl;
@@ -125,12 +127,19 @@ int Player::PlaceNewArmies() {
 		cube = GetRandomArmy();
 		cout << lastName << " - PLACE NEW ARMY (-1 to skip): " ;
 		cin >> dest;
-		if (HasSkipped(dest)) return COST_ONE_ACTIONVALUE;
+		if (HasSkipped(dest))
+		{
+			actions.push_back("- Player skips, did not place an army");
+			Notify();
+			return COST_ONE_ACTIONVALUE;
+		}
 		if (GetTerritory(dest) == nullptr) continue;
 		destination = GetTerritory(dest);
 		if (dest == MasterGame->map->starting_territory_index || destination->city_count[position] > 0) {		
 			destination = GetTerritory(dest);	
-			AddArmy(destination, cube);				
+			AddArmy(destination, cube);
+			actions.push_back("- Places army in territory " + to_string(dest));
+			Notify();
 			return COST_ONE_ACTIONVALUE;
 		}
 		else {									
@@ -168,6 +177,8 @@ int Player::MoveArmies(int numOfMoves) {
 	if (!HasArmiesOnBoard()) {
 		cout << "SORRY, cannot perform action (No armies to move)" << endl;
 		PrintPlacedArmies();
+		actions.push_back("- Player wanted to move an army, but has no armies to move.");
+		Notify();
 		return COST_ONE_ACTIONVALUE;
 	}
 	while (true) {
@@ -175,7 +186,11 @@ int Player::MoveArmies(int numOfMoves) {
 		PrintPlacedArmies();
 		cout << lastName << " - MOVE FROM (-1 to skip): ";
 		cin >> src;
-		if (HasSkipped(src)) return COST_ONE_ACTIONVALUE;
+		if (HasSkipped(src)) {
+			actions.push_back("- Player skips, did not move armies");
+			Notify();
+			return COST_ONE_ACTIONVALUE;
+		}
 		if (!HasArmyAtLocation(src)) {
 			cout << endl << "WARNING - You do not have any armies at territory ID: " << src << endl;
 			continue;
@@ -193,7 +208,12 @@ int Player::MoveArmies(int numOfMoves) {
 
 		cout << lastName << " - MOVE TO (-1 to skip): ";
 		cin >> dest;
-		if (HasSkipped(dest)) return COST_ONE_ACTIONVALUE;
+		if (HasSkipped(dest))
+		{
+			actions.push_back("- Player skips, did not move armies");
+			Notify();
+			return COST_ONE_ACTIONVALUE;
+		}
 		if (GetTerritory(dest) == nullptr) continue;
 		Territory* destination = GetTerritory(dest);
 		Cube* srcArmy = GetArmyAtLocation(src);
@@ -215,6 +235,8 @@ int Player::MoveArmies(int numOfMoves) {
 					if (territories[i] == source && source->army_count[position] == 0 && source->city_count[position] == 0)
 						territories.erase(territories.begin() + i);
 				}
+				actions.push_back("- Moves army from territory " + to_string(src) + " to territory " + to_string(dest));
+				Notify();
 				return movementCost;
 			}
 			else {
@@ -262,10 +284,16 @@ int Player::BuildCity() {
 		PrintPlacedArmies();
 		cout << lastName << " - BUILD CITY AT (-1 to skip): " << endl;
 		cin >> dest;
-		if (HasSkipped(dest)) return COST_ONE_ACTIONVALUE;
+		if (HasSkipped(dest)) {
+			actions.push_back("- Player skips, did not build a city");
+			Notify();
+			return COST_ONE_ACTIONVALUE;
+		}
 		if (GetTerritory(dest) == nullptr) continue;
 		if (HasArmyAtLocation(dest)) {
 			AddCity(GetTerritory(dest));
+			actions.push_back("- Builds city in territory " + to_string(dest));
+			Notify();
 			return COST_ONE_ACTIONVALUE;
 		}
 		else
@@ -279,6 +307,8 @@ int Player::DestroyArmy() {//Checks if friendly & enemy in same location -> Retu
 	if (!HasArmiesOnBoard()) {
 		cout << "Attacking with no armies... Pathetic..." << endl;
 		PrintPlacedArmies();
+		actions.push_back("- Player wanted to attack, but has no armies");
+		Notify();
 		return COST_ZERO_ACTIONVALUE;
 	}
 	while (true) {
@@ -286,7 +316,11 @@ int Player::DestroyArmy() {//Checks if friendly & enemy in same location -> Retu
 		PrintPlacedArmies();
 		cout << lastName << " - DESTROY AT (-1 to skip)? ";
 		cin >> battlefieldTerrId;
-		if (HasSkipped(battlefieldTerrId)) return COST_ONE_ACTIONVALUE;
+		if (HasSkipped(battlefieldTerrId)) {
+			actions.push_back("- Player skips, did not attack anyone");
+			Notify();
+			return COST_ONE_ACTIONVALUE;
+		}
 		if (GetTerritory(battlefieldTerrId) == nullptr) continue;
 		if (!HasArmyAtLocation(battlefieldTerrId)) {
 			cout << endl << "There is nobody at " << battlefieldTerrId << "to fight for you! Think again." << endl;
@@ -315,8 +349,10 @@ int Player::DestroyArmy() {//Checks if friendly & enemy in same location -> Retu
 			continue;
 		}
 		MasterGame->players[enemy]->RemoveArmy(battlefieldTerr); // Destroying Army
-		cout << "BANG BANG. You shot him down, BANG BANG. " << MasterGame->players[enemy]->lastName << " hit the gound. BANG bang ...(at territory id " << battlefieldTerrId << ") That awful sound.." << endl;
+		cout << "BANG BANG. You shot him down, BANG BANG. " << MasterGame->players[enemy]->lastName << " hit the ground. BANG bang ...(at territory id " << battlefieldTerrId << ") That awful sound.." << endl;
 		MasterGame->players[enemy]->PrintPlayerStatus();
+		actions.push_back("- Destroys army of player " + MasterGame->players[enemy]->lastName + " at territory " + to_string(battlefieldTerrId));
+		Notify();
 		return COST_ONE_ACTIONVALUE;
 	}
 }
@@ -327,6 +363,7 @@ void Player::DoAction(Card* card) {
 	bool hasActed = false;
 	int possibleActions = 0, cost = 0, receivedCoins = 0;
 	hand.push_back(card);						// puts drawn card in the hand of player
+	Notify();
 	//update player with relevant card bonuses
 	for (int i = 0; i < card->abilityCount; i++) {
 		switch (card->abilities[i].type) {

@@ -19,7 +19,7 @@ class Deck;
 class Hand;
 class Map;
 
-class Game {
+class Game : public Subject{
 public:
 	void Setup();						// Get number of players, perform bidding, distribute tokens, generate deck
 	void Startup();						// Perform initial board setup
@@ -34,10 +34,13 @@ public:
 	Hand* GetHand();
 	int playerCount;
 	int maxPlayerNameLength = 0;
+	int currentPlayer = -1;
+	int getCurrentTurn() { return currentTurn; };
 private:
 	Deck* deck;
 	Hand* hand;
 	int gameTurns;
+	int currentTurn;
 };
 
 extern Game* MasterGame;

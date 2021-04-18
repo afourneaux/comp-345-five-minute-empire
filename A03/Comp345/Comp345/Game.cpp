@@ -27,8 +27,16 @@ void Game::Setup() {
 	cout << "      INFORMATION ABOUT PLAYERS" << endl;
 	cout << "X X X X X X X X X X X X X X X X X X X\n" << endl;
 
+	//Register playerstateview with map and players
+	PlayerStateView* playerStateView = new PlayerStateView(this);
+	Attach(playerStateView);
+
 	for (int i = 0; i < playerCount; i++) {
 		cout << *players[i];
+		//Register gamestateview with players
+		players[i]->Attach(gameStateView);
+		//Register playerstateview with players
+		players[i]->Attach(playerStateView);
 	}
 	if (playerCount == 2) {
 		gameTurns = GAME_TURNS_2_PLAYERS;
@@ -86,9 +94,11 @@ void Game::MainLoop() {
 		cout << "XXXXXXXXXXXX" << endl;
 		cout << "BEGIN ROUND " << turn + 1 << endl;
 		cout << "XXXXXXXXXXXX" << endl;
+		currentTurn = turn + 1;
 		// Run through each player's turn
 		for (int currentPlayer = startingPlayer; currentPlayer < playerCount + startingPlayer; currentPlayer++) {
 			PlayerTurn(players.at(currentPlayer % playerCount));
+			Notify();
 		}
 	}
 }
@@ -217,6 +227,7 @@ void Game::PlayerTurn(Player* player) {
 	// Pay for the card
 	player->PayCoin(hand->GetCostAtIndex(desiredCardIndex));
 	Card* card = hand->Exchange(desiredCardIndex);
+	Notify();
 	cout << *card;
 	player->DoAction(card);
 	player->PrintPlayerStatus();

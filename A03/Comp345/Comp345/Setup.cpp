@@ -48,7 +48,7 @@ void SetupObj::MakePlayers() {
 		cout << "Enter the name of Player " << i + 1 << ": ";
 		cin >> playerName;
 		player->SetLastName(playerName);
-		if (playerName.length() > MasterGame->maxPlayerNameLength) MasterGame->maxPlayerNameLength = playerName.length();
+		if (playerName.length() > MasterGame->maxPlayerNameLength) MasterGame->maxPlayerNameLength = playerName.length(); // length of playerName
 		player->setPosition(i);
 		MasterGame->players.push_back(player);
 	}

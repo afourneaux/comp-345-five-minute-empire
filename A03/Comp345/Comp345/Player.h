@@ -63,6 +63,7 @@ public:
 	void PrintPlacedArmies();
 	void AddCardToHand(Card* card);
 
+
 	//Accessors
 	string GetLastName() const { return lastName; };
 	void SetLastName(string last) { lastName = last; };
@@ -79,6 +80,8 @@ public:
 	void setPosition(int pos) { position = pos; };
 
 	bool neutralPlayer = false;
+
+	vector<string> actions; // compilation of actions taken by a player
 private:
 	string lastName;
 	vector<Territory*> territories;
