@@ -1,10 +1,11 @@
 #include <iostream>
 #include <algorithm>
 #include <iomanip>
-#include <Windows.h>
 #include "GameObservers.h"
 #include "Game.h"
-#include<sstream>
+#include <sstream>
+
+using namespace std;
 
 Observer::Observer() {};
 Observer::~Observer() {};
@@ -54,8 +55,7 @@ void GameStateView::Display() {
 		game->players[i]->ComputeScore();
 	}
 
-	system("CLS");
-	HANDLE hConsole = GetStdHandle(STD_OUTPUT_HANDLE);
+	ClearScreen();
 	int maxLength = max(game->maxPlayerNameLength + 5, 16);
 	cout << setiosflags(ios::left);
 
@@ -66,10 +66,7 @@ void GameStateView::Display() {
 	cout << '+' << setfill(' ') << endl;
 	cout << setw(maxLength) << "| PLAYER STATS";
 	cout << '|';
-	cout << " Special bonuses are displayed in ";
-	SetConsoleTextAttribute(hConsole, 10); // Set colour to green 
-	cout << "green" << endl;
-	SetConsoleTextAttribute(hConsole, 15); // Set colour to  white
+	cout << " Special bonuses are indicated with *." << endl;
 	//Print horizontal divider
 	cout << '+' << setfill('=') << setw(maxLength-1) << "=";
 	for (int i = 0; i < STATS_COLUMN_COUNT; i++) {
@@ -78,18 +75,18 @@ void GameStateView::Display() {
 	}
 	cout << "+" << setfill(' ') << endl;
 	//Print headers
-	cout << left << setw(maxLength) << "| Player";
-	cout << left << "| " << setw(STATS_COLUMN_WIDTH - 2) << "Coins";
-	cout << left << "| " << setw(STATS_COLUMN_WIDTH - 2) << "# Territories";
-	cout << left << "| " << setw(STATS_COLUMN_WIDTH - 2) << "# Continents";
-	cout << left << "| " << setw(STATS_COLUMN_WIDTH - 2) << "# Elixirs";
-	cout << left << "| " << setw(STATS_COLUMN_WIDTH - 2) << "Army Bonus";
-	cout << left << "| " << setw(STATS_COLUMN_WIDTH - 2) << "Move Bonus";
-	cout << left << "| " << setw(STATS_COLUMN_WIDTH - 2) << "Flying Bonus";
-	cout << left << "| " << setw(STATS_COLUMN_WIDTH - 2) << "Immune";
-	cout << left << "| " << setw(STATS_COLUMN_WIDTH - 2) << "Card VPs";
-	cout << left << "| " << setw(STATS_COLUMN_WIDTH - 2) << "Total VP";
-	cout << left << "|" << endl;
+	cout << setw(maxLength) << "| Player";
+	cout << "| " << setw(STATS_COLUMN_WIDTH - 2) << "Coins";
+	cout << "| " << setw(STATS_COLUMN_WIDTH - 2) << "# Territories";
+	cout << "| " << setw(STATS_COLUMN_WIDTH - 2) << "# Continents";
+	cout << "| " << setw(STATS_COLUMN_WIDTH - 2) << "# Elixirs";
+	cout << "| " << setw(STATS_COLUMN_WIDTH - 2) << "Army Bonus";
+	cout << "| " << setw(STATS_COLUMN_WIDTH - 2) << "Move Bonus";
+	cout << "| " << setw(STATS_COLUMN_WIDTH - 2) << "Flying Bonus";
+	cout << "| " << setw(STATS_COLUMN_WIDTH - 2) << "Immune";
+	cout << "| " << setw(STATS_COLUMN_WIDTH - 2) << "Card VPs";
+	cout << "| " << setw(STATS_COLUMN_WIDTH - 2) << "Total VP";
+	cout << "|" << endl;
 	//Print horizontal divider
 	cout << '+' << setfill('=') << setw(maxLength-1) << "=";
 	for (int i = 0; i < STATS_COLUMN_COUNT; i++) {
@@ -101,49 +98,41 @@ void GameStateView::Display() {
 	//Print player rows: player name + game stats
 	for (int i = 0; i < game->players.size(); i++) {
 		if (game->currentPlayer == i) {
-			SetConsoleTextAttribute(hConsole, 14);
 			cout << '|' << right << setw(maxLength - 1) << ("-> " + game->players[i]->GetLastName() + " ");
-			SetConsoleTextAttribute(hConsole, 15);
 		}
 		else
 			cout << '|' << right << setw(maxLength - 1) << (game->players[i]->GetLastName() + " ");
+		cout << left;
 		if (game->players[i]->getBonusForCoins()) {
-			cout << left << "| ";
-			SetConsoleTextAttribute(hConsole, 10); // Set colour to green if player gets bonus VP for coins
-			cout << setw(STATS_COLUMN_WIDTH - 2) << game->players[i]->GetCoins();
-			SetConsoleTextAttribute(hConsole, 15); // reset to White
+			cout << "| ";
+			cout << setw(STATS_COLUMN_WIDTH - 2) << to_string(game->players[i]->getCoins()) + "*";
 		}
 		else {
-			cout << left << "| " << setw(STATS_COLUMN_WIDTH - 2) << game->players[i]->GetCoins();
+			cout << "| " << setw(STATS_COLUMN_WIDTH - 2) << game->players[i]->getCoins();
 		}
-		cout << left << "| " << setw(STATS_COLUMN_WIDTH - 2) << game->players[i]->getTerritoryScore();
-		cout << left << "| " << setw(STATS_COLUMN_WIDTH - 2) << game->players[i]->getContinentScore();
+		cout << "| " << setw(STATS_COLUMN_WIDTH - 2) << game->players[i]->getTerritoryScore();
+		cout << "| " << setw(STATS_COLUMN_WIDTH - 2) << game->players[i]->getContinentScore();
 		if (game->players[i]->getElixirWinner()) {
-			cout << left << "| ";
-			SetConsoleTextAttribute(hConsole, 10); // Set colour to green for elixir winner
-			cout << setw(STATS_COLUMN_WIDTH - 2) << game->players[i]->getElixirs();
+			cout << "| ";
+			cout << setw(STATS_COLUMN_WIDTH - 2) << to_string(game->players[i]->getElixirs()) + "*";
 		}
 		else {
-			cout << left << "| ";
-			SetConsoleTextAttribute(hConsole, 12); // Set colour to red for elixir loser
+			cout << "| ";
 			cout << setw(STATS_COLUMN_WIDTH - 2) << game->players[i]->getElixirs();
 		}
-		SetConsoleTextAttribute(hConsole, 15); // reset to White
-		cout << left << "| " << setw(STATS_COLUMN_WIDTH - 2) << game->players[i]->GetBonusArmies();
-		cout << left << "| " << setw(STATS_COLUMN_WIDTH - 2) << game->players[i]->GetBonusMoves();
+		cout << "| " << setw(STATS_COLUMN_WIDTH - 2) << game->players[i]->getBonusArmies();
+		cout << "| " << setw(STATS_COLUMN_WIDTH - 2) << game->players[i]->getBonusMoves();
 
 		if (game->players[i]->getBonusForFlying()) {
-			cout << left << "| ";
-			SetConsoleTextAttribute(hConsole, 10); // Set colour to green if player gets bonus VP for flying
-			cout << setw(STATS_COLUMN_WIDTH - 2) << game->players[i]->GetBonusFlying();
-			SetConsoleTextAttribute(hConsole, 15); // reset to White
+			cout << "| ";
+			cout << setw(STATS_COLUMN_WIDTH - 2) << to_string(game->players[i]->getBonusFlying()) + "*";
 		}
 		else {
-			cout << left << "| " << setw(STATS_COLUMN_WIDTH - 2) << game->players[i]->GetBonusFlying();
+			cout << "| " << setw(STATS_COLUMN_WIDTH - 2) << game->players[i]->getBonusFlying();
 		}
-		cout << left << "| " << setw(STATS_COLUMN_WIDTH - 2) << game->players[i]->GetBonusImmune();
-		cout << left << "| " << setw(STATS_COLUMN_WIDTH - 2) << game->players[i]->getCardScore();
-		cout << left << "| " << setw(STATS_COLUMN_WIDTH - 2) << game->players[i]->getTotalScore();
+		cout << "| " << setw(STATS_COLUMN_WIDTH - 2) << game->players[i]->getBonusImmune();
+		cout << "| " << setw(STATS_COLUMN_WIDTH - 2) << game->players[i]->getCardScore();
+		cout << "| " << setw(STATS_COLUMN_WIDTH - 2) << game->players[i]->getTotalScore();
 
 		cout << "|" << endl;
 	}
@@ -170,11 +159,11 @@ void GameStateView::Display() {
 	}
 	cout << "+" << setfill(' ') << endl;
 	//Print headers
-	cout << left << setw(maxLength) << "| Player";
+	cout << setw(maxLength) << "| Player";
 	for (int i = 0; i < TRACKED_CARD_COUNT; i++) {
-		cout << left << "| " << setw(STATS_COLUMN_WIDTH - 2) << TRACKED_CARD_NAMES[i];
+		cout << "| " << setw(STATS_COLUMN_WIDTH - 2) << TRACKED_CARD_NAMES[i];
 	}
-	cout << left << "|" << endl;
+	cout << "|" << endl;
 	//Print horizontal divider
 	cout << '+' << setfill('=') << setw(maxLength - 1) << "=";
 	for (int i = 0; i < TRACKED_CARD_COUNT; i++) {
@@ -186,21 +175,18 @@ void GameStateView::Display() {
 	//Print player rows: player name + card count by type
 	for (int i = 0; i < game->players.size(); i++) {
 		if (game->currentPlayer == i) {
-			SetConsoleTextAttribute(hConsole, 14);
 			cout << '|' << right << setw(maxLength - 1) << ("-> " + game->players[i]->GetLastName() + " ");
-			SetConsoleTextAttribute(hConsole, 15);
 		}
 		else
 			cout << '|' << right << setw(maxLength - 1) << (game->players[i]->GetLastName() + " ");
+		cout << left;
 		for (int j = 0; j < TRACKED_CARD_COUNT; j++) {
 			if (game->players[i]->bonusForTrackedName[j]) {
-				cout << left << "| ";
-				SetConsoleTextAttribute(hConsole, 10); // Set colour to green if player gets bonus VP for the card type
-				cout<< setw(STATS_COLUMN_WIDTH - 2) << game->players[i]->cardsByTrackedName[j];
-				SetConsoleTextAttribute(hConsole, 15); // reset to white
+				cout << "| ";
+				cout<< setw(STATS_COLUMN_WIDTH - 2) << to_string(game->players[i]->cardsByTrackedName[j]) + "*";
 			}
 			else {
-				cout << left << "| " << setw(STATS_COLUMN_WIDTH - 2) << game->players[i]->cardsByTrackedName[j];
+				cout << "| " << setw(STATS_COLUMN_WIDTH - 2) << game->players[i]->cardsByTrackedName[j];
 			}
 		}
 		cout << "|" << endl;
@@ -229,39 +215,35 @@ void GameStateView::Display() {
 	cout << '+' << setfill(' ') << endl;
 
 	//Print headers row 1: Territory/Continent labels
-	cout << left << setw(maxLength) << "|";
+	cout << setw(maxLength) << "|";
 	for (int i = 0; i < game->map->territory_count; i++) {
 		cout << "| ";
+		string terr;
 		if (game->map->starting_territory_index == i)
-			SetConsoleTextAttribute(hConsole, 14); // Set colour to yellow for starting territory
+			terr = "S-T" + to_string(i) + ", C" + to_string(game->map->territories[i].continentID);
 		else
-			SetConsoleTextAttribute(hConsole, 15); // White otherwise
-		string terr = "T" + to_string(i) + ", C" + to_string(game->map->territories[i].continentID);
-		cout << left << setw(max(MAP_COLUMN_WIDTH - 2, game->map->territories[i].edgeStrLength + 2)) << terr;
+			terr = "T" + to_string(i) + ", C" + to_string(game->map->territories[i].continentID);
+		cout << setw(max(MAP_COLUMN_WIDTH - 2, game->map->territories[i].edgeStrLength + 2)) << terr;
 	}
-	SetConsoleTextAttribute(hConsole, 15);  // Reset console colour
 	cout << '|' << endl;
 
 	//Print headers row 2: Player label + adjacent territories
-	cout << left << setw(maxLength) << "| Player";
+	cout << setw(maxLength) << "| Player";
 	for (int i = 0; i < game->map->territory_count; i++) {
-		cout << left << "|->" ;
+		cout << "|->" ;
 		int connections_str_length = 3;
 		Edge* temp = game->map->territories[i].head;
 		while (temp != nullptr) {
-			//if (connections_str_length > MAP_COLUMN_WIDTH - 2) break;
-
+			string conn;
 			if (temp->movement_cost == game->map->WATER_MOVEMENT_COST)
-				SetConsoleTextAttribute(hConsole, 11); // set output colour to cyan if water connection
-			else 
-				SetConsoleTextAttribute(hConsole, 15); // White otherwise
-			string conn = to_string(temp->destination_territory->territoryID) + " ";
-			cout << left << conn;
+				conn = to_string(temp->destination_territory->territoryID) + "W ";
+			else
+				conn = to_string(temp->destination_territory->territoryID) + " ";
+			cout << conn;
 			connections_str_length += conn.length();
 			temp = temp->next;
 		}
-		cout << left << setw(MAP_COLUMN_WIDTH - connections_str_length) << " ";
-		SetConsoleTextAttribute(hConsole, 15);
+		cout << setw(MAP_COLUMN_WIDTH - connections_str_length) << " ";
 	}
 	cout << '|' << endl;
 
@@ -276,20 +258,18 @@ void GameStateView::Display() {
 	//Print player rows: player name + city/army count per territory
 	for (int i = 0; i < MasterGame->players.size(); i++) {
 		if (game->currentPlayer == i) {
-			SetConsoleTextAttribute(hConsole, 14);
 			cout << '|' << right << setw(maxLength - 1) << ("-> " + game->players[i]->GetLastName() + " ");
-			SetConsoleTextAttribute(hConsole, 15);
 		}
 		else
 			cout << '|' << right << setw(maxLength - 1) << (game->players[i]->GetLastName() + " ");
+		cout << left;
 		for (int j = 0; j < game->map->territory_count; j++) {
-			cout << "| ";
+			cout << "|";
 			if (game->map->territories[j].controlling_player == i)
-				SetConsoleTextAttribute(hConsole, 10); // Set console colour to green for controlling player
+				cout << "*";
 			else
-				SetConsoleTextAttribute(hConsole, 12); // Set console colour to red for non-controlling player
+				cout <<" ";
 			string barGraph = "";
-			cout << setw(10);
 			for (int k = 0; k < game->map->territories[j].city_count[i]; k++)
 				barGraph.append("C");
 			//If the player has a lot of armies render compact version to avoid breaking columns alignment
@@ -301,8 +281,7 @@ void GameStateView::Display() {
 					barGraph.append("A");
 			}
 			
-			cout << left << setw(max(MAP_COLUMN_WIDTH - 2, game->map->territories[j].edgeStrLength + 2)) << barGraph;
-			SetConsoleTextAttribute(hConsole, 15); // Reset console colour
+			cout << setw(max(MAP_COLUMN_WIDTH - 2, game->map->territories[j].edgeStrLength + 2)) << barGraph;
 		}
 		cout << '|' << endl;
 	}
@@ -316,89 +295,153 @@ void GameStateView::Display() {
 	cout << '+' << setfill(' ') << endl;
 
 	//////////////////////////////////////////////////
-	// PART 4: RENDER DRAFTABLE CARDS 
+	// PART 4A: PRINT WINNER IF GAME IS OVER
 	//////////////////////////////////////////////////
-	int handSize = game->GetHand()->GetSize();
-	cout << '+' << setfill('=') << setw(CARD_WIDTH - 1) << "=";
-	cout << '+' << setfill(' ') << endl;
-	cout << '|' << setw(CARD_WIDTH - 1) << " AVAILABLE CARDS";
-	cout << '|' << endl;
+	if (game->gameOver) {
+		cout << "===============================" << endl << endl;;
+		cout << "The game is over!" << endl << endl;
+		if (game->winnerIndex == -1) {
+			cout << "It's a tie!" << endl;
+		}
+		else {
+			cout << "The winner is... " << game->players[game->winnerIndex]->GetLastName() << "!" << endl;
+		}
+		cout << endl;
+		cout << "===============================" << endl;
+	}
+	//////////////////////////////////////////////////
+	// PART 4B: RENDER DRAFTABLE CARDS 
+	//////////////////////////////////////////////////
+	else {
+	
+		int handSize = game->GetHand()->GetSize();
+		cout << '+' << setfill('=') << setw(CARD_WIDTH - 1) << "=";
+		cout << '+' << setfill(' ') << endl;
+		cout << '|' << setw(CARD_WIDTH - 1) << " AVAILABLE CARDS";
+		cout << '|' << endl;
 
-	//Print horizontal divider
-	for (int i = 0; i < handSize; i++) {
-		cout << '+';
-		cout << setfill('=') << setw(CARD_WIDTH - 1) << "=";
-	}
-	cout << "+" << setfill(' ') << endl;
-	//Print card index and cost
-	for (int i = 0; i < handSize; i++) {
-		cout << left << setw(5) << ("| [" + to_string(i) + "]");
-		cout << right << setw(CARD_WIDTH - 5) << ("Cost: " + to_string(game->GetHand()->GetCostAtIndex(i)) + " ");
-	}
-	cout << "|" << endl;
-	//Print card name
-	for (int i = 0; i < handSize; i++) {
-		cout << left << setw(CARD_WIDTH) << "| " + game->GetHand()->GetCardAtIndex(i)->name;
-	}
-	cout << "|" << endl;
-	//Print horizontal divider
-	for (int i = 0; i < handSize; i++) {
-		cout << '+';
-		cout << setfill('=') << setw(CARD_WIDTH - 1) << "=";
-	}
-	cout << "+" << setfill(' ') << endl;
-	
-	stringstream ss;
-	//Print card abilities
-	for (int i = 0; i < handSize; i++) {
-		cout << "| " << left << setw(CARD_WIDTH - 2);
-		for (int j = 0; j < game->GetHand()->GetCardAtIndex(i)->abilityCount; j++) {
-			ss << game->GetHand()->GetCardAtIndex(i)->abilities[j];
-			if (j < game->GetHand()->GetCardAtIndex(i)->abilityCount - 1)
-				ss << ", ";
+		//Print horizontal divider
+		for (int i = 0; i < handSize; i++) {
+			cout << '+';
+			cout << setfill('=') << setw(CARD_WIDTH - 1) << "=";
 		}
-		cout << ss.str();
-		ss.str("");
-	}
-	cout << "|" << endl;
-	//Print first card action
-	for (int i = 0; i < handSize; i++) {
-		cout << "| " << left << setw(CARD_WIDTH - 2);
-		ss << game->GetHand()->GetCardAtIndex(i)->actions[0];
-		cout << ss.str();
-		ss.str("");
+		cout << "+" << setfill(' ') << endl;
+		//Print card index and cost
+		for (int i = 0; i < handSize; i++) {
+			cout << setw(5) << ("| [" + to_string(i) + "]");
+			cout << right << setw(CARD_WIDTH - 5) << ("Cost: " + to_string(game->GetHand()->GetCostAtIndex(i)) + " ");
+		}
+		cout << left << "|" << endl;
+		//Print card name
+		for (int i = 0; i < handSize; i++) {
+			cout << setw(CARD_WIDTH) << "| " + game->GetHand()->GetCardAtIndex(i)->name;
+		}
+		cout << "|" << endl;
+		//Print horizontal divider
+		for (int i = 0; i < handSize; i++) {
+			cout << '+';
+			cout << setfill('=') << setw(CARD_WIDTH - 1) << "=";
+		}
+		cout << "+" << setfill(' ') << endl;
+
+		stringstream ss;
+		//Print card abilities
+		for (int i = 0; i < handSize; i++) {
+			cout << "| " << setw(CARD_WIDTH - 2);
+			for (int j = 0; j < game->GetHand()->GetCardAtIndex(i)->abilityCount; j++) {
+				ss << game->GetHand()->GetCardAtIndex(i)->abilities[j];
+				if (j < game->GetHand()->GetCardAtIndex(i)->abilityCount - 1)
+					ss << ", ";
+			}
+			cout << ss.str();
+			ss.str("");
+		}
+		cout << "|" << endl;
+		//Print first card action
+		for (int i = 0; i < handSize; i++) {
+			cout << "| " << left << setw(CARD_WIDTH - 2);
+			ss << game->GetHand()->GetCardAtIndex(i)->actions[0];
+			cout << ss.str();
+			ss.str("");
+		}
+
+		cout << "|" << endl;
+		//Print card and/or modifier if applicable
+		for (int i = 0; i < handSize; i++) {
+			cout << "| " << left << setw(CARD_WIDTH - 2);
+			if (game->GetHand()->GetCardAtIndex(i)->actionCount > 1) {
+				if (game->GetHand()->GetCardAtIndex(i)->actionChoice == eChoice_And)
+					cout << "AND";
+				else if (game->GetHand()->GetCardAtIndex(i)->actionChoice == eChoice_Or)
+					cout << "OR";
+			}
+			else
+				cout << " ";
+		}
+		cout << "|" << endl;
+		//Print card action 2 if applicable
+		for (int i = 0; i < handSize; i++) {
+			cout << "| " << left << setw(CARD_WIDTH - 2);
+			if (game->GetHand()->GetCardAtIndex(i)->actionCount > 1)
+				ss << game->GetHand()->GetCardAtIndex(i)->actions[1];
+			else
+				ss << " ";
+			cout << ss.str();
+			ss.str("");
+		}
+		cout << "|" << endl;
+		//Print horizontal divider
+		for (int i = 0; i < handSize; i++) {
+			cout << '+';
+			cout << setfill('=') << setw(CARD_WIDTH - 1) << "=";
+		}
+		cout << "+" << setfill(' ') << endl;
 	}
 	
-	cout << "|" << endl;
-	//Print card and/or modifier if applicable
-	for (int i = 0; i < handSize; i++) {
-		cout << "| " << left << setw(CARD_WIDTH - 2);
-		if (game->GetHand()->GetCardAtIndex(i)->actionCount > 1) {
-			if (game->GetHand()->GetCardAtIndex(i)->actionChoice == eChoice_And)
-				cout << "AND";
-			else if (game->GetHand()->GetCardAtIndex(i)->actionChoice == eChoice_Or)
-				cout << "OR";
-		}
-		else
-			cout << " ";
-	}
-	cout << "|" << endl;
-	//Print card action 2 if applicable
-	for (int i = 0; i < handSize; i++) {
-		cout << "| " << left << setw(CARD_WIDTH - 2);
-		if (game->GetHand()->GetCardAtIndex(i)->actionCount > 1)
-			ss << game->GetHand()->GetCardAtIndex(i)->actions[1];
-		else
-			ss << " ";
-		cout << ss.str();
-		ss.str("");
-	}
-	cout << "|" << endl;
-	//Print horizontal divider
-	for (int i = 0; i < handSize; i++) {
-		cout << '+';
-		cout << setfill('=') << setw(CARD_WIDTH - 1) << "=";
-	}
-	cout << "+" << setfill(' ') << endl;
 }
 
+void ClearScreen() {
+#ifdef _WIN32
+	system("cls");
+#else
+	system("clear");
+#endif
+}
+
+PlayerStateView::PlayerStateView()
+{
+	game = nullptr;
+}
+
+PlayerStateView::PlayerStateView(Game* game)
+{
+	this->game = game;
+}
+
+PlayerStateView::~PlayerStateView()
+{
+}
+
+void PlayerStateView::Update()
+{
+	Display();
+}
+
+void PlayerStateView::Display()
+{
+	// Clear currentplayer's actions vector at the end of their turn
+	Player* currentPlayer;
+	if (game->currentTurn != 0 && !game->gameOver) {
+		currentPlayer = game->players[game->currentPlayer]; // current player
+		cout << endl << "+========================================+" << endl;
+		cout << "  ROUND #" << game->currentTurn << ": It's " << currentPlayer->GetLastName() << "'s turn" << endl;
+		cout << "+========================================+" << endl;
+		if (currentPlayer->getHand().size() == game->currentTurn && currentPlayer->getHand().size() != 0) {
+			cout << "  - Selects '" << currentPlayer->getHand()[game->currentTurn-1]->name << "' card" << endl;
+			for (int i = 0; i < currentPlayer->actions.size(); i++) {
+				cout << currentPlayer->actions[i] << endl;
+			}
+		}
+		cout << "+========================================+\n" << endl;
+	}
+}

@@ -105,6 +105,8 @@ public:
 	int cardsByTrackedName[TRACKED_CARD_COUNT]{};
 	bool bonusForTrackedName[TRACKED_CARD_COUNT]{};
 	bool neutralPlayer = false;
+
+	vector<string> actions; // compilation of actions taken by a player
 private:
 	string lastName;
 	vector<Territory*> territories;

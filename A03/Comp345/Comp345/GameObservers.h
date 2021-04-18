@@ -37,3 +37,16 @@ private:
 	const int CARD_WIDTH = 25;
 	Game* game;
 };
+
+class PlayerStateView : public Observer {
+public:
+	PlayerStateView();
+	PlayerStateView(Game* game);
+	~PlayerStateView();
+	void Update();
+	void Display();
+private:
+	Game* game;
+};
+
+void ClearScreen();

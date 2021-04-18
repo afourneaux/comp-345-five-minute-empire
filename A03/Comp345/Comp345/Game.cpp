@@ -3,6 +3,7 @@
 #include "MapLoader.h"
 #include "Setup.h"
 #include "GameObservers.h"
+#include <vector>
 
 Game* MasterGame;
 
@@ -20,7 +21,7 @@ void Game::Setup() {
 	delete setupObj;
 
 	//Register gamestateview with map
-	GameStateView *gameStateView = new GameStateView(this);
+	gameStateView = new GameStateView(this);
 	map->Attach(gameStateView);
 	deck = new Deck(playerCount);
 	hand = new Hand(deck);
@@ -31,10 +32,16 @@ void Game::Setup() {
 	cout << "      INFORMATION ABOUT PLAYERS" << endl;
 	cout << "X X X X X X X X X X X X X X X X X X X\n" << endl;
 
+	//Register playerstateview with map and players
+	playerStateView = new PlayerStateView(this);
+	Attach(playerStateView);
+
 	for (int i = 0; i < playerCount; i++) {
 		cout << *players[i];
 		//Register gamestateview with players
 		players[i]->Attach(gameStateView);
+		//Register playerstateview with players
+		players[i]->Attach(playerStateView);
 	}
 	if (playerCount == 2) {
 		gameTurns = GAME_TURNS_2_PLAYERS;
@@ -93,22 +100,20 @@ void Game::MainLoop() {
 	cin.ignore(INT_MAX, '\n');
 	map->Notify();
 	for (int turn = 0; turn < gameTurns; turn++) {
-		cout << "XXXXXXXXXXXX" << endl;
-		cout << "BEGIN ROUND " << turn + 1 << endl;
+		currentTurn = turn + 1;
+		cout << endl << "XXXXXXXXXXXX" << endl;
+		cout << "BEGIN ROUND " << currentTurn << endl;
 		cout << "XXXXXXXXXXXX" << endl;
 		// Run through each player's turn
 		for (int currentPlayer = startingPlayer; currentPlayer < playerCount + startingPlayer; currentPlayer++) {
 			PlayerTurn(players.at(currentPlayer % playerCount));
+			players[currentPlayer % playerCount]->actions.clear();
 		}
 	}
 }
 
 // Determine and output the winner of the game
 void Game::GetWinner() {
-	cout << endl;
-	cout << "#----------------------------------#" << endl;
-	cout << "#  GAME OVER - CALCULATING SCORES  #" << endl;
-	cout << "#----------------------------------#" << endl;
 	//Compute the final scores for each player
 	int* scores = new int[playerCount];
 	for (int i = 0; i < playerCount; i++) {
@@ -119,7 +124,7 @@ void Game::GetWinner() {
 	int max_score = -1;
 	string tiebreaker = "";
 	bool tie_after_tiebreakers = false;
-	cout << "Calculating winner and processing tiebreakers: " << endl;
+
 	for (int i = 0; i < playerCount; i++) {
 		if (scores[i] > max_score) {
 			winner_index = i;
@@ -128,7 +133,6 @@ void Game::GetWinner() {
 		}
 		//In the event that two players are tied, proceed to tiebreakers:
 		else if (scores[i] == max_score) {
-			cout << "Players " << winner_index << " and " << i << " are tied. Proceeding to tiebreakers..." << endl;
 			//Tiebreaker 1: player with the most coins
 			tiebreaker = "have the most coins.";
 			if (players[i]->GetCoins() > players[winner_index]->GetCoins())
@@ -148,27 +152,17 @@ void Game::GetWinner() {
 					}
 				}
 			}
-			//Print the result of the tiebreaker
-			if (tie_after_tiebreakers) {
-				cout << "Players " << players[winner_index]->GetLastName() << " and " << players[i]->GetLastName() << " are still tied after tiebreakers." << endl;
-			}
-			else {
-				cout << "Player " << players[winner_index]->GetLastName() << " wins the tiebreaker because they " << tiebreaker << endl;
-			}
 		}
 	}
-	cout << endl;
-	cout << "#----------------------------------#" << endl;
-	cout << "#           FINAL RESULT           #" << endl;
-	cout << "#----------------------------------#" << endl;
 	if (tie_after_tiebreakers) {
-		cout << "The final score is a tie!" << endl;
+		winnerIndex = -1;
 	}
 	else {
-		cout << "And the winner is... Player " << players[winner_index]->GetLastName() << "!" << endl;
+		winnerIndex = winner_index;
 	}
-
+	gameOver = true;
 	delete[] scores;
+	map->Notify();
 }
 
 void Game::PlayerTurn(Player* player) {
@@ -180,9 +174,9 @@ void Game::PlayerTurn(Player* player) {
 	cin.ignore(INT_MAX, '\n');
 	player->Notify();
 
-	cout << "========================================" << endl;
-	cout << player->GetLastName() << " - It is your turn!" << endl;
-	cout << "========================================" << endl;
+	//cout << "========================================" << endl;
+	//cout << player->GetLastName() << " - It is your turn!" << endl;
+	//cout << "========================================" << endl;
 
 	player->GetStrategy()->SelectCard();
 }
@@ -199,6 +193,8 @@ Game::~Game() {
 		delete players[i];
 	}
 	delete map;
+	delete gameStateView;
+	delete playerStateView;
 }
 
 Hand* Game::GetHand() {
