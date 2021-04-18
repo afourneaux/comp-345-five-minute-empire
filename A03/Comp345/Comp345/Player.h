@@ -5,10 +5,12 @@
 #include "BiddingFacility.h"
 #include "Map.h"
 #include <iostream>
+#include "Strategy.h"
 using namespace std;
 
 const int STARTING_COINS = 14;
 const int STARTING_ARMIES = 18;
+const int STARTING_CITIES = 3;
 const int COST_ONE_ACTIONVALUE = 1;
 const int COST_ZERO_ACTIONVALUE = 0;
 const int COST_THREE_ACTIONVALUE = 3;
@@ -19,6 +21,7 @@ class Map;
 struct Card;
 class BiddingFacility;
 class Game;
+struct Strategy;
 
 struct Cube {
 	Territory* location;
@@ -30,7 +33,7 @@ struct Disk {
 };
 struct Player: public Subject {
 public:
-	Player();
+	Player(int pos);
 	~Player();
 	Player(const Player* player);
 	Player& operator= (const Player& player);
@@ -40,6 +43,7 @@ public:
 	int MoveArmies(int numOfMoves);		//Loops through all armies in a territory -> Assigns it a new territory 
 	bool PlaceNewArmiesDirectly(int territoryIndex);
 	bool MoveOverLand();	//Loops through all armies in a territory -> Assigns it a new territory (calculation for movement imissing)
+	bool MoveOverSea();	//Loops through all armies in a territory -> Assigns it a new territory (calculation for movement imissing)
 	int BuildCity();		// if (player has a city to build and has an army at the destination) -> Build city and return true.
 	int DestroyArmy();
 	int AndOrAction();
@@ -57,9 +61,11 @@ public:
 	void AddCity(Territory* terr);
 	void AddArmy(Territory* terr, Cube* cube);
 	void RemoveArmy(Territory* terr);
+	void MoveArmy(Territory* src, Territory* dest, Cube* cube);
 	bool Find(Territory* terr);
 	bool HasSkipped(int input);
-	void InitializePlayer();
+	void InitializePlayer(int pos);
+	void InitializePlayerForTournament(int pos);
 	int ComputeScore();
 	void PrintPlacedCities();
 	void PrintPlacedArmies();
@@ -69,12 +75,12 @@ public:
 	string GetLastName() const { return lastName; };
 	void SetLastName(string last) { lastName = last; };
 	vector<Territory*> GetTerritories() const { return territories; };
-	vector<Cube*> getCubes() const { return cubes; };
-	vector<Disk*> getDisks() const { return disks; };
-	vector <Card*> getHand() const { return hand; };
+	vector<Cube*> GetCubes() const { return cubes; };
+	vector<Disk*> GetDisks() const { return disks; };
+	vector <Card*> GetHand() const { return hand; };
 	BiddingFacility* GetBf() const { return bf; };
-	int getCoins() const { return coins; };
-	int getArmiesLeft() const { return armiesLeft; };
+	int GetCoins() const { return coins; };
+	int GetArmiesLeft() const { return armiesLeft; };
 	void SetCoins(int amt) { coins = amt; };
 	int GetPosition() { return position; };
 	void setCoins(int amt) { coins = amt; };
@@ -94,6 +100,12 @@ public:
 
 	int cardsByTrackedName[TRACKED_CARD_COUNT]{};
 	bool bonusForTrackedName[TRACKED_CARD_COUNT]{};
+	void SetStrategy(Strategy* straty) { strat = straty; };
+	Strategy* GetStrategy() { return strat; };
+	void SetBonusMoves(int val) { bonusMoves = val; };
+	void SetBonusArmies(int val) { bonusArmies = val; };
+	void SetBonusFlying(int val) { bonusFlying = val; };
+	void SetBonusImmune(bool val) { bonusImmune = val; };
 	bool neutralPlayer = false;
 
 	vector<string> actions; // compilation of actions taken by a player
@@ -104,6 +116,7 @@ private:
 	vector<Disk*> disks;
 	vector <Card*> hand;
 	BiddingFacility* bf;
+	Strategy* strat;
 	int coins = STARTING_COINS;
 	int armiesLeft = STARTING_ARMIES;
 	int position; // the position of the player at the table

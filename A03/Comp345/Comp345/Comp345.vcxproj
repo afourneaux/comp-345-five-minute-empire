@@ -144,8 +144,11 @@
     <ClCompile Include="Driver.cpp" />
     <ClCompile Include="Game.cpp" />
     <ClCompile Include="GameObservers.cpp" />
+    <ClCompile Include="GreedyPlayer.cpp" />
+    <ClCompile Include="HumanPlayer.cpp" />
     <ClCompile Include="Map.cpp" />
     <ClCompile Include="MapLoader.cpp" />
+    <ClCompile Include="ModeratePlayer.cpp" />
     <ClCompile Include="Player.cpp" />
     <ClCompile Include="ScoreDriver.cpp" />
     <ClCompile Include="Setup.cpp" />
@@ -156,10 +159,14 @@
     <ClInclude Include="Cards.h" />
     <ClInclude Include="Game.h" />
     <ClInclude Include="GameObservers.h" />
+    <ClInclude Include="GreedyPlayer.h" />
+    <ClInclude Include="HumanPlayer.h" />
     <ClInclude Include="Map.h" />
     <ClInclude Include="MapLoader.h" />
+    <ClInclude Include="ModeratePlayer.h" />
     <ClInclude Include="Player.h" />
     <ClInclude Include="Setup.h" />
+    <ClInclude Include="Strategy.h" />
   </ItemGroup>
   <ItemGroup>
     <Text Include="Maps\Map2a.txt" />

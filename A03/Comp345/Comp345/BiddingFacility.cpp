@@ -22,7 +22,7 @@ int AskForBid(Player* player)
 	char input;
 	int counter = 0;
 	cout << player->GetLastName() << ", please input a two-digit bid (example: input 03 instead of 3)" << endl;
-	cout << "You Currently have "<< player->getCoins()<<" Coins to Bid. ";
+	cout << "You Currently have "<< player->GetCoins()<<" Coins to Bid. ";
 	// Loop until a valid value is input
 	while (true)
 	{
@@ -70,14 +70,14 @@ int AskForBid(Player* player)
 			}
 			// Save user input
 			numericInput = (bid[0] - 48) * 10 + (bid[1] - 48);  // char to int with ASCII calculation
-			if (numericInput > player->getCoins())
+			if (numericInput > player->GetCoins())
 			{
 				counter = 0;
 				bid[0] = 0;
 				bid[1] = 0;
 				bid[2] = 0;
 				cout << endl << "You do not have enough coins." << endl;
-				cout << player->GetLastName() << " currently has " << player->getCoins() << " coins." << endl;
+				cout << player->GetLastName() << " currently has " << player->GetCoins() << " coins." << endl;
 
 				cout << endl << "Try Again " << endl;
 				out = AskForBid(player);
@@ -173,7 +173,7 @@ int BiddingFacility::DoBidding(vector<Player*> players, int playerCount)
 	}
 	cout << endl;
 	cout << endl << "__________________________________________________________________________________";
-	cout << "\n Each Player has " << players[0]->getCoins() << " coins \n Players have to place their bid. The winner will pay their bid amount and start the game and have to pay" << endl;
+	cout << "\n Each Player has " << players[0]->GetCoins() << " coins \n Players have to place their bid. The winner will pay their bid amount and start the game and have to pay" << endl;
 	for (int i = 0; i < playerCount; i++)
 	{
 		cout << "___________________________________________________\n";

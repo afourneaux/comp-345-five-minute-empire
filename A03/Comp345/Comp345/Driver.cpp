@@ -9,6 +9,7 @@ extern Game* MasterGame;
 
 int main() {
 	MasterGame = new Game();
+	MasterGame->MainMenu();
 	MasterGame->Setup();
 	MasterGame->Startup();
 	MasterGame->MainLoop();

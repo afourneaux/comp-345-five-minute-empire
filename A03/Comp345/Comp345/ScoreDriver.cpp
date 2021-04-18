@@ -31,8 +31,8 @@ void TestScoreCalculation() {
 	// Print the "final" game state: player hand contents and map
 	for (int j = 0; j < 2; j++) {
 		cout << "Printing player " << j << " hand contents: " << endl;
-		for (int i = 0; i < MasterGame->players[j]->getHand().size(); i++) {
-			cout << *MasterGame->players[j]->getHand().at(i);
+		for (int i = 0; i < MasterGame->players[j]->GetHand().size(); i++) {
+			cout << *MasterGame->players[j]->GetHand().at(i);
 		}
 		cout << endl << endl;
 	}
