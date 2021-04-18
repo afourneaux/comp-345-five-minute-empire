@@ -7,7 +7,7 @@
 using namespace std;
 
 // Constants
-const int GAME_TURNS_2_PLAYERS = 13;
+const int GAME_TURNS_2_PLAYERS = 1;
 const int GAME_TURNS_3_PLAYERS = 10;
 const int GAME_TURNS_4_PLAYERS = 8;
 const int STARTING_TERRITORY_ARMIES = 4;
@@ -19,7 +19,7 @@ class Deck;
 class Hand;
 class Map;
 
-class Game {
+class Game : public Subject{
 public:
 	void Setup();						// Get number of players, perform bidding, distribute tokens, generate deck
 	void Startup();						// Perform initial board setup
@@ -37,10 +37,13 @@ public:
 	int currentPlayer = -1;
 	bool gameOver = false;
 	int winnerIndex = -1;
+	int currentTurn;
 private:
 	Deck* deck;
 	Hand* hand;
 	int gameTurns;
+	GameStateView* gameStateView;
+	PlayerStateView* playerStateView;
 };
 
 extern Game* MasterGame;
