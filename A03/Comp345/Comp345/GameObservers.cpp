@@ -439,7 +439,6 @@ void PlayerStateView::Display()
 				cout << currentPlayer->actions[i] << endl;
 			}
 		}
-		//if(actions != 0)
 		cout << "+========================================+\n" << endl;
 	}
 }

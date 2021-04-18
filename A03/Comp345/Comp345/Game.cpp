@@ -108,7 +108,6 @@ void Game::MainLoop() {
 		for (int currentPlayer = startingPlayer; currentPlayer < playerCount + startingPlayer; currentPlayer++) {
 			PlayerTurn(players.at(currentPlayer % playerCount));
 			players[currentPlayer % playerCount]->actions.clear();
-			Notify();
 		}
 	}
 }
