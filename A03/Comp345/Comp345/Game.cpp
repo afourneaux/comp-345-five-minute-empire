@@ -21,7 +21,7 @@ void Game::Setup() {
 	delete setupObj;
 
 	//Register gamestateview with map
-	GameStateView *gameStateView = new GameStateView(this);
+	gameStateView = new GameStateView(this);
 	map->Attach(gameStateView);
 	deck = new Deck(playerCount);
 	hand = new Hand(deck);
@@ -33,7 +33,7 @@ void Game::Setup() {
 	cout << "X X X X X X X X X X X X X X X X X X X\n" << endl;
 
 	//Register playerstateview with map and players
-	PlayerStateView* playerStateView = new PlayerStateView(this);
+	playerStateView = new PlayerStateView(this);
 	Attach(playerStateView);
 
 	for (int i = 0; i < playerCount; i++) {
@@ -238,6 +238,8 @@ Game::~Game() {
 		delete players[i];
 	}
 	delete map;
+	delete gameStateView;
+	delete playerStateView;
 }
 
 Hand* Game::GetHand() {

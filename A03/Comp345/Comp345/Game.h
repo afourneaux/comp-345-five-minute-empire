@@ -7,7 +7,7 @@
 using namespace std;
 
 // Constants
-const int GAME_TURNS_2_PLAYERS = 13;
+const int GAME_TURNS_2_PLAYERS = 1;
 const int GAME_TURNS_3_PLAYERS = 10;
 const int GAME_TURNS_4_PLAYERS = 8;
 const int STARTING_TERRITORY_ARMIES = 4;
@@ -42,6 +42,8 @@ private:
 	Deck* deck;
 	Hand* hand;
 	int gameTurns;
+	GameStateView* gameStateView;
+	PlayerStateView* playerStateView;
 };
 
 extern Game* MasterGame;
