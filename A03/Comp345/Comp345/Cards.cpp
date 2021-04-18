@@ -627,6 +627,8 @@ Card* Hand::Exchange(const int index)
 		cards[i] = cards[i + 1];
 	}
 	cards[HAND_SIZE - 1] = deck->Draw();
+	if (cards[HAND_SIZE - 1] == nullptr)
+		size--;
 	return card;
 }
 
@@ -894,7 +896,7 @@ ostream& operator<<(ostream& out, const Ability& ability) {
 	case eAbility_VpPerCardName:
 		out << "+" << ability.value << "VP ";
 		if (ability.countSetOnce) {
-			out << "if you have ";
+			out << "if ";
 		}
 		else {
 			out << "per ";
@@ -903,7 +905,7 @@ ostream& operator<<(ostream& out, const Ability& ability) {
 			out << ability.setName << " card";
 		}
 		else {
-			out << ability.setTarget << " " << ability.setName << " cards";
+			out << ability.setTarget << " " << ability.setName;
 		}
 		break;
 	case eAbility_VpPerCoins:

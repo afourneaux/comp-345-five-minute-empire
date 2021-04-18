@@ -39,6 +39,8 @@
     </ClCompile>
     <ClCompile Include="ModeratePlayer.cpp">
       <Filter>Source Files\Players</Filter>
+    <ClCompile Include="GameObservers.cpp">
+      <Filter>Source Files</Filter>
     </ClCompile>
   </ItemGroup>
   <ItemGroup>
@@ -74,6 +76,9 @@
     </ClInclude>
     <ClInclude Include="HumanPlayer.h">
       <Filter>Header Files\Players</Filter>
+    </ClInclude>
+    <ClInclude Include="GameObservers.h">
+      <Filter>Header Files</Filter>
     </ClInclude>
   </ItemGroup>
   <ItemGroup>

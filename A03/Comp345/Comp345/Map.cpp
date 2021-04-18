@@ -32,6 +32,7 @@ Map::Map(int* territories, int territory_count, int player_count, int continent_
 	//Initialize territories array
 	this->territories = new Territory[territory_count];
 	for (int i = 0; i < territory_count; i++) {
+		this->territories[i].map = this;
 		this->territories[i].head = nullptr;
 		this->territories[i].continentID = territories[i];
 		this->territories[i].territoryID = i;
@@ -150,7 +151,9 @@ void Map::AddEdge(int origin, int destination) {
 	if (territories[origin].continentID != territories[destination].continentID) edgeCost = WATER_MOVEMENT_COST;
 	//Add edge (in both directions)
 	territories[origin].head = new Edge{ GetTerritory(destination), edgeCost, territories[origin].head };
+	territories[origin].edgeStrLength += to_string(destination).length() + 1;
 	territories[destination].head = new Edge{ GetTerritory(origin), edgeCost, territories[destination].head };
+	territories[destination].edgeStrLength += to_string(origin).length() + 1;
 }
 
 
@@ -461,20 +464,8 @@ std::ostream& operator<< (std::ostream& out, const Map& map) {
 	return out;
 }
 
-int Map::ComputeMapScore(int playerIndex) {
-	int score{0};
-	//Loop through territories and increment each player's score for each territory they control
-	cout << "Territories controlled by player " << MasterGame->players[playerIndex]->GetLastName() << ": ";
-	for (int i = 0; i < territory_count; i++) {
-		if (territories[i].controlling_player == playerIndex) {
-			score++;
-			cout << i << " ";
-		}
-	}
-	cout << endl;
-
-	cout << "Player " << MasterGame->players[playerIndex]->GetLastName() << " score for controlled territories: " << score << endl;
-
+int Map::ComputeMapContinentScore(int playerIndex) {
+	int score{ 0 };
 	//Loop through each continent
 	for (int i = 0; i < continent_count; i++) {
 		int* continent_scores = new int[player_count];
@@ -503,16 +494,25 @@ int Map::ComputeMapScore(int playerIndex) {
 			}
 		}
 		if (winning_player == playerIndex) {
-			cout << "Player " << MasterGame->players[playerIndex]->GetLastName() << " controls Continent " << i << ", gets 1 bonus point." << endl;
 			score++;
 		}
-			
 		delete[] continent_scores;
-
 	}
 
 	return score;
 
+}
+
+int Map::ComputeMapTerritoryScore(int playerIndex) {
+	int score{0};
+	//Loop through territories and increment each player's score for each territory they control
+	for (int i = 0; i < territory_count; i++) {
+		if (territories[i].controlling_player == playerIndex) {
+			score++;
+			cout << i << " ";
+		}
+	}
+	return score;
 }
 
 int Map::getNumberControlledTerritories(int playerIndex) {
@@ -621,6 +621,7 @@ void Territory::UpdateControl() {
 			current_max = player_control_score;
 		}
 	}
+	map->Notify();
 }
 
 

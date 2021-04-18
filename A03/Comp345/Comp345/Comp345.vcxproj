@@ -145,6 +145,7 @@
     <ClCompile Include="Game.cpp" />
     <ClCompile Include="GreedyPlayer.cpp" />
     <ClCompile Include="HumanPlayer.cpp" />
+    <ClCompile Include="GameObservers.cpp" />
     <ClCompile Include="Map.cpp" />
     <ClCompile Include="MapLoader.cpp" />
     <ClCompile Include="ModeratePlayer.cpp" />
@@ -159,6 +160,7 @@
     <ClInclude Include="Game.h" />
     <ClInclude Include="GreedyPlayer.h" />
     <ClInclude Include="HumanPlayer.h" />
+    <ClInclude Include="GameObservers.h" />
     <ClInclude Include="Map.h" />
     <ClInclude Include="MapLoader.h" />
     <ClInclude Include="ModeratePlayer.h" />

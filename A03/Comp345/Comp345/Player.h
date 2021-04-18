@@ -13,6 +13,8 @@ const int STARTING_ARMIES = 18;
 const int COST_ONE_ACTIONVALUE = 1;
 const int COST_ZERO_ACTIONVALUE = 0;
 const int COST_THREE_ACTIONVALUE = 3;
+const int TRACKED_CARD_COUNT = 8;
+const string TRACKED_CARD_NAMES[TRACKED_CARD_COUNT] = { "Dire", "Forest", "Cursed", "Arcane", "Ancient", "Night", "Mountain", "Noble" };
 
 class Map;
 struct Card;
@@ -28,7 +30,7 @@ struct Disk {
 	Territory* location;
 	bool isBuilt = false;
 };
-struct Player {
+struct Player: public Subject {
 public:
 	Player(int pos);
 	~Player();
@@ -91,7 +93,17 @@ public:
 	void SetBonusArmies(int val) { bonusArmies = val; };
 	void SetBonusFlying(int val) { bonusFlying = val; };
 	void SetBonusImmune(bool val) { bonusImmune = val; };
-	vector<Card*> GetHand() { return hand; };
+	int getElixirs() { return elixirs; };
+	bool getElixirWinner() { return elixirWinner; }
+	bool getBonusForFlying() { return bonusForFlying; };
+	bool getBonusForCoins() { return bonusForCoins; };
+	int getTerritoryScore() { return territoryScore; };
+	int getContinentScore() { return continentScore; };
+	int getCardScore() { return cardScore; };
+	int getTotalScore() { return totalScore; };
+
+	int cardsByTrackedName[TRACKED_CARD_COUNT]{};
+	bool bonusForTrackedName[TRACKED_CARD_COUNT]{};
 	bool neutralPlayer = false;
 private:
 	string lastName;
@@ -104,10 +116,18 @@ private:
 	int coins = STARTING_COINS;
 	int armiesLeft = STARTING_ARMIES;
 	int position; // the position of the player at the table
+	int elixirs = 0;
 	int bonusMoves = 0;
 	int bonusArmies = 0;
 	int bonusFlying = 0;
+	bool bonusForFlying = false;
+	bool bonusForCoins = false;
 	bool bonusImmune = false;
+	int territoryScore = 0;
+	int continentScore = 0;
+	int cardScore = 0;
+	bool elixirWinner = false;
+	int totalScore = 0;
 };
 int testPlayer();
 

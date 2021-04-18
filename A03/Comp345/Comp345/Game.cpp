@@ -2,6 +2,7 @@
 #include <iostream>
 #include "MapLoader.h"
 #include "Setup.h"
+#include "GameObservers.h"
 
 Game* MasterGame;
 
@@ -18,6 +19,9 @@ void Game::Setup() {
 	setupObj->MakeMap();
 	delete setupObj;
 
+	//Register gamestateview with map
+	GameStateView *gameStateView = new GameStateView(this);
+	map->Attach(gameStateView);
 	deck = new Deck(playerCount);
 	hand = new Hand(deck);
 
@@ -29,6 +33,8 @@ void Game::Setup() {
 
 	for (int i = 0; i < playerCount; i++) {
 		cout << *players[i];
+		//Register gamestateview with players
+		players[i]->Attach(gameStateView);
 	}
 	if (playerCount == 2) {
 		gameTurns = GAME_TURNS_2_PLAYERS;
@@ -76,12 +82,16 @@ void Game::Startup() {
 }
 
 void Game::MainLoop() {
-	cout << "Press Enter to start!";
+	cout << "Press Enter to start bidding!";
 	cin.ignore(INT_MAX, '\n');
 	cin.ignore(INT_MAX, '\n');
 
 	int startingPlayer = BiddingFacility::DoBidding(players, playerCount);
 
+	cout << "Press Enter to start!";
+	cin.ignore(INT_MAX, '\n');
+	cin.ignore(INT_MAX, '\n');
+	map->Notify();
 	for (int turn = 0; turn < gameTurns; turn++) {
 		cout << "XXXXXXXXXXXX" << endl;
 		cout << "BEGIN ROUND " << turn + 1 << endl;
@@ -162,18 +172,17 @@ void Game::GetWinner() {
 }
 
 void Game::PlayerTurn(Player* player) {
-	cout << "========================================" << endl;
-	cout << player->GetLastName() << " - It is your turn!" << endl;
-	cout << "========================================" << endl;
-
+	currentPlayer = player->GetPosition();
 	cout << "Press Enter to continue...";
 	// TODO: This requires two taps of enter on the first go.
 	//       Figure out a more elegant solution
 	cin.ignore(INT_MAX, '\n');
 	cin.ignore(INT_MAX, '\n');
-	
-	cout << *map;
-	cout << *hand;
+	player->Notify();
+
+	cout << "========================================" << endl;
+	cout << player->GetLastName() << " - It is your turn!" << endl;
+	cout << "========================================" << endl;
 
 	player->GetStrategy()->SelectCard();
 }
