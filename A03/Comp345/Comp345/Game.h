@@ -14,7 +14,7 @@ const int GAME_TURNS_TOURNAMENT = 20;
 const int STARTING_TERRITORY_ARMIES = 4;
 const int NEUTRAL_ARMY_COUNT = 10;
 const int DEVELOPER_COUNT = 4;
-const string DEVELOPERS[DEVELOPER_COUNT] = { "Alexander Fourneaux", "Georges Grodin", "Michel Laplaine-Pereira", "Souheil Al-awar" };
+const string DEVELOPERS[DEVELOPER_COUNT] = { "Alexander Fourneaux", "Georges Grondin", "Michael Laplaine-Pereira", "Souheil Al-awar" };
 
 // Declare custom classes to be used
 struct Player;

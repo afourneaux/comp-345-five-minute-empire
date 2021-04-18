@@ -260,9 +260,6 @@ void Game::PlayerTurn(Player* player) {
 	if (isTournament == false) {
 		EnterToContinue();
 	}
-	
-	cout << *map;
-	cout << *hand;
 
 	player->GetStrategy()->SelectCard();
 	Notify();

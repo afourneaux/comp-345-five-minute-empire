@@ -84,15 +84,15 @@ public:
 	void SetCoins(int amt) { coins = amt; };
 	int GetPosition() { return position; };
 	void setCoins(int amt) { coins = amt; };
-	void setPosition(int pos) { position = pos; };
+	void SetPosition(int pos) { position = pos; };
 	int getElixirs() { return elixirs; };
 	bool getElixirWinner() { return elixirWinner; }
-	int getBonusMoves() { return bonusMoves; };
-	int getBonusArmies() { return bonusArmies; };
-	int getBonusFlying() { return bonusFlying; };
-	bool getBonusImmune() { return bonusImmune; };
-	bool getBonusForFlying() { return bonusForFlying; };
-	bool getBonusForCoins() { return bonusForCoins; };
+	int GetBonusMoves() { return bonusMoves; };
+	int GetBonusArmies() { return bonusArmies; };
+	int GetBonusFlying() { return bonusFlying; };
+	bool GetBonusImmune() { return bonusImmune; };
+	bool GetBonusForFlying() { return bonusForFlying; };
+	bool GetBonusForCoins() { return bonusForCoins; };
 	int getTerritoryScore() { return territoryScore; };
 	int getContinentScore() { return continentScore; };
 	int getCardScore() { return cardScore; };
