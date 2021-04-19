@@ -45,7 +45,7 @@ void SetupObj::MakePlayers() {
 	// Getting player names
 	for (int i = 0; i < MasterGame->playerCount; i++) {
 		player = new Player(i);
-		if (playerName.length() > MasterGame->maxPlayerNameLength) MasterGame->maxPlayerNameLength = playerName.length();
+		if (player->GetLastName().length() > MasterGame->maxPlayerNameLength) MasterGame->maxPlayerNameLength = player->GetLastName().length();
 		player->SetPosition(i);
 		MasterGame->players.push_back(player);
 	}
