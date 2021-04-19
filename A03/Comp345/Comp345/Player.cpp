@@ -129,39 +129,38 @@ int Player::PlaceNewArmies() {
 	vector <Territory*> priorityTerr;
 	// Loop
 	while (true) {
-		if (!HasArmiesToPlace()) {							// Check if player has armies to place
+		if (HasArmiesToPlace() == nullptr) {				// Check if player has armies to place
 			cout << "SORRY, cannot perform action (No armies to place) " << endl;
 			PrintPlacedArmies();
 			actions.push_back("  - Player wanted to place an army, but has no armies to place.");
 			Notify();
 			return COST_ONE_ACTIONVALUE;
 		}
-	cout << "Here are VALID inputs: " << endl;
-	cout << "-> Territory ID (Starting Region): " << MasterGame->map->starting_territory_index << endl;
-	PrintPlacedCities();
-	cube = GetRandomArmy();
-	cout << GetLastName() << " - PLACE NEW ARMY (-1 to skip): ";
+		cout << "Here are VALID inputs: " << endl;
+		cout << "-> Territory ID (Starting Region): " << MasterGame->map->starting_territory_index << endl;
+		PrintPlacedCities();
+		cube = GetRandomArmy();
+		cout << GetLastName() << " - PLACE NEW ARMY (-1 to skip): ";
 
-	dest =  strat->PlaceNewArmies();						//implementing strat
+		dest = strat->PlaceNewArmies();						//implementing strat
 
-	if (HasSkipped(dest))
-	{
-		actions.push_back("  - Player skips, did not place an army");
-		Notify();
-		return COST_ONE_ACTIONVALUE;
-	}
-	if (GetTerritory(dest) == nullptr) continue;			// Checks if territory exists
-	destination = GetTerritory(dest);
-	AddArmy(destination, cube);
-	actions.push_back("  - Places army in territory " + to_string(dest));
-	Notify();
-	if (dest == MasterGame->map->starting_territory_index || destination->city_count[GetPosition()] > 0) {			// Check if territory is a valid game ID: Starting region or Has a city
+		if (HasSkipped(dest))
+		{
+			actions.push_back("  - Player skips, did not place an army");
+			Notify();
+			return COST_ONE_ACTIONVALUE;
+		}
+		if (GetTerritory(dest) == nullptr) continue;			// Checks if territory exists
 		destination = GetTerritory(dest);
-		AddArmy(destination, cube);
-		return COST_ONE_ACTIONVALUE;
-	}
-	else 
-		cout << endl << "WARNING - You cannot place an army at territory ID: " << dest << " (You do not have a city there or it's not the starting region" << endl;
+		if (dest == MasterGame->map->starting_territory_index || destination->city_count[GetPosition()] > 0) {			// Check if territory is a valid game ID: Starting region or Has a city
+			destination = GetTerritory(dest);
+			AddArmy(destination, cube);
+			actions.push_back("  - Places army in territory " + to_string(dest));
+			Notify();
+			return COST_ONE_ACTIONVALUE;
+		}
+		else
+			cout << endl << "WARNING - You cannot place an army at territory ID: " << dest << " (You do not have a city there or it's not the starting region" << endl;
 	}  // While(true)
 }
 
@@ -206,7 +205,7 @@ int Player::MoveArmies(int numOfMoves) {
 		cout << "Here are VALID inputs: " << endl;
 		PrintPlacedArmies();
 		cout << GetLastName() << " - MOVE FROM (-1 to skip): ";
-		
+
 		choices = strat->MoveArmies(numOfMoves);				// Implementing Strat
 
 		src = choices[0];
@@ -277,7 +276,7 @@ int Player::BuildCity() {
 		cout << "Put some armies first, jeez!" << endl;
 		return COST_ONE_ACTIONVALUE;
 	}
-	if (!HasCitiesToPlace()) {								// Check if player has city to build 
+	if (HasCitiesToPlace() == nullptr) {					// Check if player has city to build 
 		cout << "Are you trying to become a real estate agent o.O? I think not. (No more cities to place)" << endl;
 		PrintPlacedCities();
 		return COST_ONE_ACTIONVALUE;
@@ -332,7 +331,7 @@ int Player::DestroyArmy() {//Checks if friendly & enemy in same location -> Retu
 		cout << "Here are VALID inputs: " << endl;
 		PrintPlacedArmies();
 		cout << GetLastName() << " - DESTROY AT (-1 to skip)? ";
-		
+
 		choices = strat->DestroyArmy();							// Impementing Strategy
 
 		if (choices.empty()) {
@@ -468,7 +467,7 @@ void Player::DoAction(Card* card) {
 				cout << endl;
 				i += cost;
 				break;
-			case eAction_MoveArmies: cost = MoveArmies(actionValueWithBonus-i);
+			case eAction_MoveArmies: cost = MoveArmies(actionValueWithBonus - i);
 				i += cost;
 				cout << endl;
 				break;
@@ -708,6 +707,7 @@ void Player::AddArmy(Territory* terr, Cube* cube) {
 	cube->isPlaced = true;
 	cube->location = terr;
 	cout << "* Placed * - Army unit at territory ID " << terr->territoryID << endl;
+	armiesLeft--;
 
 	return;
 }
@@ -724,7 +724,8 @@ void Player::RemoveArmy(Territory* terr) {
 		if (cubes[i]->location == terr) {					// Look for available cubes
 			cubes[i]->isPlaced = false;
 			cubes[i]->location = nullptr;
-			cout <<"* Removed * - Army unit at territory ID " << terr->territoryID << endl;
+			cout << "* Removed * - Army unit at territory ID " << terr->territoryID << endl;
+			armiesLeft++;
 			return;
 		}
 	}
@@ -732,7 +733,7 @@ void Player::RemoveArmy(Territory* terr) {
 	return;
 }
 //**********
-//Add Army
+//Move Army
 //**********
 void Player::MoveArmy(Territory* src, Territory* dest, Cube* cube) {
 	src->removeArmy(position);
@@ -792,11 +793,11 @@ bool Player::HasArmiesOnBoard() {
 //InitializePlayer
 //**********
 void Player::InitializePlayer(int pos) {
-	for (int i = 0; i < 18; i++) {
+	for (int i = 0; i < STARTING_ARMIES; i++) {
 		cubes.push_back(new Cube());
 		cubes[i]->isPlaced = false;
 	}
-	for (int j = 0; j < 3; j++)
+	for (int j = 0; j < STARTING_CITIES; j++)
 		disks.push_back(new Disk());
 	string type;
 	if (MasterGame->playerCount == 2 && pos == 2)
@@ -817,13 +818,13 @@ void Player::InitializePlayer(int pos) {
 		lastName += " (Greedy)";
 		cout << endl << endl;
 	}
-	if (type == "M" || type == "m"){
+	if (type == "M" || type == "m") {
 		strat = new ModeratePlayer();
 		cout << lastName << " is a moderate player" << endl;
 		lastName += " (Moderate)";
 		cout << endl << endl;
 	}
-	if (type == "H" || type == "h"){
+	if (type == "H" || type == "h") {
 		strat = new HumanPlayer();
 		cout << lastName << " is a human player" << endl;
 		lastName += " (Human)";
@@ -842,7 +843,7 @@ void Player::InitializePlayerForTournament(int pos) {
 		cubes.push_back(new Cube());
 		cubes[i]->isPlaced = false;
 	}
-	for (int j = 0; j < STARTING_ARMIES; j++)
+	for (int j = 0; j < STARTING_CITIES; j++)
 		disks.push_back(new Disk());
 	if (MasterGame->playerCount == 2 && pos == 2)
 		return;
