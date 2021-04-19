@@ -182,9 +182,7 @@ void Game::MainLoop() {
 
 	int startingPlayer = BiddingFacility::DoBidding(players, playerCount);
 
-	cout << "Press Enter to start!";
-	cin.ignore(INT_MAX, '\n');
-	cin.ignore(INT_MAX, '\n');
+	EnterToContinue();
 	map->Notify();
 	for (int turn = 0; turn < gameTurns; turn++) {
 		currentTurn = turn + 1;
@@ -192,9 +190,10 @@ void Game::MainLoop() {
 		cout << "BEGIN ROUND " << currentTurn << endl;
 		cout << "XXXXXXXXXXXX" << endl;
 		// Run through each player's turn
-		for (int currentPlayer = startingPlayer; currentPlayer < playerCount + startingPlayer; currentPlayer++) {
-			PlayerTurn(players.at(currentPlayer % playerCount));
-			players[currentPlayer % playerCount]->actions.clear();
+		for (int i = startingPlayer; i < playerCount + startingPlayer; i++) {
+			currentPlayer = i % playerCount;
+			PlayerTurn(players.at(currentPlayer));
+			players[currentPlayer]->actions.clear();
 		}
 	}
 }

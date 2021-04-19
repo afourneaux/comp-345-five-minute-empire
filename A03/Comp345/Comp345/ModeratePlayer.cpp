@@ -92,7 +92,6 @@ int ModeratePlayer::PlaceNewArmies() {
 	bool found = false;
 	// Loop
 	while (!found) {													// Randomly chooses a territory that has armies in it
-		cout << "..";
 		if (count == 10)
 			return -1;
 		int randomized = rand() % (GetPlayer()->GetTerritories().size());
@@ -100,6 +99,7 @@ int ModeratePlayer::PlaceNewArmies() {
 			dest = GetPlayer()->GetTerritories()[randomized]->territoryID;
 			found = true;
 		}
+		count++;
 	}
 	cout << dest << endl;
 	return dest;
@@ -136,8 +136,11 @@ vector<int> ModeratePlayer::MoveArmies(int numOfMoves) {
 			possMoves.push_back(i);
 		}
 	}
-	if (possMoves.size() == 0)
+	if (possMoves.size() == 0) {
+		choices.push_back(-1);
+		choices.push_back(-1);
 		return choices;
+	}
 	cout << GetPlayer()->GetLastName() << " - MOVE TO (-1 to skip): ";
 	randomized = rand() % possMoves.size();								// Randomizes all possible moves
 	dest = possMoves[randomized];

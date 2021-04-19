@@ -95,7 +95,6 @@ int GreedyPlayer::PlaceNewArmies() {
 	bool found = false;
 	// Loop
 		while (!found) {													// Randomly chooses a territory that has armies in it
-			cout << "..";
 			if (count == 10)
 				return -1;
 			int randomized = rand() % (GetPlayer()->GetTerritories().size());
@@ -103,6 +102,7 @@ int GreedyPlayer::PlaceNewArmies() {
 				dest = GetPlayer()->GetTerritories()[randomized]->territoryID;
 				found = true;
 			}
+			count++;
 		}
 		cout << dest << endl;
 		return dest;

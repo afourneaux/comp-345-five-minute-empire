@@ -28,6 +28,7 @@ Player::~Player()
 		delete disks[i];
 	for (int i = 0; i < hand.size(); i++) // iterate through hand
 		delete hand[i];
+	delete strat;
 	delete bf;
 }
 //copy constructor
@@ -332,8 +333,13 @@ int Player::DestroyArmy() {//Checks if friendly & enemy in same location -> Retu
 		PrintPlacedArmies();
 		cout << GetLastName() << " - DESTROY AT (-1 to skip)? ";
 		
-
 		choices = strat->DestroyArmy();							// Impementing Strategy
+
+		if (choices.empty()) {
+			actions.push_back("  - Player skips, did not attack anyone");
+			Notify();
+			return COST_ONE_ACTIONVALUE;
+		}
 
 		battlefieldTerrId = choices[0];
 		enemy = choices[1];
@@ -342,11 +348,6 @@ int Player::DestroyArmy() {//Checks if friendly & enemy in same location -> Retu
 		if (count > 5) {
 			cout << "Tried too many times";
 			break;
-		}
-		if (HasSkipped(battlefieldTerrId)) {
-			actions.push_back("  - Player skips, did not attack anyone");
-			Notify();
-			return COST_ONE_ACTIONVALUE;
 		}
 		if (enemy < 0 || enemy >= MasterGame->players.size()) { // Checking if valid player GetPosition()
 			cout << "Might as well attack the chair! Find a real opponent." << endl << endl;
