@@ -17,7 +17,7 @@ const int DEVELOPER_COUNT = 4;
 const string DEVELOPERS[DEVELOPER_COUNT] = { "Alexander Fourneaux", "Georges Grondin", "Michael Laplaine-Pereira", "Souheil Al-awar" };
 
 // Declare custom classes to be used
-struct Player;
+class Player;
 class Deck;
 class Hand;
 class Map;

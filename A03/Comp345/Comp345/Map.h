@@ -3,11 +3,12 @@
 #include <vector>
 #include "GameObservers.h"
 
-struct Edge;
+class Edge;
 class Map;
 class Subject;
 
-struct Territory {
+class Territory {
+public:
 	Map* map;
 	Edge* head;							// Pointer to head of linked list of edge objects (edge object contains a pointer to an adjacent territory)
 	int continentID;					// Index of continent that the territory belongs to - maps to continents[] array in Map class
@@ -26,18 +27,21 @@ struct Territory {
 	std::vector<int> GetAdjacent();
 };
 
-struct Edge {
+class Edge {
+public:
 	Territory* destination_territory;	// Pointer to territory that is adjacent to the territory the linked list belongs to
 	int movement_cost;					// Movement cost associated with moving an army along edge (water=3, land=1)
 	Edge* next;							// Next edge in linked list
 };
 
-struct TerritoryListNode {				// Node for use in TerritoryList linked list data structure
+class TerritoryListNode {				// Node for use in TerritoryList linked list data structure
+public:
 	Territory* territory;				// Pointer to territory
 	TerritoryListNode* next;			// Next Node in linked list
 };
 
-struct TerritoryList {					// Territorylist is a generic linked list data structure for tracking territories 
+class TerritoryList {					// Territorylist is a generic linked list data structure for tracking territories 
+public:
 	TerritoryListNode* head;			// Head of list
 	int length;							// length of linked list
 	int controlling_player = -1;		// The player controlling the most territories on the continent

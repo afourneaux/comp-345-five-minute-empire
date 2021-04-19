@@ -1,9 +1,9 @@
 #pragma once
 #include "Game.h"
 
-struct Player;
+class Player;
 
-struct Strategy
+class Strategy
 {
 public:
 	virtual void SelectCard() = 0;

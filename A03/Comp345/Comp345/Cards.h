@@ -7,7 +7,7 @@ using namespace std;
 const int HAND_SIZE = 6;	// The number of face-up cards in the hand
 const int ELIXIR_BONUS = 2;	// Bonus score awarded for having the most elixirs
 
-struct Player;
+class Player;
 
 // The different possible actions granted by a card
 enum CardAction {
@@ -39,14 +39,16 @@ enum CardAbility {
 	eAbility_Immune
 };
 
-struct Action {
+class Action {
+public:
 	CardAction action;			// The type of action allowed by the card
 	int actionValue;			// The value associated to the card's action, for example "move *2* armies"Ability
 	Action& operator= (const Action& action);							// Assignment operator
 	friend ostream& operator<< (ostream& out, const Action& action);	// Stream insertion operator
 };
 
-struct Ability {
+class Ability {
+public:
 	CardAbility type;			// The type of ability granted by the card
 	int value;					// The value associated to the ability
 	string setName;				// If the card grants VP Per Card Set, what name does it target?
@@ -56,7 +58,8 @@ struct Ability {
 	friend ostream& operator<< (ostream& out, const Ability& ability);	// Stream insertion operator
 };
 
-struct Card {
+class Card {
+public:
 	Card();						// Default constructor
 	Card(const Card* card);		// Copy constructor
 	~Card();					// Destructor

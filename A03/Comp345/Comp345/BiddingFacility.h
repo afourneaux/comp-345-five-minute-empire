@@ -13,7 +13,7 @@
 
 using namespace std;
 
-struct Player;
+class Player;
 class Game;
 
 class BiddingFacility {

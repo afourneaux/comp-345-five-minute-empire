@@ -18,20 +18,22 @@ const int TRACKED_CARD_COUNT = 8;
 const string TRACKED_CARD_NAMES[TRACKED_CARD_COUNT] = { "Dire", "Forest", "Cursed", "Arcane", "Ancient", "Night", "Mountain", "Noble" };
 
 class Map;
-struct Card;
+class Card;
 class BiddingFacility;
 class Game;
-struct Strategy;
+class Strategy;
 
-struct Cube {
+class Cube {
+public:
 	Territory* location;
 	bool isPlaced;
 };
-struct Disk {
+class Disk {
+public:
 	Territory* location;
 	bool isBuilt = false;
 };
-struct Player: public Subject {
+class Player: public Subject {
 public:
 	Player(int pos);
 	~Player();
